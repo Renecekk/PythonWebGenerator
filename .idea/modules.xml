@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../FontEnumerator/.idea/FontEnumerator.iml" filepath="$PROJECT_DIR$/../FontEnumerator/.idea/FontEnumerator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PythonWebGenerator.iml" filepath="$PROJECT_DIR$/.idea/PythonWebGenerator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Testiky/.idea/Testiky.iml" filepath="$PROJECT_DIR$/../Testiky/.idea/Testiky.iml" />
+    </modules>
+  </component>
+</project>

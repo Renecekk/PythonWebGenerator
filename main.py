@@ -1,9 +1,9 @@
 import wx
 import os
 
+from numpy.distutils.system_info import wx_info
 
 global xMax, yMax
-xMax, yMax = 0, 0
 frame = None
 btncolor='#353535'
 
@@ -27,8 +27,6 @@ class Menu(wx.Frame):
         if yMax is 0:
             yMax = 1080
 
-        print("Width =", xMax, "px")
-        print("Height =", yMax, "px")
         xHalf = xMax / 2
         yHalf = yMax / 2
 
@@ -50,7 +48,6 @@ class Menu(wx.Frame):
         self.SetBackgroundColour('#252525')
         panel = wx.Panel(self)
 
-        my_sizer = wx.BoxSizer(wx.VERTICAL)
         font = wx.Font(30, wx.DEFAULT, wx.ITALIC, wx.BOLD, underline=False, faceName="Candara")
 
         self.newproj = wx.Button(panel, label="Create New Project", pos=(50, yHalf/7*2+20), size=(xHalf - 100, yHalf/8))
@@ -89,18 +86,13 @@ class Menu(wx.Frame):
         self.exitbtn.Bind(wx.EVT_ENTER_WINDOW, self.exitbtnHover)
         self.exitbtn.Bind(wx.EVT_LEAVE_WINDOW, self.exitbtnUnhover)
 
-
-        panel.SetSizer(my_sizer)
-
         self.Center()
         self.Show()
-
 
 
     def newproject(self, event):
         frame = EditorFrame()
         frame.Show()
-        print('New Window Opened')
         self.Destroy()
 
 
@@ -157,6 +149,8 @@ class EditorFrame(wx.Frame):
         global xMax, yMax, yHalf, xHalf
         super().__init__(parent=None, title="Main Menu", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER  |  wx.MAXIMIZE_BOX)
         self.SetBackgroundColour('#252525')
+
+
         self.Center()
         self.Show()
 

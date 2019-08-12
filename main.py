@@ -8,10 +8,6 @@ frame = None
 btncolor='#353535'
 
 
-def include(fname):
-    if os.path.exists(fname):
-        execfile(fname)
-
 class App(wx.App):
 
     def OnInit(self):

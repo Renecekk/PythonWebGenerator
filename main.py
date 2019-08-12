@@ -1,7 +1,22 @@
 import wx
+import os
 
+
+global xMax, yMax
 xMax, yMax = 0, 0
 frame = None
+btncolor='#353535'
+
+
+def include(filepath, globals=None, locals=None):
+    if globals is None:
+        globals = {}
+    globals.update({
+        "__file__": filepath,
+        "__name__": "__main__",
+    })
+    with open(filepath, 'rb') as file:
+        exec(compile(file.read(), filepath, 'exec'), globals, locals)
 
 class App(wx.App):
 
@@ -11,12 +26,10 @@ class App(wx.App):
         self.SetTopWindow(frame)
         return True
 
-btncolor='#353535'
-
-
 
 class Menu(wx.Frame):
     def __init__(self):
+        global xMax, yMax, yHalf, xHalf
         xMax, yMax = wx.GetDisplaySize()
         if xMax is 0:
             xMax = 1920
@@ -42,7 +55,6 @@ class Menu(wx.Frame):
         if yHalf < 400:
             yHalf = yMax
             xHalf = xMax
-
 
         super().__init__(parent=None, title="Main Menu", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER  |  wx.MAXIMIZE_BOX)
         self.SetBackgroundColour('#252525')
@@ -87,98 +99,20 @@ class Menu(wx.Frame):
         self.exitbtn.Bind(wx.EVT_ENTER_WINDOW, self.exitbtnHover)
         self.exitbtn.Bind(wx.EVT_LEAVE_WINDOW, self.exitbtnUnhover)
 
-        '''
-        my_sizer.Add(newproj, 0, wx.ALL | wx.CENTER, 5)
-        my_sizer.Add(loadproj, 0, wx.ALL | wx.CENTER, 5)
-        my_sizer.Add(settings, 0, wx.ALL | wx.CENTER, 5)
-        my_sizer.Add(exitbtn, 0, wx.ALL | wx.CENTER, 5)
-        '''
 
         panel.SetSizer(my_sizer)
 
         self.Center()
         self.Show()
+        include("buttons/menubuttons.py")
 
-    def newproject(self, event):
-        #EditorFrame.Show(self)
-        print('New Window Opened')
-        #Menu.Hide(self)
-
-    def loadproject(self, event):
-        print("laodproject")
-
-    def opensettings(self, event):
-        print("opensettings")
-
-    def closeapp(self, event):
-        dlg = wx.MessageDialog(self, 'Do you want to close App? ', 'Confirm Exit', wx.OK | wx.CANCEL | wx.ICON_QUESTION)
-        result = dlg.ShowModal()
-        dlg.Destroy()
-        if result == wx.ID_OK:
-            self.Destroy()
-
-
-    def settingsHover(self, event):
-        self.settings.SetBackgroundColour('#454545')
-        event.Skip()
-
-    def settingsUnhover(self, event):
-        self.settings.SetBackgroundColour('#353535')
-        event.Skip()
-
-    def exitbtnHover(self, event):
-        self.exitbtn.SetBackgroundColour('#454545')
-        event.Skip()
-
-    def exitbtnUnhover(self, event):
-        self.exitbtn.SetBackgroundColour('#353535')
-        event.Skip()
-
-    def newprojHover(self, event):
-        self.newproj.SetBackgroundColour('#454545')
-        event.Skip()
-
-    def newprojUnhover(self, event):
-        self.newproj.SetBackgroundColour('#353535')
-        event.Skip()
-
-    def loadprojHover(self, event):
-        self.loadproj.SetBackgroundColour('#454545')
-        event.Skip()
-
-    def loadprojUnhover(self, event):
-        self.loadproj.SetBackgroundColour('#353535')
-        event.Skip()
 
 
 class EditorFrame(wx.Frame):
+
     def __init__(self):
-        xMax, yMax = wx.GetDisplaySize()
-        if xMax is 0:
-            xMax = 1920
-
-        if yMax is 0:
-            yMax = 1080
-
-        print("Width =", xMax, "px")
-        print("Height =", yMax, "px")
-        xHalf = xMax / 2
-        yHalf = yMax / 2
-
-        if xMax > 1920:
-            xHalf = 1920 / 2
-
-        if yMax > 1080:
-            yHalf = 1080 / 2
-
-        if xHalf < 600:
-            xHalf = xMax
-            yHalf = yMax
-
-        if yHalf < 400:
-            yHalf = yMax
-            xHalf = xMax
-        super().__init__(parent=Menu, title="Main Menu", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER | wx.MAXIMIZE_BOX)
+        global xMax, yMax, yHalf, xHalf
+        super().__init__(parent=None, title="Main Menu", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER  |  wx.MAXIMIZE_BOX)
         self.SetBackgroundColour('#252525')
         self.Center()
         self.Show()

@@ -7,7 +7,6 @@ import os
 import getpass
 import time
 import base64
-import codecs
 import wx.grid as gridlib
 from pathlib import Path
 from io import BytesIO
@@ -225,7 +224,9 @@ class Menu(wx.Frame):
 		if dlg.ShowModal() == wx.ID_OK:
 			wd = dlg.GetPath()
 
+		wd = wd.replace("config.pwgproj", "")
 		workingdir = wd.replace("\\\\", "\\")
+ 
 			
 		dlg.Destroy()
 		
@@ -297,8 +298,9 @@ class Menu(wx.Frame):
 		self.loadproj.SetBackgroundColour(btncolor)
 		event.Skip()
 
-
-#New Project Frame
+######################################################################################################################################################
+############################################################### New Project Frame ####################################################################
+######################################################################################################################################################
 
 class NewProjFrame(wx.Frame):
 
@@ -438,22 +440,13 @@ class NewProjFrame(wx.Frame):
 	def createproject(self, name, path, author, ver, desc):
 		pathrepl = path.replace("\\", r"\\")
 		os.makedirs(pathrepl + "\\" + name)
-		os.makedirs(pathrepl + "\\" + name + "\\" + "internal")
-		data = '{\n\t"name": "' + name + '",\n\t"author": "' + author + '",\n\t"version": "' + ver + '",\n\t"desc": "' + repr(desc) + '"\n}'
+		data = '{\n\t"name": "' + name + '",\n\t"author": "' + author + '",\n\t"version": "' + ver + '",\n\t"desc": "' + repr(desc) + '",\n\t"elements" : []\n}'
 		currpath = os.getcwd()
 		os.chdir(path + "\\" +  name)
 		mkconffile = open("config.pwgproj", 'w+')
 		mkconffile.write(data)
 		mkconffile.close()
 
-		os.chdir(path + "\\" + name + "\\" + "internal")
-		mkconffile = open("usedelements.json", 'w+')
-		mkconffile.write("{\n\t\n}")
-		mkconffile.close()
-
-		mkconffile = open("elementprops.json", 'w+')
-		mkconffile.write("{\n\t\n}")
-		mkconffile.close()
 		os.makedirs(pathrepl+"\\"+name+"\\"+"OUTPUT")
 		os.chdir(currpath)
 
@@ -482,7 +475,7 @@ class NewProjFrame(wx.Frame):
 		if (err==0):
 			self.createproject(name___, path___, author___, version___, description___)
 			global workingdir
-			workingdir = path___ + name___
+			workingdir = path___ + name___ + "\\"
 			frame = editorFrame()
 
 			frame.Show()
@@ -509,7 +502,9 @@ def dcdask(self):
 
 
 
-
+#############################################################################################################
+############################################## SETTINGS #####################################################
+#############################################################################################################
 	
 class settingsFrame(wx.Frame):
 
@@ -655,7 +650,10 @@ class editorFrame(wx.Frame):
 
 
 	def __init__(self):
-		global workingdir
+		global workingdir, elements
+		global divcount, webpage, textcount, buttoncount, inputcount, imagecount
+
+		divcount = textcount = imagecount = buttoncount = inputcount = 0
 
 		super().__init__(parent=None, title="PWG | Editor ", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER  |  wx.MAXIMIZE_BOX)
 		self.Maximize(True)
@@ -669,39 +667,52 @@ class editorFrame(wx.Frame):
 		self.frame_toolbar.SetBackgroundColour("#202020")
 		wd = str(workingdir)
 		wd.replace("\\\\", "\\")
-		print(wd)
 
-		ue = wd + "\\" + "internal" + "\\" + "usedelements.json"
+		ue = wd + "\\" + "config.pwgproj"
 		ue = r'%s' %  ue
 		uefile = open(ue)
-		usedelements = json.load(uefile)
+		webpage = json.load(uefile)
 		uefile.close()
+		self.refresh()
 
+	def refresh(self):
+		global elements, divcount, textcount, imagecount, buttoncount, workingdir, webpage, elementlist
+
+		elements = []
+
+		for val in webpage['elements']:
+			elements.append(val)
 
 		exp = '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'
 		txt = 'iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4wwIEAst5k0grAAAA0xJREFUSMedlsuLXEUUxn+nbk13zyQ4D1S0MwnxBVn4QhASjThoFgYfiGgkiGaRAff+C/4H7kSyEXXhxvdCN4KESNyMExVcykRmFkGZSU+cnu5b9WUxdXuq29szxtrc4tSpc873na+qrlEztNiupgUQgA8Qi3hXbq9t+K21DkWrOB7LeBlwQJz5UYwbjvHDUoJJ4FTmXwIoxLNEQZSZM64/7f9XkmrtKeAoEJOtAJA4Y97NmncBydQP/z1JRlU1Xk7fOIxQdyvqJYWIJKcI/5yeuiUkOVXPZbaRinQu9iH2iFYY/U73lpJU9pPAPQlFnqRI34WiaY+5hklRTkH7J8moqgJWVAVgBcijlIBJehMJJDdOAHVILAXIqepKege4XtUzQCNetcJNW+HKcQKoS1LZngTuTfPfbXbqM5xdwgw0oC8A8/8SwPMH6pPsQRXAN2z1wbtPaklPAlAfWWH0N7b2RFJR1cqoEvAVLQ/H7vpaZbiKo0Ao2/9M0bRHbcJinQBGk+RU3Zfmy8DS5tLViWvvXV4vN7c/NzcQQ1XUsADM6Cz44aD7UPUloMbcAWvMGbEXPkz2KkolgNfMu9vMuxJksReHk+xBFcDPwB2Nmcn56YfaR1uHZtaAX9JaLoDDCnpxVwC7lOWidsn5CeD+1IsAfLRTrQkzU6+MCph5hEbols6p5GNArmlsnHRMXwz4fQ6gHylkKGRNL591DXtEYllRDhRzJBVVTeB0RsVvVWOzyBU9c8CRkf1e0huIZcCZc7Gz4AdJRqkCuAI8PoB5YRWA9RPmzFs042FJS2nvrpzF6+bdu0CHKIu9IJdVMqqq7/K+6XwbvT1PMTmh2JWFrq4AlzLUVaFHFPTCQADaaVz12uVUAXxbwz3+YFOuSeEagNmndT5JACgAyFyG4gTwQJr/AfyUVYldWMXe/5PeXzcwZ9GcYcYXwI2ENr8BTrkJe9AKC2Dm2DkXAK9ktfwAdIHBTafFNuvHIdEgRU2Fba0A32fFVAIoJL2VboBJ02J7JTncyc71DvA3sJmqW0jI3Mavq0q224GLwFQqZC7Z84dtC7gGmAcO1/A6mzZWZ2V0FMAh4GC2b/R5bpEk7hn+QRhqX1ob90MVMz/by+cm8xSGJSxjhFoAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTktMTItMDhUMTY6MTE6NDUtMDg6MDBg698NAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE5LTEyLTA4VDE2OjExOjQ1LTA4OjAwEbZnsQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII='
 		flp = 'iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wwIEA8Ft5RNUgAAAxpJREFUSMedlk2LXFUQhp8659x7Z6ZnEjALPyIiIRIwE7LyA0HQhX9A/4Lkd8w2OxEE3blw4z+IJCboQgMRpAk44EwI6CKZmDY6M+m+fe85VS769kxPf48Fh8v5qPNWvW+d4kr7UcmoXX15hf9rt3YMAQxEQAAFCM3+B8B1zNz9vdp6h//Ig19+WHhpCAHnHCklYox2xnXc6vrZXl1X14rMbe+XWehWPg5BtoC3gQT4ZaIWETqdp5RlSau1zsbGBmZmIiZVym4+2s8+isr2eoFzjc9q89Vlhpmpc07b7bZ+d+OGPtjd0SzL1MwMiGpyvgjcOrtqlwR0CCLN1wNu2RFCcEWRO++DM7PhegAi8IqqfGnN4ijIqcxUSUkx0/Etx6AA1kaFn0b6HGQBEUKWURQFPmSIyIyDc0BSXc3NIkW4euUKm5cvE4Kn7D6fBjQFRARVJV9p8eKFN4lVf1aEzXFBGh+f5eSrLUwVkZMFOiUTQ5znpYubC4WysbnGiKGMS3wCxBovJ4YuoGtGapjJ0T0TIAZkHpxAGY/oPJWZQis3qmgMS9eGIGYQPHS6wmc/Bh4fCMFN0jE3CaBWOH/G+PQdo/CQbLAeYDDZyOD2ruP7HccLLVA9BQJDmmF7T7hwDj7ehP0SvBvTJCZYy6HwUI1otKQc5B5aOdRphibDgwC9Gq69VfHea5HnlRx3uCmmjQ4//RH46l5+lNFMEGuiLwJ808759n62lC4DPYSVAAd9ZlfXaDZR4f3XI2+cU/pxMrITmTRB7Tx13H4YmPZ2J0CGQfRqYb8UqgRzHj1m0I/QjU2vMyaqP4wjmA0q4rcnjofPHGrzX4w1GvRq8DKYp6QcN/gGRAQTDJEBQK3wyWbNu68murUspGstM+7+6fn615yqjhx2E04KrCEmCBCTWFShTqSyUlY8fPFz4HMNLGvegaem81eXdKlIyNGDJzw5KEhGCbD3rO/+fnzo/l2ThTRNpc0MIojIUNrSDIII1NG2BLmODP9oELPTtRUAcTLwFETA6mRbIRPkzu7J/vHhRXfKqyft5u92HC3wHwknXaod81MKAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTEyLTA4VDE2OjE1OjA1LTA4OjAw7UpxjQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0xMi0wOFQxNjoxNTowNS0wODowMJwXyTEAAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC'
-		code = 'iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAABCLAAAQiwE9nYyBAAAAB3RJTUUH4wwIEBcMTFNtrwAAAvZJREFUSMe1lstvHEUQh7/q7nns7K7XjjYoTpBAHCJQZBECUg7APw33SAgjRA5WEDkhHonEgSTGHsee2d2Z7i4OO1m/1l4ssXWc0tRXXb9fP+T5y5NtoA9E/v8wQOWAn4HhGiHHDri9huJnI3eArhmCiyBrhwxk7QzcN3V1ox+UuZo3mbH79kYQRRBaVSxgRP4TbOW4lFPRRAxtVHbLirtpwqNhzkwVswoSryluACeCVyUCCfBP65m2gZA6EHDM82ebuRhLm4hAKsI0Kn9MG3w3EwH22wDAndRRB+XltEEAK1frdAmiQC7CfuvZLWuelTUHrSfpVrTfBjCGceJ4MWnYO6z46e2ENiqJyNJj4xIkE+H3acMPZU3tAx8NcsapI6JMo1L6wCgxJAbezxPGvZRXk4bvypoDH8iXmGEBEcAI7J1MeXY0AeDhqMfDQT7PIRz5ACEyThwGITfCl6OCDwc5VRvYPaz4c9qSXjCTO6vD06MJr6ctG6nl0bDHLWdpVC/pMU4sAKHr8rNBzpYzPD+Zsfe2pgo5n/QzvGrXYFcgqHLi50UKYxhZQ+DUNUGV/daDNYycJTC37jsN7qSO3Ah0I700rgikRvhqs89W5vh70vDksOLYRzIRBKijcuQjm87Ss0LUziRGeNV4nhxUHLeeu0XKFxs9YrcKzq8Eelb4elTwQT/juA18f1jx16wlMzLvLkTGicUyd5ET4de64ceyYhYjHw97PN4osJy38znhQ9fd58MeOxs9gsLTw4r9NixGME7sYh/9Vs/4paxJjOHxqOBBP6PtNu5S4d+BABpV7hcpQ2t4MW1IRHjTBKTTI6piROhbw+0iZaefsekss6hLd71b8g0BZlF5L7XcywpKHyl94FanR9C5EbYzx70sIaA0qlceK1fejAK0XebYB/CRcZFiETzzgvPj5tTiXAO5Mm+AqMpWYtnZLNhO3cL7qwpfhLzhmteKAokI93vpUlFXxOK18ikr3l0RKH0gMwYnN7oVDVD9C4oyWbl13KYfAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTEyLTA4VDE2OjIzOjEyLTA4OjAwcLtZ2wAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0xMi0wOFQxNjoyMzoxMi0wODowMAHm4WcAAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC'
+		cod = 'iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAABCLAAAQiwE9nYyBAAAAB3RJTUUH4wwIEBcMTFNtrwAAAvZJREFUSMe1lstvHEUQh7/q7nns7K7XjjYoTpBAHCJQZBECUg7APw33SAgjRA5WEDkhHonEgSTGHsee2d2Z7i4OO1m/1l4ssXWc0tRXXb9fP+T5y5NtoA9E/v8wQOWAn4HhGiHHDri9huJnI3eArhmCiyBrhwxk7QzcN3V1ox+UuZo3mbH79kYQRRBaVSxgRP4TbOW4lFPRRAxtVHbLirtpwqNhzkwVswoSryluACeCVyUCCfBP65m2gZA6EHDM82ebuRhLm4hAKsI0Kn9MG3w3EwH22wDAndRRB+XltEEAK1frdAmiQC7CfuvZLWuelTUHrSfpVrTfBjCGceJ4MWnYO6z46e2ENiqJyNJj4xIkE+H3acMPZU3tAx8NcsapI6JMo1L6wCgxJAbezxPGvZRXk4bvypoDH8iXmGEBEcAI7J1MeXY0AeDhqMfDQT7PIRz5ACEyThwGITfCl6OCDwc5VRvYPaz4c9qSXjCTO6vD06MJr6ctG6nl0bDHLWdpVC/pMU4sAKHr8rNBzpYzPD+Zsfe2pgo5n/QzvGrXYFcgqHLi50UKYxhZQ+DUNUGV/daDNYycJTC37jsN7qSO3Ah0I700rgikRvhqs89W5vh70vDksOLYRzIRBKijcuQjm87Ss0LUziRGeNV4nhxUHLeeu0XKFxs9YrcKzq8Eelb4elTwQT/juA18f1jx16wlMzLvLkTGicUyd5ET4de64ceyYhYjHw97PN4osJy38znhQ9fd58MeOxs9gsLTw4r9NixGME7sYh/9Vs/4paxJjOHxqOBBP6PtNu5S4d+BABpV7hcpQ2t4MW1IRHjTBKTTI6piROhbw+0iZaefsekss6hLd71b8g0BZlF5L7XcywpKHyl94FanR9C5EbYzx70sIaA0qlceK1fejAK0XebYB/CRcZFiETzzgvPj5tTiXAO5Mm+AqMpWYtnZLNhO3cL7qwpfhLzhmteKAokI93vpUlFXxOK18ikr3l0RKH0gMwYnN7oVDVD9C4oyWbl13KYfAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTEyLTA4VDE2OjIzOjEyLTA4OjAwcLtZ2wAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0xMi0wOFQxNjoyMzoxMi0wODowMAHm4WcAAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC'
 		img = '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'
 		btn = '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'
 		inp = 'iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4wwIECQCX4AlmAAABFhJREFUSMedlU9oVFcUxr9z7s10MmOSGTSx6qKSgYQsFELduArFILVgFxIQWoMWQ0F0oBKIYrJxNUbdGKhCFbowutJN6zIussiIUDNj3TTCgAa6sB2ZSeYNGd+8e04XzgyJGZPYD97m/vl+33v33PNo3759qOvFixfYiv4+eRLW8xhEAuZTEDnpnPuamN8RQJ8/fKirfamvr681l8tZ3/cVAG0GIADd27ZxzvO8wtDQt+9U7xNRmER++2l+fvj+zp3S/vQpLQMaCoUokUgEtH///lfhcDhKRKKqRLQxxzmHaCSCJd/XH2Ox2Kn29lDBOWlZWOA/SqXi5Y4OXyMRIhFVgCuVSpkOHjyod+7cQVdXF3zfx0YQ5xzi8ThmZmYwdeMGlkVkJBql7xYXqZjPC3se6a1bxEePIlSp4J+3bzEyMgJLRNLV1UU7duyAqn4UIiJgZjx79gw3b96Ecw5tzJycm0POOZwn4vDVqxo/cULVOVBHB2AMiEgZAKsqASBVbfpUq1ViZkqn0zQ6OkorKytEzJTJZlFdWsI1z8Nfly8jfuYMOedI3yelmi9bAI30RLTuTZxzaGlpQTqdxsTEBADAGINsNovi0hIA4NrkJL46fx4SBDDWQlWx2tdudsjGGKTTaYyPjzdCZDIZLC8vA6qYmppCMpmEBAHYNreznwIQEczPz8PzPKgqrl+/jmQyiSAIYO3H8zadEZF1AOccstksRKQBGB0d3RTQFFKvoidPnqwBZDIZAEC5XEYqldoyAAC4GSCXy2FsbAzGGIgIstksAKBUKuHKlSu4ePHilgHrIPVq6GhvxzdHjiCfzyOTySAIApRKJaRSKVy4cOGTAOs+FzOjWq2iWq0iee4cFhcX8fz5cwDA5OQkxsbGPhnQ9EwKhQJ+f/QIX/b3Y+LSJVQqFXQnEv8b0ICISGPg9evXePnyJXbv3o2e3l78cvs2jDEIgqBRBJtJVWGtbfhaZgYzNyb7+/tx4MCBdTe/vmYrqt/4urfN5/MYHx9HOByGiDQSOOewWdvfSMyMSqWCfD4PSqVSrlwuQ0RARI0UddXG6MN/Ta1jKxHpR/aAmRGNRkFzc3NqjNkwlTEGttb4VoOccwiCYMO9zjlYz/P+JKI2APLhAlUlY4wrFAqdnufFmFlr7VuDIKC2trbi9u3b/3XOGSLSJgxW1ZI1xvTj/aVcs0hEcPfuXTs9Pf2OmadF5HsAjoistdaFw2EbiUQevXnzZvj06dOfHT9+PGhSHARA6uYBADc4OOgAOADu8OHDLhQKBQDQ2tq6Nx6PY8+ePZRIJNDT00Pd3d3YtWvXF7FYDPF4PBgeHm7sXeUTAFCamZmpE9fowYMHuHfvnlprQ52dnQvGmL0ARFVZRERVGcCrlZWVXt/3/WPHjtHQ0FCzY9F15jUoDh06hNnZ2R+KxWLv7OzsWedclIhcLZACMMxcHhgY+DkWiy0MDAz8+vjxYwDA4ODgGs//AMuEVdQT4ac/AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTEyLTA4VDE2OjM2OjAyLTA4OjAwm7ZNwQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0xMi0wOFQxNjozNjowMi0wODowMOrr9X0AAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC'
 
-		self.frame_toolbar.AddTool(wx.ID_ANY, "div", Base64ToImg(code), Base64ToImg(code), wx.ITEM_NORMAL, "Div", "Binds Div tool to your cursor")
-		self.frame_toolbar.AddTool(wx.ID_ANY, "text", Base64ToImg(txt), Base64ToImg(txt), wx.ITEM_NORMAL, "Text", "Binds Text tool to your cursor")
-		self.frame_toolbar.AddTool(wx.ID_ANY, "image", Base64ToImg(img), Base64ToImg(img), wx.ITEM_NORMAL, "Image", "Binds Image tool to your cursor")
-		self.frame_toolbar.AddTool(wx.ID_ANY, "button", Base64ToImg(btn), Base64ToImg(btn), wx.ITEM_NORMAL, "Button", "Binds Button tool to your cursor")
-		self.frame_toolbar.AddTool(wx.ID_ANY, "input", Base64ToImg(inp), Base64ToImg(inp), wx.ITEM_NORMAL, "Input", "Binds Input tool to your cursor")
+		self.frame_toolbar.AddTool(1, "div", Base64ToImg(cod), Base64ToImg(cod), wx.ITEM_NORMAL, "Div", "Binds Div tool to your cursor")
+		self.frame_toolbar.AddTool(2, "text", Base64ToImg(txt), Base64ToImg(txt), wx.ITEM_NORMAL, "Text", "Binds Text tool to your cursor")
+		self.frame_toolbar.AddTool(3, "image", Base64ToImg(img), Base64ToImg(img), wx.ITEM_NORMAL, "Image", "Binds Image tool to your cursor")
+		self.frame_toolbar.AddTool(4, "button", Base64ToImg(btn), Base64ToImg(btn), wx.ITEM_NORMAL, "Button", "Binds Button tool to your cursor")
+		self.frame_toolbar.AddTool(5, "input", Base64ToImg(inp), Base64ToImg(inp), wx.ITEM_NORMAL, "Input", "Binds Input tool to your cursor")
 		self.frame_toolbar.AddSeparator()
 		self.frame_toolbar.AddSeparator()
 		self.frame_toolbar.AddSeparator()
-		self.frame_toolbar.AddTool(wx.ID_ANY, "save", Base64ToImg(flp), Base64ToImg(flp), wx.ITEM_NORMAL, "Save", "Save project file")
-		self.frame_toolbar.AddTool(wx.ID_ANY, "export", Base64ToImg(exp), Base64ToImg(exp), wx.ITEM_NORMAL, "Export", "Export HTML file")
+		self.frame_toolbar.AddTool(9, "save", Base64ToImg(flp), Base64ToImg(flp), wx.ITEM_NORMAL, "Save", "Save project file")
+		self.frame_toolbar.AddTool(10, "export", Base64ToImg(exp), Base64ToImg(exp), wx.ITEM_NORMAL, "Export", "Export HTML file")
 
 		self.frame_toolbar.Realize()
 
 		self.SetToolBar(self.frame_toolbar)
 
-		self.Bind(wx.EVT_TOOL, self.exporthtml, id=wx.ID_ANY)
+		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.div(), id=1)
+		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.text(), id=2)
+		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.image(), id=3)
+		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.button(), id=4)
+		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.input(), id=5)
+		self.frame_toolbar.Bind(wx.EVT_TOOL, self.save, id=9)
+		self.frame_toolbar.Bind(wx.EVT_TOOL, self.export, id=10)
 
 
 
@@ -749,38 +760,69 @@ class editorFrame(wx.Frame):
 
 		grid_sizer_1.Add(self.coloredpanel, 2, wx.EXPAND, 0)
 		grid_sizer_1.Add(self.coloredpane2, 2, wx.EXPAND, 0)
+		self.updatelist()
 
-
-		self.elementlist = wx.ListBox(choices=[],
-			name='elementlist', parent=self, pos=(800,0),
-			size=wx.Size(200, yMax*.9-15), style=0)
 
 
 		self.Center()
 		self.Show()
 
+	
 
-	def div(self, event):
+	def updatelist(self):
+		global elementlist, elements
+		elementlist = wx.ListBox(choices=elements, name='elementlist', parent=self, pos=(800,0), size=wx.Size(200,yMax*.9-15), style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
 
+
+
+
+	def div(event):
+		global divcount, elements, elementlist
+
+		divcount = divcount + 1
+		name = str(divcount) + "-div"
+		elements.append(name)
+		elementlist.Set(elements)
+
+
+	def text(event):
+		global textcount, elements, elementlist
+
+		textcount = textcount + 1
+		name = str(textcount) + "-text"
+		elements.append(name)
+		elementlist.Set(elements)
+
+
+	def image(event):
+		global imagecount, elements, elementlist
+
+		imagecount = imagecount + 1
+		name = str(imagecount) + "-image"
+		elements.append(name)
+		elementlist.Set(elements)
+
+	def button(event):
+		global buttoncount, elements, elementlist
+
+		buttoncount = buttoncount + 1
+		name = str(buttoncount) + "-button"
+		elements.append(name)
+		elementlist.Set(elements)
+
+	def input(event):
+		global inputcount, elements, elementlist
+
+		inputcount = inputcount + 1
+		name = str(inputcount) + "-input"
+		elements.append(name)
+		elementlist.Set(elements)
+
+	def save(event):
 		pass
 
-	def text(self, event):
 
-		pass
-
-	def image(self, event):
-
-		pass
-
-	def button(self, event):
-
-		pass
-
-	def input(self, event):
-
-		pass
-
-	def exporthtml(self, event):
+	def export(self, event):
 
 		pass
 

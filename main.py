@@ -43,6 +43,210 @@ def CreateConfig():
 		f.write(data)
 		f.close()
 
+		json = """{
+	"div":
+	{
+		"class":"",
+		"id":"",
+		"a":"",
+		"type":"",
+		"style":
+		{
+
+			"position":"",
+			"background-color":"",
+			"background":"",
+			"text-align":"",
+			"height":"",
+			"width":"",
+			"margin":
+			{
+				"margin-top":"",
+				"margin-bottom":"",
+				"margin-left":"",
+				"margin-right":""
+			},
+			"padding":
+			{
+				"padding-top":"",
+				"padding-bottom":"",
+				"padding-left":"",
+				"padding-right":""
+			},
+			"border":
+			{
+				"border-top":"",
+				"border-bottom":"",
+				"border-left":"",
+				"border-right":""
+			}
+		}
+	},
+	"text":
+	{
+		"class":"",
+		"id":"",
+		"a":"",
+		"type":"",
+		"a_new_window":"",
+		"style":
+		{
+			"content":"",
+			"position":"",
+			"background-color":"",
+			"background":"",
+			"text-align":"",
+			"font-family":"",
+			"font-weight":"",
+			"text-decoration":"",
+			"color":"",
+			"height":"",
+			"width":"",
+			"margin":
+			{
+				"margin-top":"",
+				"margin-bottom":"",
+				"margin-left":"",
+				"margin-right":""
+			},
+			"padding":
+			{
+				"padding-top":"",
+				"padding-bottom":"",
+				"padding-left":"",
+				"padding-right":""
+			},
+			"border":
+			{
+				"border-top":"",
+				"border-bottom":"",
+				"border-left":"",
+				"border-right":""
+			}
+		}
+	},
+	"image":
+	{
+		"class":"",
+		"id":"",
+		"a":"",
+		"type":"",
+		"a_new_window":"",
+		"src":"",
+		"alt":"",
+		"style":
+		{
+			"height":"",
+			"width":"",
+			"position":"",
+			"margin":
+			{
+				"margin-top":"",
+				"margin-bottom":"",
+				"margin-left":"",
+				"margin-right":""
+			},
+			"padding":
+			{
+				"padding-top":"",
+				"padding-bottom":"",
+				"padding-left":"",
+				"padding-right":""
+			},
+			"border":
+			{
+				"border-top":"",
+				"border-bottom":"",
+				"border-left":"",
+				"border-right":""
+			}
+		}
+	},
+	"button":
+	{
+		"class":"",
+		"id":"",
+		"a":"",
+		"type":"",
+		"a_new_window":"",
+		"disabled":"",
+		"type":"",
+		"value":"",
+		"name":"",
+		"style":
+		{
+			"height":"",
+			"width":"",
+			"position":"",
+			"margin":
+			{
+				"margin-top":"",
+				"margin-bottom":"",
+				"margin-left":"",
+				"margin-right":""
+			},
+			"padding":
+			{
+				"padding-top":"",
+				"padding-bottom":"",
+				"padding-left":"",
+				"padding-right":""
+			},
+			"border":
+			{
+				"border-top":"",
+				"border-bottom":"",
+				"border-left":"",
+				"border-right":""
+			}
+		}
+	},
+	"input":
+	{
+		"class":"",
+		"id":"",
+		"type":"",
+		"a":"",
+		"a_new_window":"",
+		"autocomplete":"",
+		"name":"",
+		"placeholder":"",
+		"type":"",
+		"value":"",
+		"readonly":"",
+		"maxlength":"",
+		"style":
+		{
+			"height":"",
+			"width":"",
+			"position":"",
+			"margin":
+			{
+				"margin-top":"",
+				"margin-bottom":"",
+				"margin-left":"",
+				"margin-right":""
+			},
+			"padding":
+			{
+				"padding-top":"",
+				"padding-bottom":"",
+				"padding-left":"",
+				"padding-right":""
+			},
+			"border":
+			{
+				"border-top":"",
+				"border-bottom":"",
+				"border-left":"",
+				"border-right":""
+			}
+		}
+	}
+}"""
+		f = open(defaultpath + '\\.PyWebGen\\elements.properties', 'w+')
+		f.write(json)
+		f.close()
 
 		
 
@@ -52,13 +256,16 @@ def CreateConfig():
 if not os.path.exists(defaultpath + "\\.PyWebGen"):
 	os.makedirs(defaultpath + "\\.PyWebGen")
 
-confExists = os.path.isfile(defaultpath + "\\.PyWebGen\\config.json") 
+confExists = os.path.isfile(defaultpath + "\\.PyWebGen\\config.json")
+elementExists = os.path.isfile(defaultpath + "\\.PyWebGen\\elements.properties") 
 
-if confExists == True:
+if confExists and elementExists:
 	f = str(Path.home())
 	ff = f + "\\" + ".PyWebGen" + "\\" + "config.json"
 	ff = r'%s' %  ff
-	globconf = json.load(open(ff))
+	fd = open(ff)
+	globconf = json.load(fd)
+	fd.close()
 	cnf=1
 
 else:
@@ -250,7 +457,9 @@ class Menu(wx.Frame):
 		filePath = str(Path.home())
 		fp = filePath + "\\" + ".PyWebGen" + "\\" + "config.json"
 		fp = r'%s' %  fp
-		cfg = json.load(open(fp))
+		fd = open(fp)
+		cfg = json.load(fd)
+		fd.close()
 
 
 		val = cfg["ask_for_close"]
@@ -446,6 +655,9 @@ class NewProjFrame(wx.Frame):
 		data = '{\n\t"name": "' + name + '",\n\t"author": "' + author + '",\n\t"version": "' + ver + '",\n\t"desc": "' + repr(desc) + '",\n\t"elements" : []\n}'
 		currpath = os.getcwd()
 		os.chdir(path + "\\" +  name)
+		mkconffile = open("elements.properties", "w+")
+		mkconffile.write("{\n\t\n}")
+		mkconffile.close()
 		mkconffile = open("config.pwgproj", 'w+')
 		mkconffile.write(data)
 		mkconffile.close()
@@ -477,7 +689,7 @@ class NewProjFrame(wx.Frame):
 			author___ = getpass.GetUser()
 
 		if (err==0):
-			self.createproject(name___, path___, author___, version___, description___)
+			self.createproject(path___, name___, author___, version___, description___)
 			global workingdir
 			workingdir = path___ + name___ + "\\"
 			frame = editorFrame()
@@ -650,10 +862,11 @@ class settingsFrame(wx.Frame):
 ID_SAVE = wx.NewIdRef()
 ID_EXPORT = wx.NewIdRef()
 ID_DELETE = wx.NewIdRef()
-accelerators = [wx.AcceleratorEntry() for x in range(3)]
+accelerators = [wx.AcceleratorEntry() for x in range(4)]
 accelerators[0].Set(wx.ACCEL_CTRL, ord('S'), ID_SAVE)
 accelerators[1].Set(wx.ACCEL_CTRL, ord('E'), ID_EXPORT)
 accelerators[2].Set(wx.ACCEL_NORMAL, wx.WXK_DELETE, ID_DELETE)
+accelerators[3].Set(wx.ACCEL_NORMAL, wx.WXK_NUMPAD_DELETE, ID_DELETE)
 
 
 exp = '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'
@@ -672,7 +885,7 @@ class editorFrame(wx.Frame):
 
 	def __init__(self):
 
-		global divcount, textcount, imagecount, buttoncount, inputcount, elements, workingdir, webpage, wd
+		global divcount, textcount, imagecount, buttoncount, inputcount, elements, workingdir, webpage, wd, props, dep
 
 		super().__init__(parent=None, title="PWG | Editor ", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER  |  wx.MAXIMIZE_BOX)
 
@@ -731,18 +944,30 @@ class editorFrame(wx.Frame):
 		wd = str(workingdir)
 		wd.replace("\\\\", "\\")
 
-		ue = wd + "\\" + "config.pwgproj"
-		ue = r'%s' %  ue
-		uefile = open(ue)
-		webpage = json.load(uefile)
-		uefile.close()
+##########configuration
+		file = os.path.join(wd, 'config.pwgproj')
+		file = open(file)
+		webpage = json.load(file)
+		file.close()
+
+##########default elements
+		filepath = str(Path.home())
+		filepath = os.path.join(filepath, '.PyWebGen')
+		filepath = os.path.join(filepath, 'elements.properties')
+		depfile = open(filepath)
+		dep = json.load(depfile)
+		depfile.close()
+
+###############Custom used elements
+		file = os.path.join(wd, 'elements.properties')
+		file = open(file)
+		props = json.load(file)
+		file.close()
 
 		elements = []
 
 		for val in webpage['elements']:
 			elements.append(val)
-
-
 
 		self.frame_toolbar = wx.ToolBar(self, -1, style=wx.TB_3DBUTTONS | wx.TB_HORIZONTAL)
 		self.frame_toolbar.SetBackgroundColour("#202020")
@@ -768,7 +993,7 @@ class editorFrame(wx.Frame):
 		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.image(), id=3)
 		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.button(), id=4)
 		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.input(), id=5)
-		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.delete(), id=6)
+		self.frame_toolbar.Bind(wx.EVT_TOOL, self.delete, id=6)
 
 		self.frame_toolbar.Bind(wx.EVT_TOOL, self.save, id=9)
 		self.frame_toolbar.Bind(wx.EVT_TOOL, self.export, id=10)
@@ -785,12 +1010,6 @@ class editorFrame(wx.Frame):
 		self.Center()
 		self.Show()
 
-
-
-
-	def save(self, event):
-		print("Save")
-		event.Skip()
 
 	def export(self, event):
 		print("Export")
@@ -820,7 +1039,7 @@ class editorFrame(wx.Frame):
 
 		elmt = elmt[:-1]
 
-		data = '{\n\t"name": "' + webpage['name'] + '",\n\t"author": "' + webpage['author'] + '",\n\t"version": "' + webpage['version'] + '",\n\t"desc": "' + webpage['desc'] + '",\n\t"elements" : [' + elmt + ']\n\n\n\t'
+		data = '{\n\t"name": "' + webpage['name'] + '",\n\t"author": "' + webpage['author'] + '",\n\t"version": "' + webpage['version'] + '",\n\t"desc": "' + webpage['desc'] + '",\n\t"elements" : [' + elmt + ']'
 
 		data = data + "\n}"
 		mkconffile = open(wd + "\\config.pwgproj", 'w+')
@@ -880,7 +1099,7 @@ class editorFrame(wx.Frame):
 
 
 
-	def loadselected(self):
+	def loadselected(self, event):
 		global elements
 		num, word = re.split("-", elements[elementlist.GetSelection()])
 		if word == "div":
@@ -908,7 +1127,7 @@ class editorFrame(wx.Frame):
 	def updatelist(self):
 		global elements, elementlist,divcount, textcount, imagecount, buttoncount, inputcount
 		elementlist = wx.ListBox(choices=elements, name='elementlist', parent=self, pos=(800,0), size=wx.Size(200,yMax*.9-15), style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
-		elementlist.Bind(wx.EVT_LISTBOX, self.loadselected())
+		elementlist.Bind(wx.EVT_LISTBOX, self.loadselected)
 		i, divcount, textcount, buttoncount, imagecount, inputcount = 0,0,0,0,0,0
 		imax = len(elements)
 
@@ -941,14 +1160,46 @@ class editorFrame(wx.Frame):
 				pass
 
 	def div(event):
-		global divcount, elements, elementlist
+		global divcount, elements, elementlist, wd, props, dep
 		divcount = divcount + 1
 		name = str(divcount) + "-div"
 		elements.append(name)
 		elementlist.Set(elements)
+		#self.autosaveprops()
+		if name in props:
+		#	self.reloadprops()
+			pass
+		else:
+			file = open(wd+"elements.properties", "r")
+			lines = file.readlines()
+			file.close()
+			lines = lines[:-2]
+			file = open(wd+'elements.properties', 'w')
+			data = dep['div']
+			tempfile = os.path.join(wd, '.tmp')
+			tempfile = open(tempfile, 'w+')
+			json.dump(data, tempfile)
+			tempfile.close()
+			tempfile = os.path.join(wd, '.tmp')
+			tempfilepath = tempfile
+			tempfile = open(tempfile, "r")
+			templines = tempfile.readlines()
+			i=0
+			for line in lines:
+				i = i+1 
+				if len(lines)>1 and i==len(lines):
+					file.write(line+",")
+				else:
+					file.write(line)
 
-		data = '"' + name + '" : "[' + '"style":"' '''+ style''' + ']"'
-		print(data)
+			for line in templines:
+				file.write('"' + name + '":' + line)
+
+			file.write("\n\n}")
+			file.close()
+			tempfile.close()
+			os.remove(tempfilepath)
+			
 		
 	def text(event):
 		global textcount, elements, elementlist
@@ -957,8 +1208,6 @@ class editorFrame(wx.Frame):
 		name = str(textcount) + "-text"
 		elements.append(name)
 		elementlist.Set(elements)
-		data = '"' + name + '" : "['  + ']"'
-		print(data)
 		
 	def image(event):
 		global imagecount, elements, elementlist
@@ -967,9 +1216,7 @@ class editorFrame(wx.Frame):
 		name = str(imagecount) + "-image"
 		elements.append(name)
 		elementlist.Set(elements)
-		data = '"' + name + '" : "['  + ']"'
-		print(data)
-		
+				
 	def button(event):
 		global buttoncount, elements, elementlist
 
@@ -977,24 +1224,16 @@ class editorFrame(wx.Frame):
 		name = str(buttoncount) + "-button"
 		elements.append(name)
 		elementlist.Set(elements)
-		data = '"' + name + '" : "['  + ']"'
-		print(data)
-		
+				
 	def input(event):
 		global inputcount, elements, elementlist
 		inputcount = inputcount + 1
 		name = str(inputcount) + "-input"
 		elements.append(name)
 		elementlist.Set(elements)
-		data = '"' + name + '" : "['  + ']"'
-		print(data)
-
-
-
-
-
-
+		
 if __name__ == "__main__":
 	app = App()
 	app.MainLoop()
 	sys.exit(1)
+

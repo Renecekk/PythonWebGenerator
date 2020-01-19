@@ -269,7 +269,6 @@ if confExists and elementExists:
 	cnf=1
 
 else:
-	print("Creating new Conf")
 	cnf=0
 	CreateConfig()
 
@@ -662,7 +661,8 @@ class NewProjFrame(wx.Frame):
 		mkconffile.write(data)
 		mkconffile.close()
 
-		os.makedirs(pathrepl+"\\"+name+"\\"+"OUTPUT")
+		os.makedirs(pathrepl+"\\"+name+"\\OUTPUT")
+		os.makedirs(pathrepl+"\\"+name+"\\persistent")
 		os.chdir(currpath)
 
 
@@ -859,14 +859,15 @@ class settingsFrame(wx.Frame):
 ###################################################################################################################################################
 ################################################################## EDITOR #########################################################################
 ###################################################################################################################################################
+
 ID_SAVE = wx.NewIdRef()
 ID_EXPORT = wx.NewIdRef()
 ID_DELETE = wx.NewIdRef()
 accelerators = [wx.AcceleratorEntry() for x in range(4)]
 accelerators[0].Set(wx.ACCEL_CTRL, ord('S'), ID_SAVE)
 accelerators[1].Set(wx.ACCEL_CTRL, ord('E'), ID_EXPORT)
-accelerators[2].Set(wx.ACCEL_NORMAL, wx.WXK_DELETE, ID_DELETE)
-accelerators[3].Set(wx.ACCEL_NORMAL, wx.WXK_NUMPAD_DELETE, ID_DELETE)
+#accelerators[2].Set(wx.ACCEL_NORMAL, wx.WXK_DELETE, ID_DELETE)
+#accelerators[3].Set(wx.ACCEL_NORMAL, wx.WXK_NUMPAD_DELETE, ID_DELETE)
 
 
 exp = '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'
@@ -878,18 +879,22 @@ btn = 'iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAACBjS
 inp = 'iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH4wwIECQCX4AlmAAABFhJREFUSMedlU9oVFcUxr9z7s10MmOSGTSx6qKSgYQsFELduArFILVgFxIQWoMWQ0F0oBKIYrJxNUbdGKhCFbowutJN6zIussiIUDNj3TTCgAa6sB2ZSeYNGd+8e04XzgyJGZPYD97m/vl+33v33PNo3759qOvFixfYiv4+eRLW8xhEAuZTEDnpnPuamN8RQJ8/fKirfamvr681l8tZ3/cVAG0GIADd27ZxzvO8wtDQt+9U7xNRmER++2l+fvj+zp3S/vQpLQMaCoUokUgEtH///lfhcDhKRKKqRLQxxzmHaCSCJd/XH2Ox2Kn29lDBOWlZWOA/SqXi5Y4OXyMRIhFVgCuVSpkOHjyod+7cQVdXF3zfx0YQ5xzi8ThmZmYwdeMGlkVkJBql7xYXqZjPC3se6a1bxEePIlSp4J+3bzEyMgJLRNLV1UU7duyAqn4UIiJgZjx79gw3b96Ecw5tzJycm0POOZwn4vDVqxo/cULVOVBHB2AMiEgZAKsqASBVbfpUq1ViZkqn0zQ6OkorKytEzJTJZlFdWsI1z8Nfly8jfuYMOedI3yelmi9bAI30RLTuTZxzaGlpQTqdxsTEBADAGINsNovi0hIA4NrkJL46fx4SBDDWQlWx2tdudsjGGKTTaYyPjzdCZDIZLC8vA6qYmppCMpmEBAHYNreznwIQEczPz8PzPKgqrl+/jmQyiSAIYO3H8zadEZF1AOccstksRKQBGB0d3RTQFFKvoidPnqwBZDIZAEC5XEYqldoyAAC4GSCXy2FsbAzGGIgIstksAKBUKuHKlSu4ePHilgHrIPVq6GhvxzdHjiCfzyOTySAIApRKJaRSKVy4cOGTAOs+FzOjWq2iWq0iee4cFhcX8fz5cwDA5OQkxsbGPhnQ9EwKhQJ+f/QIX/b3Y+LSJVQqFXQnEv8b0ICISGPg9evXePnyJXbv3o2e3l78cvs2jDEIgqBRBJtJVWGtbfhaZgYzNyb7+/tx4MCBdTe/vmYrqt/4urfN5/MYHx9HOByGiDQSOOewWdvfSMyMSqWCfD4PSqVSrlwuQ0RARI0UddXG6MN/Ta1jKxHpR/aAmRGNRkFzc3NqjNkwlTEGttb4VoOccwiCYMO9zjlYz/P+JKI2APLhAlUlY4wrFAqdnufFmFlr7VuDIKC2trbi9u3b/3XOGSLSJgxW1ZI1xvTj/aVcs0hEcPfuXTs9Pf2OmadF5HsAjoistdaFw2EbiUQevXnzZvj06dOfHT9+PGhSHARA6uYBADc4OOgAOADu8OHDLhQKBQDQ2tq6Nx6PY8+ePZRIJNDT00Pd3d3YtWvXF7FYDPF4PBgeHm7sXeUTAFCamZmpE9fowYMHuHfvnlprQ52dnQvGmL0ARFVZRERVGcCrlZWVXt/3/WPHjtHQ0FCzY9F15jUoDh06hNnZ2R+KxWLv7OzsWedclIhcLZACMMxcHhgY+DkWiy0MDAz8+vjxYwDA4ODgGs//AMuEVdQT4ac/AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE5LTEyLTA4VDE2OjM2OjAyLTA4OjAwm7ZNwQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxOS0xMi0wOFQxNjozNjowMi0wODowMOrr9X0AAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC'
 tsh = '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'
 
-
-
 class editorFrame(wx.Frame):
 
 
 	def __init__(self):
 
-		global divcount, textcount, imagecount, buttoncount, inputcount, elements, workingdir, webpage, wd, props, dep
+		global divcount, textcount, imagecount, buttoncount, inputcount, elements, workingdir, elementlist, webpage, wd, props, dep, leftSplitter, rightSplitter, myGrid, currentlySelectedCell, right
+
 
 		super().__init__(parent=None, title="PWG | Editor ", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER  |  wx.MAXIMIZE_BOX)
 
-		divcount, textcount, imagecount, buttoncount, inputcount = 0,0,0,0,0
+		divcount, textcount, imagecount, buttoncount, inputcount = [],[],[],[],[]
+		divcount.append("0")
+		textcount.append("0")
+		imagecount.append("0")
+		inputcount.append("0")
+		buttoncount.append("0")
 
 		icon = wx.Icon()
 		icon.CopyFromBitmap(Base64ToImg(favicon))
@@ -901,52 +906,34 @@ class editorFrame(wx.Frame):
 		accel=wx.AcceleratorTable(accelerators)
 		self.SetAcceleratorTable(accel)
 
-		panel = wx.Panel(self)
-		sizer = wx.FlexGridSizer(2, 2, 0, 0)
+		rightSplitter = wx.SplitterWindow(self, style = wx.SP_BORDER)
+		leftSplitter = wx.SplitterWindow(rightSplitter)
+		leftSplitter.SetMinimumPaneSize(750)
+		rightSplitter.SetBackgroundColour(bgColor)
 
 		self.Bind(wx.EVT_MENU, self.save, id=ID_SAVE)
 		self.Bind(wx.EVT_MENU, self.export, id=ID_EXPORT)
 		self.Bind(wx.EVT_MENU, self.delete, id=ID_DELETE)
 
 
-		self.currentlySelectedCell = (0, 0)
-		self.myGrid = gridlib.Grid(self, size=(780, yMax*.9-15), pos=(0, 40))
-		self.myGrid.CreateGrid(100,50)
-		self.myGrid.SetRowLabelSize(0)
-		self.myGrid.SetColLabelSize(0)
-		self.myGrid.DisableDragColSize()
-		self.myGrid.DisableDragRowSize()
-		self.myGrid.SetBackgroundColour("transparent")
-
-		self.myGrid.Bind(gridlib.EVT_GRID_SELECT_CELL, self.onSingleSelect)
-		self.myGrid.Bind(gridlib.EVT_GRID_RANGE_SELECT, self.onDragSelection)
-
-		for i in range(0,100):
-			self.myGrid.SetRowSize(i,15)
-
-
-		for i in range(0,50):
-			self.myGrid.SetColSize(i,15)
-
-		col=0
-		row=0
-		while (row<101):
-			if (col>50):
-				col=0
-				row=row+1
-			if (col%10==9):
-				self.myGrid.SetCellBackgroundColour(row, col, "#E5E5E5")
-			if (row%10==9):
-				self.myGrid.SetCellBackgroundColour(row, col, "#E5E5E5")
-			col=col+1
-
-
 		wd = str(workingdir)
 		wd.replace("\\\\", "\\")
 
 ##########configuration
+		if os.path.isfile(wd+"persistent\\config.pwgproj"):
+			file = open(wd+"persistent\\config.pwgproj", "r")
+			lines = file.readlines()
+			file.close()
+
+			file = os.path.join(wd, 'config.pwgproj')
+			file = open(file, "w+")
+			for line in lines:
+				file.write(line)
+			file.close
+
+
 		file = os.path.join(wd, 'config.pwgproj')
-		file = open(file)
+		file = open(file, "r")
 		webpage = json.load(file)
 		file.close()
 
@@ -959,6 +946,17 @@ class editorFrame(wx.Frame):
 		depfile.close()
 
 ###############Custom used elements
+		if os.path.isfile(wd+"persistent\\elements.properties"):
+			file = open(wd+"persistent\\elements.properties", "r")
+			lines = file.readlines()
+			file.close()
+
+			file = os.path.join(wd, 'elements.properties')
+			file = open(file, "w+")
+			for line in lines:
+				file.write(line)
+			file.close
+
 		file = os.path.join(wd, 'elements.properties')
 		file = open(file)
 		props = json.load(file)
@@ -971,12 +969,14 @@ class editorFrame(wx.Frame):
 
 		self.frame_toolbar = wx.ToolBar(self, -1, style=wx.TB_3DBUTTONS | wx.TB_HORIZONTAL)
 		self.frame_toolbar.SetBackgroundColour("#202020")
-
 		self.frame_toolbar.AddTool(1, "div", Base64ToImg(cod), Base64ToImg(cod), wx.ITEM_NORMAL, "Div", "Binds Div tool to your cursor")
 		self.frame_toolbar.AddTool(2, "text", Base64ToImg(txt), Base64ToImg(txt), wx.ITEM_NORMAL, "Text", "Binds Text tool to your cursor")
 		self.frame_toolbar.AddTool(3, "image", Base64ToImg(img), Base64ToImg(img), wx.ITEM_NORMAL, "Image", "Binds Image tool to your cursor")
 		self.frame_toolbar.AddTool(4, "button", Base64ToImg(btn), Base64ToImg(btn), wx.ITEM_NORMAL, "Button", "Binds Button tool to your cursor")
 		self.frame_toolbar.AddTool(5, "input", Base64ToImg(inp), Base64ToImg(inp), wx.ITEM_NORMAL, "Input", "Binds Input tool to your cursor")
+		self.frame_toolbar.AddSeparator()
+		self.frame_toolbar.AddSeparator()
+		self.frame_toolbar.AddSeparator()
 		self.frame_toolbar.AddTool(6, "delete", Base64ToImg(tsh), Base64ToImg(tsh), wx.ITEM_NORMAL, "Delete", "Delete selected item")
 		self.frame_toolbar.AddSeparator()
 		self.frame_toolbar.AddSeparator()
@@ -985,7 +985,6 @@ class editorFrame(wx.Frame):
 		self.frame_toolbar.AddTool(10, "export", Base64ToImg(exp), Base64ToImg(exp), wx.ITEM_NORMAL, "Export", "Export HTML file")
 
 		self.frame_toolbar.Realize()
-
 		self.SetToolBar(self.frame_toolbar)
 
 		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.div(), id=1)
@@ -993,22 +992,112 @@ class editorFrame(wx.Frame):
 		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.image(), id=3)
 		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.button(), id=4)
 		self.frame_toolbar.Bind(wx.EVT_TOOL, lambda evt:self.input(), id=5)
-		self.frame_toolbar.Bind(wx.EVT_TOOL, self.delete, id=6)
 
+		self.frame_toolbar.Bind(wx.EVT_TOOL, self.delete, id=6)
 		self.frame_toolbar.Bind(wx.EVT_TOOL, self.save, id=9)
 		self.frame_toolbar.Bind(wx.EVT_TOOL, self.export, id=10)
 
-		sizer.Add(self.frame_toolbar, 1, wx.EXPAND, 0)
-		sizer.Add(self.myGrid, 1, wx.EXPAND, 0)
-
-		#############
 
 
-		#############
+		currentlySelectedCell = (0, 0)
+		myGrid = gridlib.Grid(leftSplitter, size=(780, yMax*.9-15))
+		myGrid.CreateGrid(100,50)
+		myGrid.SetRowLabelSize(0)
+		myGrid.SetColLabelSize(0)
+		myGrid.DisableDragColSize()
+		myGrid.DisableDragRowSize()
 
-		self.updatelist()
-		self.Center()
-		self.Show()
+
+		myGrid.Bind(gridlib.EVT_GRID_SELECT_CELL, self.onSingleSelect)
+		myGrid.Bind(gridlib.EVT_GRID_RANGE_SELECT, self.onDragSelection)
+
+		for i in range(0,100):
+			myGrid.SetRowSize(i,15)
+
+
+		for i in range(0,50):
+			myGrid.SetColSize(i,15)
+
+		col=0
+		row=0
+		while (row<101):
+			if (col>50):
+				col=0
+				row=row+1
+			if (col%10==9):
+				myGrid.SetCellBackgroundColour(row, col, "#E5E5E5")
+			if (row%10==9):
+				myGrid.SetCellBackgroundColour(row, col, "#E5E5E5")
+			col=col+1
+
+
+		elementlist = wx.ListBox(leftSplitter, choices=elements, name='elementlist', pos=(800,0), size=wx.Size(200,yMax*.9-15), style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
+		elementlist.Bind(wx.EVT_LISTBOX, self.loadelement)
+
+
+
+		right = wx.Panel(rightSplitter)
+
+		leftSplitter.SplitVertically(myGrid, elementlist)
+		leftSplitter.SetSashGravity(0.5)
+
+		rightSplitter.SplitVertically(leftSplitter, right)
+		for x in elements:
+			num,word = re.split("-", x)
+			num = int(num)
+			dclen = len(divcount)
+			txlen = len(textcount)
+			imlen = len(imagecount)
+			btnlen = len(buttoncount)
+			inlen = len(inputcount)
+			if (word=="div"):
+
+				if dclen<num+3:
+					while(dclen-2<num):
+						divcount.append("")
+						dclen+=1
+
+				divcount[num] = num
+
+			if (word=="text"):
+
+				if txlen<num+3:
+					while(txlen-2<num):
+						textcount.append("")
+						txlen+=1
+
+				textcount[num] = num
+
+			if (word=="image"):
+
+				if imlen<num+3:
+					while(imlen-2<num):
+						imagecount.append("")
+						imlen+=1
+
+				imagecount[num] = num
+
+			if (word=="button"):
+
+				if btnlen<num+3:
+					while(btnlen-2<num):
+						buttoncount.append("")
+						btnlen+=1
+
+				buttoncount[num] = num
+
+			if (word=="input"):
+
+				if inlen<num+3:
+					while(inlen-2<num):
+						inputcount.append("")
+						inlen+=1
+
+				inputcount[num] = num
+
+
+
+
 
 
 	def export(self, event):
@@ -1016,20 +1105,23 @@ class editorFrame(wx.Frame):
 		event.Skip()
 
 	def onDragSelection(self, event):
+		global myGrid
 
-		if self.myGrid.GetSelectionBlockTopLeft():
-			top_left = self.myGrid.GetSelectionBlockTopLeft()[0]
-			bottom_right = self.myGrid.GetSelectionBlockBottomRight()[0]
+		if myGrid.GetSelectionBlockTopLeft():
+			top_left = myGrid.GetSelectionBlockTopLeft()[0]
+			bottom_right = myGrid.GetSelectionBlockBottomRight()[0]
 			print(top_left)
 			print(bottom_right)
 
 
 	def onSingleSelect(self, event):
+		global currentlySelectedCell
 		print(event.GetRow(), event.GetCol())
-		self.currentlySelectedCell = (event.GetRow(), event.GetCol())
+		currentlySelectedCell = (event.GetRow(), event.GetCol())
 		event.Skip()
 
-	def save(self, event):
+
+	def save(self, event=None):
 		global elements, wd, webpage
 		elmt = ""
 
@@ -1046,130 +1138,139 @@ class editorFrame(wx.Frame):
 		mkconffile.write(data)
 		mkconffile.close()
 
+		file = open(wd+"config.pwgproj", "r")
+		lines = file.readlines()
+		file.close()
+		file = open(wd+"persistent\\config.pwgproj", "w+")
+		for line in lines:
+			file.write(line)
+		file.close()
+
+		file = open(wd+"elements.properties", "r")
+		lines = file.readlines()
+		file.close()
+		file = open(wd+"persistent\\elements.properties", "w+")
+		for line in lines:
+			file.write(line)
+		file.close()
+
+
 	def delete(self, event):
-		global divcount, textcount, imagecount, buttoncount, inputcount, elements, elementlist
+		global divcount, textcount, imagecount, buttoncount, inputcount, elements, elementlist, wd, webpage
 
 		myArr = []
 		arrlen = len(elements)
 		i = 0
 
 		rem = elementlist.GetSelection()
-
 		if (rem != "NOT_FOUND"):
-			while i<arrlen:
-				if (i != rem):
-					myArr.append(elements[i])
-				else:
-					pass
-				i = i+1
+			rem = elements[rem]
+			toremovenumber, toremoveword = re.split("-", rem)
+			if toremoveword == "div":
+				divcount[int(toremovenumber)] = ''
+			elif toremoveword == "text":
+				textcount[int(toremovenumber)] = ''
+			elif toremoveword == "image":
+				imagecount[int(toremovenumber)] = ''
+			elif toremoveword == "button":
+				buttoncount[int(toremovenumber)] = ''
+			elif toremoveword == "input":
+				inputcount[int(toremovenumber)] = ''
 
-		elements = myArr
-		elementlist.Set(elements)
+			for x in elements:
+				if (x != rem):
+					myArr.append(x)
 
-		i, divcount, textcount, buttoncount, imagecount, inputcount = 0,0,0,0,0,0
-		imax = len(elements)
+			elements = myArr
+			elementlist.Set(elements)
 
-		while i<imax:
-			num, word = re.split("-", elements[i])
-			num = int(num)
-			i = i+1
+			file = open(wd+"elements.properties", "r")
+			lines = file.readlines()
+			file.close()
 
-			if (word == "div"):
-				if divcount<num:
-					divcount = num
+			file = open(wd+'elements.properties', 'w')
 
-			elif (word == "text"):
-				if textcount<num:
-					textcount = num
+			tempfile = os.path.join(wd, '.tmp')
+			tempfile = open(tempfile, 'w')
 
-			elif (word == "button"):
-				if buttoncount<num:
-					buttoncount = num
+			for line in lines:
+				tempfile.write(line)
+			tempfile.close()
 
-			elif (word == "image"):
-				if imagecount<num:
-					imagecount = num
+			tempfile = os.path.join(wd, '.tmp')
+			tempfilepath = tempfile
+			tempfile = open(tempfile, "r")
+			templines = tempfile.readlines()
 
-			elif (word == "input"):
-				if inputcount<num:
-					inputcount = num
+			if elements:
+				nametoremove = str(elements[0])
 
+			for line in templines:
+				if elements:
+					if line.startswith(',"'+nametoremove+'":'):
+						line = line[1:]
+
+				if rem not in line:
+					file.write(line)
+
+				i+=1
+
+
+			file.close()
+			tempfile.close()
+			os.remove(tempfilepath)
+
+
+
+			elmt = ""
+
+			for x in elements:
+				x = ","+ "\"" + x + "\""
+				elmt = elmt + x
+
+			if len(elmt)==0:
+				elmt=""
 			else:
-				pass
+				elmt = elmt[1:]
+
+			data = '{\n\t"name": "' + webpage['name'] + '",\n\t"author": "' + webpage['author'] + '",\n\t"version": "' + webpage['version'] + '",\n\t"desc": "' + webpage['desc'] + '",\n\t"elements" : [' + elmt + ']'
+
+			data = data + "\n}"
+			mkconffile = open(wd + "\\config.pwgproj", 'w+')
+			mkconffile.write(data)
 
 
 
-	def loadselected(self, event):
-		global elements
-		num, word = re.split("-", elements[elementlist.GetSelection()])
-		if word == "div":
-			print("div")
-		elif word == "text":
-			print("Text")
-		elif word == "button":
-			print("Button")
-		elif word == "image":
-			print("Image")
-		elif word == "input":
-			print("Input")
-		else:
-			print("Default")
-
-
-	def onKey(self, evt):
-		if evt.GetKeyCode() == wx.WXK_DELETE:
-			print("DELETED")
-			self.delete()
-
-		elif evt.GetKeyCode() == wx.WXK_NUMPAD_DELETE:
-			self.delete()
-
-	def updatelist(self):
-		global elements, elementlist,divcount, textcount, imagecount, buttoncount, inputcount
-		elementlist = wx.ListBox(choices=elements, name='elementlist', parent=self, pos=(800,0), size=wx.Size(200,yMax*.9-15), style=wx.LB_SINGLE | wx.LB_NEEDED_SB)
-		elementlist.Bind(wx.EVT_LISTBOX, self.loadselected)
-		i, divcount, textcount, buttoncount, imagecount, inputcount = 0,0,0,0,0,0
-		imax = len(elements)
-
-		while i<imax:
-			num, word = re.split("-", elements[i])
-			num = int(num)
-			i = i+1
-
-			if (word == "div"):
-				if divcount<num:
-					divcount = num
-
-			elif (word == "text"):
-				if textcount<num:
-					textcount = num
-
-			elif (word == "button"):
-				if buttoncount<num:
-					buttoncount = num
-
-			elif (word == "image"):
-				if imagecount<num:
-					imagecount = num
-
-			elif (word == "input"):
-				if inputcount<num:
-					inputcount = num
-
-			else:
-				pass
 
 	def div(event):
-		global divcount, elements, elementlist, wd, props, dep
-		divcount = divcount + 1
-		name = str(divcount) + "-div"
+		global elements, elementlist, props, dep, wd, webpage, divcount
+		i=0
+
+		for x in divcount:
+			if x == "":
+				i = i+1
+
+		while(i<2):
+			divcount.append("")
+			i+=1
+
+		i=0
+		for x in divcount:
+			if x != "":
+				i+=1
+
+		i=0
+		while i<len(divcount):
+			i += 1
+			if divcount[i] == "":
+				divcount[i] = i
+				break
+
+		name = str(i) + "-div"
 		elements.append(name)
 		elementlist.Set(elements)
-		#self.autosaveprops()
-		if name in props:
-		#	self.reloadprops()
-			pass
-		else:
+
+		if name not in props:
 			file = open(wd+"elements.properties", "r")
 			lines = file.readlines()
 			file.close()
@@ -1199,41 +1300,362 @@ class editorFrame(wx.Frame):
 			file.close()
 			tempfile.close()
 			os.remove(tempfilepath)
-			
-		
+
+			elmt = ""
+
+			for x in elements:
+				x = "\"" + x + "\"" + ","
+				elmt = elmt + x
+
+			elmt = elmt[:-1]
+
+			data = '{\n\t"name": "' + webpage['name'] + '",\n\t"author": "' + webpage['author'] + '",\n\t"version": "' + webpage['version'] + '",\n\t"desc": "' + webpage['desc'] + '",\n\t"elements" : [' + elmt + ']'
+
+			data = data + "\n}"
+			mkconffile = open(wd + "\\config.pwgproj", 'w+')
+			mkconffile.write(data)
+
+
+
 	def text(event):
-		global textcount, elements, elementlist
+		global elements, elementlist, props, dep, wd, webpage, textcount
+		i=0
 
-		textcount = textcount + 1
-		name = str(textcount) + "-text"
+		for x in textcount:
+			if x == "":
+				i = i+1
+
+		while(i<2):
+			textcount.append("")
+			i+=1
+
+		i=0
+		for x in textcount:
+			if x != "":
+				i+=1
+
+		i=0
+		while i<len(textcount):
+			i += 1
+			if textcount[i] == "":
+				textcount[i] = i
+				break
+
+		name = str(i) + "-text"
 		elements.append(name)
 		elementlist.Set(elements)
-		
-	def image(event):
-		global imagecount, elements, elementlist
 
-		imagecount = imagecount + 1
-		name = str(imagecount) + "-image"
-		elements.append(name)
-		elementlist.Set(elements)
-				
+		if name not in props:
+			file = open(wd+"elements.properties", "r")
+			lines = file.readlines()
+			file.close()
+			lines = lines[:-2]
+			file = open(wd+'elements.properties', 'w')
+			data = dep['text']
+			tempfile = os.path.join(wd, '.tmp')
+			tempfile = open(tempfile, 'w+')
+			json.dump(data, tempfile)
+			tempfile.close()
+			tempfile = os.path.join(wd, '.tmp')
+			tempfilepath = tempfile
+			tempfile = open(tempfile, "r")
+			templines = tempfile.readlines()
+			i=0
+			for line in lines:
+				i = i+1 
+				if len(lines)>1 and i==len(lines):
+					file.write(line+",")
+				else:
+					file.write(line)
+
+			for line in templines:
+				file.write('"' + name + '":' + line)
+
+			file.write("\n\n}")
+			file.close()
+			tempfile.close()
+			os.remove(tempfilepath)
+
+			elmt = ""
+
+			for x in elements:
+				x = "\"" + x + "\"" + ","
+				elmt = elmt + x
+
+			elmt = elmt[:-1]
+
+			data = '{\n\t"name": "' + webpage['name'] + '",\n\t"author": "' + webpage['author'] + '",\n\t"version": "' + webpage['version'] + '",\n\t"desc": "' + webpage['desc'] + '",\n\t"elements" : [' + elmt + ']'
+
+			data = data + "\n}"
+			mkconffile = open(wd + "\\config.pwgproj", 'w+')
+			mkconffile.write(data)
+
+
 	def button(event):
-		global buttoncount, elements, elementlist
+		global elements, elementlist, props, dep, wd, webpage, buttoncount
+		i=0
 
-		buttoncount = buttoncount + 1
-		name = str(buttoncount) + "-button"
+		for x in buttoncount:
+			if x == "":
+				i = i+1
+
+		while(i<2):
+			buttoncount.append("")
+			i+=1
+
+		i=0
+		for x in buttoncount:
+			if x != "":
+				i+=1
+
+		i=0
+		while i<len(buttoncount):
+			i += 1
+			if buttoncount[i] == "":
+				buttoncount[i] = i
+				break
+
+		name = str(i) + "-button"
 		elements.append(name)
 		elementlist.Set(elements)
-				
+
+		if name not in props:
+			file = open(wd+"elements.properties", "r")
+			lines = file.readlines()
+			file.close()
+			lines = lines[:-2]
+			file = open(wd+'elements.properties', 'w')
+			data = dep['button']
+			tempfile = os.path.join(wd, '.tmp')
+			tempfile = open(tempfile, 'w+')
+			json.dump(data, tempfile)
+			tempfile.close()
+			tempfile = os.path.join(wd, '.tmp')
+			tempfilepath = tempfile
+			tempfile = open(tempfile, "r")
+			templines = tempfile.readlines()
+			i=0
+			for line in lines:
+				i = i+1 
+				if len(lines)>1 and i==len(lines):
+					file.write(line+",")
+				else:
+					file.write(line)
+
+			for line in templines:
+				file.write('"' + name + '":' + line)
+
+			file.write("\n\n}")
+			file.close()
+			tempfile.close()
+			os.remove(tempfilepath)
+
+			elmt = ""
+
+			for x in elements:
+				x = "\"" + x + "\"" + ","
+				elmt = elmt + x
+
+			elmt = elmt[:-1]
+
+			data = '{\n\t"name": "' + webpage['name'] + '",\n\t"author": "' + webpage['author'] + '",\n\t"version": "' + webpage['version'] + '",\n\t"desc": "' + webpage['desc'] + '",\n\t"elements" : [' + elmt + ']'
+
+			data = data + "\n}"
+			mkconffile = open(wd + "\\config.pwgproj", 'w+')
+			mkconffile.write(data)
+
+
 	def input(event):
-		global inputcount, elements, elementlist
-		inputcount = inputcount + 1
-		name = str(inputcount) + "-input"
+		global elements, elementlist, props, dep, wd, webpage, inputcount
+		i=0
+
+		for x in inputcount:
+			if x == "":
+				i = i+1
+
+		while(i<2):
+			inputcount.append("")
+			i+=1
+
+		i=0
+		for x in inputcount:
+			if x != "":
+				i+=1
+
+		i=0
+		while i<len(inputcount):
+			i += 1
+			if inputcount[i] == "":
+				inputcount[i] = i
+				break
+
+		name = str(i) + "-input"
 		elements.append(name)
 		elementlist.Set(elements)
+
+		if name not in props:
+			file = open(wd+"elements.properties", "r")
+			lines = file.readlines()
+			file.close()
+			lines = lines[:-2]
+			file = open(wd+'elements.properties', 'w')
+			data = dep['input']
+			tempfile = os.path.join(wd, '.tmp')
+			tempfile = open(tempfile, 'w+')
+			json.dump(data, tempfile)
+			tempfile.close()
+			tempfile = os.path.join(wd, '.tmp')
+			tempfilepath = tempfile
+			tempfile = open(tempfile, "r")
+			templines = tempfile.readlines()
+			i=0
+			for line in lines:
+				i = i+1 
+				if len(lines)>1 and i==len(lines):
+					file.write(line+",")
+				else:
+					file.write(line)
+
+			for line in templines:
+				file.write('"' + name + '":' + line)
+
+			file.write("\n\n}")
+			file.close()
+			tempfile.close()
+			os.remove(tempfilepath)
+
+			elmt = ""
+
+			for x in elements:
+				x = "\"" + x + "\"" + ","
+				elmt = elmt + x
+
+			elmt = elmt[:-1]
+
+			data = '{\n\t"name": "' + webpage['name'] + '",\n\t"author": "' + webpage['author'] + '",\n\t"version": "' + webpage['version'] + '",\n\t"desc": "' + webpage['desc'] + '",\n\t"elements" : [' + elmt + ']'
+
+			data = data + "\n}"
+			mkconffile = open(wd + "\\config.pwgproj", 'w+')
+			mkconffile.write(data)
+
+
+	def image(event):
+		global elements, elementlist, props, dep, wd, webpage, imagecount
+		i=0
+
+		for x in imagecount:
+			if x == "":
+				i = i+1
+
+		while(i<2):
+			imagecount.append("")
+			i+=1
+
+		i=0
+		for x in imagecount:
+			if x != "":
+				i+=1
+
+		i=0
+		while i<len(imagecount):
+			i += 1
+			if imagecount[i] == "":
+				imagecount[i] = i
+				break
+
+		name = str(i) + "-image"
+		elements.append(name)
+		elementlist.Set(elements)
+
+		if name not in props:
+			file = open(wd+"elements.properties", "r")
+			lines = file.readlines()
+			file.close()
+			lines = lines[:-2]
+			file = open(wd+'elements.properties', 'w')
+			data = dep['image']
+			tempfile = os.path.join(wd, '.tmp')
+			tempfile = open(tempfile, 'w+')
+			json.dump(data, tempfile)
+			tempfile.close()
+			tempfile = os.path.join(wd, '.tmp')
+			tempfilepath = tempfile
+			tempfile = open(tempfile, "r")
+			templines = tempfile.readlines()
+			i=0
+			for line in lines:
+				i = i+1 
+				if len(lines)>1 and i==len(lines):
+					file.write(line+",")
+				else:
+					file.write(line)
+
+			for line in templines:
+				file.write('"' + name + '":' + line)
+
+			file.write("\n\n}")
+			file.close()
+			tempfile.close()
+			os.remove(tempfilepath)
+
+			elmt = ""
+
+			for x in elements:
+				x = "\"" + x + "\"" + ","
+				elmt = elmt + x
+
+			elmt = elmt[:-1]
+
+			data = '{\n\t"name": "' + webpage['name'] + '",\n\t"author": "' + webpage['author'] + '",\n\t"version": "' + webpage['version'] + '",\n\t"desc": "' + webpage['desc'] + '",\n\t"elements" : [' + elmt + ']'
+
+			data = data + "\n}"
+			mkconffile = open(wd + "\\config.pwgproj", 'w+')
+			mkconffile.write(data)
+
+
+
+
+
+	def refresh(self):
+		global elements, divcount
+
+		for x in elements[i]:
+			num,word = re.split("-", x)
+			dcl = len(divcount)
+
+			if (word=="div"):
+				if dcl<num:
+					dcl = num-dcl
+					while dcl>0:
+						dcl -=1
+						divcount.append("")
+				divcount[num] = num
+
+
+
+	def loadelement(self, event):
+		global elements, right
+		num, word = re.split("-", elements[elementlist.GetSelection()])
+		if word == "div":
+			print("div")
+		elif word == "text":
+			print("Text")
+		elif word == "button":
+			print("Button")
+		elif word == "image":
+			print("Image")
+		elif word == "input":
+			print("Input")
+		else:
+			print("Default")
+
+
+
+
+
+
 		
 if __name__ == "__main__":
 	app = App()
 	app.MainLoop()
 	sys.exit(1)
-

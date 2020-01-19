@@ -4,7 +4,7 @@ import wx.propgrid
 import sys
 import json
 import os
-import re ### Pridaný nový, pridaj do súboru
+import re
 import getpass
 import time
 import base64
@@ -49,15 +49,18 @@ def CreateConfig():
 		"class":"",
 		"id":"",
 		"a":"",
+		"a_new_window":"",
 		"type":"",
 		"style":
 		{
 
 			"position":"",
 			"background-color":"",
+			"text-align":"",
 			"background":"",
 			"text-align":"",
 			"height":"",
+			"float":"",
 			"width":"",
 			"margin":
 			{
@@ -95,6 +98,7 @@ def CreateConfig():
 			"position":"",
 			"background-color":"",
 			"background":"",
+			"float":"",
 			"text-align":"",
 			"font-family":"",
 			"font-weight":"",
@@ -130,7 +134,6 @@ def CreateConfig():
 		"class":"",
 		"id":"",
 		"a":"",
-		"type":"",
 		"a_new_window":"",
 		"src":"",
 		"alt":"",
@@ -138,6 +141,7 @@ def CreateConfig():
 		{
 			"height":"",
 			"width":"",
+			"float":"",
 			"position":"",
 			"margin":
 			{
@@ -170,12 +174,12 @@ def CreateConfig():
 		"type":"",
 		"a_new_window":"",
 		"disabled":"",
-		"type":"",
 		"value":"",
 		"name":"",
 		"style":
 		{
 			"height":"",
+			"float":"",
 			"width":"",
 			"position":"",
 			"margin":
@@ -220,6 +224,7 @@ def CreateConfig():
 			"height":"",
 			"width":"",
 			"position":"",
+			"float":"",
 			"margin":
 			{
 				"margin-top":"",
@@ -320,7 +325,7 @@ class FirstSetup(wx.Frame):
 		super().__init__(parent=None, title="PWG | Main Menu", size=(0,0), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER ^ wx.MAXIMIZE_BOX)
 		self.SetBackgroundColour(bgColor)
 
-		dlg = wx.MessageDialog(self, ' Config created. Please, start program once again (this happens only once) ', 'Restart', wx.OK | wx.ICON_QUESTION)
+		dlg = wx.MessageDialog(self, "Creating needed configuration files. Please, Close this window and run program again.", 'First time setup', wx.OK | wx.ICON_QUESTION)
 		result = dlg.ShowModal()
 		dlg.Destroy()
 		if result == wx.ID_OK:
@@ -340,6 +345,13 @@ class Menu(wx.Frame):
 	def __init__(self):
 		global globconf, xMax, yMax, xHalf, yHalf, btn_font, bgColor, hovercolor, currentProjectPath, startingDir, btn_font, text_font, value_font, workingdir
 
+		filePath = str(Path.home())
+		fp = filePath + "\\" + ".PyWebGen" + "\\" + "config.json"
+		fp = r'%s' %  fp
+		fd = open(fp)
+		globconf = json.load(fd)
+		fd.close()
+
 #Getting screen resolution
 		xMax, yMax = wx.GetDisplaySize()
 
@@ -351,8 +363,6 @@ class Menu(wx.Frame):
 
 		xHalf=960
 		yHalf=540
-
-#Some basic things
 
 		super().__init__(parent=None, title="PWG | Main Menu", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER ^ wx.MAXIMIZE_BOX)
 		self.SetBackgroundColour(bgColor)
@@ -413,7 +423,6 @@ class Menu(wx.Frame):
 		self.Center()
 		self.Show()
 
-#All Button events are defined here, Hovering below
 
 	def newproject(self, event):
 		frame = NewProjFrame()
@@ -519,6 +528,14 @@ class NewProjFrame(wx.Frame):
 
 		super().__init__(parent=None, title="PWG | New Project", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE ^ wx.RESIZE_BORDER ^ wx.MAXIMIZE_BOX)
 		self.SetBackgroundColour(bgColor)
+
+		filePath = str(Path.home())
+		fp = filePath + "\\" + ".PyWebGen" + "\\" + "config.json"
+		fp = r'%s' %  fp
+		fd = open(fp)
+		globconf = json.load(fd)
+		cfg=globconf
+		fd.close()
 		
 		panel = wx.Panel(self)
 		sizer = wx.BoxSizer(wx.HORIZONTAL) 
@@ -884,17 +901,18 @@ class editorFrame(wx.Frame):
 
 	def __init__(self):
 
-		global divcount, textcount, imagecount, buttoncount, inputcount, elements, workingdir, elementlist, webpage, wd, props, dep, leftSplitter, rightSplitter, myGrid, currentlySelectedCell, right
+		global divcount, textcount, imagecount, buttoncount, inputcount, elements, workingdir, elementlist, webpage, wd, props, dep, leftSplitter, rightSplitter, myGrid, currentlySelectedCell, right, previousselected
 
 
 		super().__init__(parent=None, title="PWG | Editor ", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER  |  wx.MAXIMIZE_BOX)
 
-		divcount, textcount, imagecount, buttoncount, inputcount = [],[],[],[],[]
+		divcount, textcount, imagecount, buttoncount, inputcount, currentlyloadedlistofelements = [],[],[],[],[],[]
 		divcount.append("0")
 		textcount.append("0")
 		imagecount.append("0")
 		inputcount.append("0")
 		buttoncount.append("0")
+		previousselected = ""
 
 		icon = wx.Icon()
 		icon.CopyFromBitmap(Base64ToImg(favicon))
@@ -1035,13 +1053,12 @@ class editorFrame(wx.Frame):
 		elementlist.Bind(wx.EVT_LISTBOX, self.loadelement)
 
 
-
-		right = wx.Panel(rightSplitter)
-
 		leftSplitter.SplitVertically(myGrid, elementlist)
 		leftSplitter.SetSashGravity(0.5)
 
-		rightSplitter.SplitVertically(leftSplitter, right)
+		self.right = wx.Panel(rightSplitter)
+		rightSplitter.SplitVertically(leftSplitter, self.right)
+
 		for x in elements:
 			num,word = re.split("-", x)
 			num = int(num)
@@ -1094,10 +1111,6 @@ class editorFrame(wx.Frame):
 						inlen+=1
 
 				inputcount[num] = num
-
-
-
-
 
 
 	def export(self, event):
@@ -1634,20 +1647,468 @@ class editorFrame(wx.Frame):
 
 
 	def loadelement(self, event):
-		global elements, right
+		global elements, right, text_font, previousselected
 		num, word = re.split("-", elements[elementlist.GetSelection()])
+
+		leftSplitter.SplitVertically(myGrid, elementlist)
+		leftSplitter.SetSashGravity(0.5)
+
+		right = wx.Panel(rightSplitter)
+
+		ps=previousselected
+
+		if ps=="div":
+			self.classname.Destroy()
+			self.idname.Destroy()
+			self.a.Destroy()
+			self.a_new_window.Destroy()
+			self.position.Destroy()
+			self.backgroundcolor.Destroy()
+			self.background.Destroy()
+			self.height.Destroy()
+			self.width.Destroy()
+			self.margin.Destroy()
+			self.padding.Destroy()
+			self.border.Destroy()
+			self.float.Destroy()
+			self.textalign.Destroy()
+
+		elif ps=="text":
+			self.classname.Destroy()
+			self.idname.Destroy()
+			self.a.Destroy()
+			self.type.Destroy()
+			self.a_new_window.Destroy()
+			self.content.Destroy()
+			self.position.Destroy()
+			self.backgroundcolor.Destroy()
+			self.background.Destroy()
+			self.float.Destroy()
+			self.textalign.Destroy()
+			self.fontfamily.Destroy()
+			self.fontweight.Destroy()
+			self.textdecoration.Destroy()
+			self.color.Destroy()
+			self.height.Destroy()
+			self.width.Destroy()
+			self.margin.Destroy()
+			self.padding.Destroy()
+			self.border.Destroy()
+
+		elif ps=="image":
+			self.classname.Destroy()
+			self.idname.Destroy()
+			self.a.Destroy()
+			self.src.Destroy()
+			self.alt.Destroy()
+			self.a_new_window.Destroy()
+			self.height.Destroy()
+			self.width.Destroy()
+			self.float.Destroy()
+			self.position.Destroy()
+			self.margin.Destroy()
+			self.padding.Destroy()
+			self.border.Destroy()
+
+		elif ps=="button":
+			self.classname.Destroy()
+			self.idname.Destroy()
+			self.a.Destroy()
+			self.a_new_window.Destroy()
+			self.type.Destroy()
+			self.disabled.Destroy()
+			self.value.Destroy()
+			self.name.Destroy()
+			self.height.Destroy()
+			self.width.Destroy()
+			self.float.Destroy()
+			self.position.Destroy()
+			self.margin.Destroy()
+			self.padding.Destroy()
+			self.border.Destroy()
+
+		elif ps=="input":
+			self.classname.Destroy()
+			self.idname.Destroy()
+			self.a.Destroy()
+			self.a_new_window.Destroy()
+			self.type.Destroy()
+			self.autocomplete.Destroy()
+			self.placeholder.Destroy()
+			self.readonly.Destroy()
+			self.maxwidth.Destroy()
+			self.value.Destroy()
+			self.name.Destroy()
+			self.height.Destroy()
+			self.width.Destroy()
+			self.float.Destroy()
+			self.position.Destroy()
+			self.margin.Destroy()
+			self.padding.Destroy()
+			self.border.Destroy()
+
+
+
+
 		if word == "div":
-			print("div")
+			previousselected = "div"
+
+			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,25))
+			self.classname.SetFont(text_font)
+			self.classname.SetForegroundColour('#CDCDCD')
+
+			self.idname = wx.StaticText(self.right, label="ID: ", pos=(10, 50))
+			self.idname.SetFont(text_font)
+			self.idname.SetForegroundColour('#CDCDCD')
+
+			self.a = wx.StaticText(self.right, label="Link to redirect (<a href=''>): ", pos=(10,75))
+			self.a.SetFont(text_font)
+			self.a.SetForegroundColour('#CDCDCD')
+
+			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(300,75))
+			self.a_new_window.SetFont(text_font)
+			self.a_new_window.SetForegroundColour('#CDCDCD')
+
+			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,100))
+			self.position.SetFont(text_font)
+			self.position.SetForegroundColour('#CDCDCD')
+
+			self.backgroundcolor = wx.StaticText(self.right, label="Background-color: ", pos=(10,125))
+			self.backgroundcolor.SetFont(text_font)
+			self.backgroundcolor.SetForegroundColour('#CDCDCD')
+
+			self.background = wx.StaticText(self.right, label="Background: ", pos=(10,150))
+			self.background.SetFont(text_font)
+			self.background.SetForegroundColour('#CDCDCD')
+
+			self.height = wx.StaticText(self.right, label="Element height: ", pos=(10,175))
+			self.height.SetFont(text_font)
+			self.height.SetForegroundColour('#CDCDCD')
+
+			self.width = wx.StaticText(self.right, label="Element width: ", pos=(300,175))
+			self.width.SetFont(text_font)
+			self.width.SetForegroundColour('#CDCDCD')
+
+			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,200))
+			self.float.SetFont(text_font)
+			self.float.SetForegroundColour('#CDCDCD')
+
+			self.margin = wx.StaticText(self.right, label="Margin (top, bottom, left, right): ", pos=(10,225))
+			self.margin.SetFont(text_font)
+			self.margin.SetForegroundColour('#CDCDCD')
+
+			self.padding = wx.StaticText(self.right, label="Padding (top, bottom, left, right): ", pos=(10,250))
+			self.padding.SetFont(text_font)
+			self.padding.SetForegroundColour('#CDCDCD')
+
+			self.border = wx.StaticText(self.right, label="Border (top, bottom, left, right): ", pos=(10,275))
+			self.border.SetFont(text_font)
+			self.border.SetForegroundColour('#CDCDCD')
+
+			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(10,300))
+			self.textalign.SetFont(text_font)
+			self.textalign.SetForegroundColour('#CDCDCD')
+
+
+
+
+
+
+
+
+
 		elif word == "text":
-			print("Text")
-		elif word == "button":
-			print("Button")
+			previousselected = "text"
+
+			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,25))
+			self.classname.SetFont(text_font)
+			self.classname.SetForegroundColour('#CDCDCD')
+
+			self.idname = wx.StaticText(self.right, label="ID: ", pos=(10, 50))
+			self.idname.SetFont(text_font)
+			self.idname.SetForegroundColour('#CDCDCD')
+
+			self.a = wx.StaticText(self.right, label="Link to redirect (<a href=''>): ", pos=(10,75))
+			self.a.SetFont(text_font)
+			self.a.SetForegroundColour('#CDCDCD')
+
+			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(300,75))
+			self.a_new_window.SetFont(text_font)
+			self.a_new_window.SetForegroundColour('#CDCDCD')
+
+			self.type = wx.StaticText(self.right, label="Type: (p, h1-h6) ", pos=(10,100))
+			self.type.SetFont(text_font)
+			self.type.SetForegroundColour('#CDCDCD')
+
+			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,125))
+			self.position.SetFont(text_font)
+			self.position.SetForegroundColour('#CDCDCD')
+
+			self.backgroundcolor = wx.StaticText(self.right, label="Background-color: ", pos=(10,150))
+			self.backgroundcolor.SetFont(text_font)
+			self.backgroundcolor.SetForegroundColour('#CDCDCD')
+
+			self.background = wx.StaticText(self.right, label="Background: ", pos=(10,175))
+			self.background.SetFont(text_font)
+			self.background.SetForegroundColour('#CDCDCD')
+
+			self.height = wx.StaticText(self.right, label="Element height: ", pos=(10,200))
+			self.height.SetFont(text_font)
+			self.height.SetForegroundColour('#CDCDCD')
+
+			self.width = wx.StaticText(self.right, label="Element width: ", pos=(300,200))
+			self.width.SetFont(text_font)
+			self.width.SetForegroundColour('#CDCDCD')
+
+			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,225))
+			self.float.SetFont(text_font)
+			self.float.SetForegroundColour('#CDCDCD')
+
+			self.margin = wx.StaticText(self.right, label="Margin (top, bottom, left, right): ", pos=(10,250))
+			self.margin.SetFont(text_font)
+			self.margin.SetForegroundColour('#CDCDCD')
+
+			self.padding = wx.StaticText(self.right, label="Padding (top, bottom, left, right): ", pos=(10,275))
+			self.padding.SetFont(text_font)
+			self.padding.SetForegroundColour('#CDCDCD')
+
+			self.border = wx.StaticText(self.right, label="Border (top, bottom, left, right): ", pos=(10,300))
+			self.border.SetFont(text_font)
+			self.border.SetForegroundColour('#CDCDCD')
+
+			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(10,325))
+			self.textalign.SetFont(text_font)
+			self.textalign.SetForegroundColour('#CDCDCD')
+
+			self.fontfamily = wx.StaticText(self.right, label="Font Family ", pos=(10,350))
+			self.fontfamily.SetFont(text_font)
+			self.fontfamily.SetForegroundColour('#CDCDCD')
+			
+			self.fontweight = wx.StaticText(self.right, label="Font weight: ", pos=(10,375))
+			self.fontweight.SetFont(text_font)
+			self.fontweight.SetForegroundColour('#CDCDCD')
+			
+			self.textdecoration = wx.StaticText(self.right, label="Text decoration: ", pos=(10,400))
+			self.textdecoration.SetFont(text_font)
+			self.textdecoration.SetForegroundColour('#CDCDCD')
+
+			self.color = wx.StaticText(self.right, label="Color: ", pos=(10,425))
+			self.color.SetFont(text_font)
+			self.color.SetForegroundColour('#CDCDCD')
+
+			self.content = wx.StaticText(self.right, label="Content: ", pos=(10,450))
+			self.content.SetFont(text_font)
+			self.content.SetForegroundColour('#CDCDCD')
+
+			
+			
+
+
 		elif word == "image":
-			print("Image")
+			previousselected = "image"
+
+			self.classname = wx.StaticText(self.right, label="classname: ", pos=(10,25))
+			self.classname.SetFont(text_font)
+			self.classname.SetForegroundColour('#CDCDCD')
+
+			self.idname = wx.StaticText(self.right, label="idname: ", pos=(10,50))
+			self.idname.SetFont(text_font)
+			self.idname.SetForegroundColour('#CDCDCD')
+
+			self.a = wx.StaticText(self.right, label="a: ", pos=(10,75))
+			self.a.SetFont(text_font)
+			self.a.SetForegroundColour('#CDCDCD')
+
+			self.a_new_window = wx.StaticText(self.right, label="a_new_window: ", pos=(300,75))
+			self.a_new_window.SetFont(text_font)
+			self.a_new_window.SetForegroundColour('#CDCDCD')
+
+			self.src = wx.StaticText(self.right, label="src: ", pos=(10,100))
+			self.src.SetFont(text_font)
+			self.src.SetForegroundColour('#CDCDCD')
+
+			self.alt = wx.StaticText(self.right, label="alt: ", pos=(10,125))
+			self.alt.SetFont(text_font)
+			self.alt.SetForegroundColour('#CDCDCD')
+
+			self.height = wx.StaticText(self.right, label="height: ", pos=(10,150))
+			self.height.SetFont(text_font)
+			self.height.SetForegroundColour('#CDCDCD')
+
+			self.width = wx.StaticText(self.right, label="width: ", pos=(300,150))
+			self.width.SetFont(text_font)
+			self.width.SetForegroundColour('#CDCDCD')
+
+			self.float = wx.StaticText(self.right, label="float: ", pos=(10,175))
+			self.float.SetFont(text_font)
+			self.float.SetForegroundColour('#CDCDCD')
+
+			self.position = wx.StaticText(self.right, label="position: ", pos=(10,200))
+			self.position.SetFont(text_font)
+			self.position.SetForegroundColour('#CDCDCD')
+
+			self.margin = wx.StaticText(self.right, label="margin: ", pos=(10,225))
+			self.margin.SetFont(text_font)
+			self.margin.SetForegroundColour('#CDCDCD')
+
+			self.padding = wx.StaticText(self.right, label="padding: ", pos=(10,250))
+			self.padding.SetFont(text_font)
+			self.padding.SetForegroundColour('#CDCDCD')
+
+			self.border = wx.StaticText(self.right, label="border: ", pos=(10,275))
+			self.border.SetFont(text_font)
+			self.border.SetForegroundColour('#CDCDCD')
+
+			
+	
+
+
+		elif word == "button":
+			previousselected = "button"
+
+			self.classname = wx.StaticText(self.right, label="classname: ", pos=(10,25))
+			self.classname.SetFont(text_font)
+			self.classname.SetForegroundColour('#CDCDCD')
+			
+			self.idname = wx.StaticText(self.right, label="idname: ", pos=(10,50))
+			self.idname.SetFont(text_font)
+			self.idname.SetForegroundColour('#CDCDCD')
+			
+			self.a = wx.StaticText(self.right, label="a: ", pos=(10,75))
+			self.a.SetFont(text_font)
+			self.a.SetForegroundColour('#CDCDCD')
+			
+			self.a_new_window = wx.StaticText(self.right, label="a_new_window: ", pos=(300,75))
+			self.a_new_window.SetFont(text_font)
+			self.a_new_window.SetForegroundColour('#CDCDCD')
+
+			self.type = wx.StaticText(self.right, label="type: ", pos=(10,100))
+			self.type.SetFont(text_font)
+			self.type.SetForegroundColour('#CDCDCD')
+			
+			self.disabled = wx.StaticText(self.right, label="disabled: ", pos=(10,125))
+			self.disabled.SetFont(text_font)
+			self.disabled.SetForegroundColour('#CDCDCD')
+			
+			self.value = wx.StaticText(self.right, label="value: ", pos=(10,150))
+			self.value.SetFont(text_font)
+			self.value.SetForegroundColour('#CDCDCD')
+			
+			self.name = wx.StaticText(self.right, label="name: ", pos=(10,175))
+			self.name.SetFont(text_font)
+			self.name.SetForegroundColour('#CDCDCD')
+			
+			self.height = wx.StaticText(self.right, label="height: ", pos=(10,200))
+			self.height.SetFont(text_font)
+			self.height.SetForegroundColour('#CDCDCD')
+
+			self.width = wx.StaticText(self.right, label="width: ", pos=(300,200))
+			self.width.SetFont(text_font)
+			self.width.SetForegroundColour('#CDCDCD')
+
+			self.float = wx.StaticText(self.right, label="float: ", pos=(10,225))
+			self.float.SetFont(text_font)
+			self.float.SetForegroundColour('#CDCDCD')
+
+			self.position = wx.StaticText(self.right, label="position: ", pos=(10,250))
+			self.position.SetFont(text_font)
+			self.position.SetForegroundColour('#CDCDCD')
+
+			self.margin = wx.StaticText(self.right, label="margin: ", pos=(10,275))
+			self.margin.SetFont(text_font)
+			self.margin.SetForegroundColour('#CDCDCD')
+
+			self.padding = wx.StaticText(self.right, label="padding: ", pos=(10,300))
+			self.padding.SetFont(text_font)
+			self.padding.SetForegroundColour('#CDCDCD')
+
+			self.border = wx.StaticText(self.right, label="border: ", pos=(10,325))
+			self.border.SetFont(text_font)
+			self.border.SetForegroundColour('#CDCDCD')
+
+			
+
+
+
 		elif word == "input":
-			print("Input")
+			previousselected = "input"
+
+			self.classname = wx.StaticText(self.right, label="classname: ", pos=(10,25))
+			self.classname.SetFont(text_font)
+			self.classname.SetForegroundColour('#CDCDCD')
+			
+			self.idname = wx.StaticText(self.right, label="idname: ", pos=(10,50))
+			self.idname.SetFont(text_font)
+			self.idname.SetForegroundColour('#CDCDCD')
+			
+			self.a = wx.StaticText(self.right, label="a: ", pos=(10,75))
+			self.a.SetFont(text_font)
+			self.a.SetForegroundColour('#CDCDCD')
+			
+			self.a_new_window = wx.StaticText(self.right, label="a_new_window: ", pos=(300,75))
+			self.a_new_window.SetFont(text_font)
+			self.a_new_window.SetForegroundColour('#CDCDCD')
+
+			self.type = wx.StaticText(self.right, label="type: ", pos=(10,100))
+			self.type.SetFont(text_font)
+			self.type.SetForegroundColour('#CDCDCD')
+			
+			self.autocomplete = wx.StaticText(self.right, label="autocomplete: ", pos=(10,125))
+			self.autocomplete.SetFont(text_font)
+			self.autocomplete.SetForegroundColour('#CDCDCD')
+			
+			self.placeholder = wx.StaticText(self.right, label="placeholder: ", pos=(10,150))
+			self.placeholder.SetFont(text_font)
+			self.placeholder.SetForegroundColour('#CDCDCD')
+			
+			self.readonly = wx.StaticText(self.right, label="readonly: ", pos=(10,175))
+			self.readonly.SetFont(text_font)
+			self.readonly.SetForegroundColour('#CDCDCD')
+			
+			self.maxwidth = wx.StaticText(self.right, label="maxwidth: ", pos=(10,200))
+			self.maxwidth.SetFont(text_font)
+			self.maxwidth.SetForegroundColour('#CDCDCD')
+			
+			self.value = wx.StaticText(self.right, label="value: ", pos=(10,225))
+			self.value.SetFont(text_font)
+			self.value.SetForegroundColour('#CDCDCD')
+			
+			self.name = wx.StaticText(self.right, label="name: ", pos=(10,250))
+			self.name.SetFont(text_font)
+			self.name.SetForegroundColour('#CDCDCD')
+			
+			self.height = wx.StaticText(self.right, label="height: ", pos=(10,275))
+			self.height.SetFont(text_font)
+			self.height.SetForegroundColour('#CDCDCD')
+
+			self.width = wx.StaticText(self.right, label="width: ", pos=(300,275))
+			self.width.SetFont(text_font)
+			self.width.SetForegroundColour('#CDCDCD')
+
+			self.float = wx.StaticText(self.right, label="float: ", pos=(10,300))
+			self.float.SetFont(text_font)
+			self.float.SetForegroundColour('#CDCDCD')
+
+			self.position = wx.StaticText(self.right, label="position: ", pos=(10,325))
+			self.position.SetFont(text_font)
+			self.position.SetForegroundColour('#CDCDCD')
+
+			self.margin = wx.StaticText(self.right, label="margin: ", pos=(10,350))
+			self.margin.SetFont(text_font)
+			self.margin.SetForegroundColour('#CDCDCD')
+
+			self.padding = wx.StaticText(self.right, label="padding: ", pos=(10,375))
+			self.padding.SetFont(text_font)
+			self.padding.SetForegroundColour('#CDCDCD')
+
+			self.border = wx.StaticText(self.right, label="border: ", pos=(10,400))
+			self.border.SetFont(text_font)
+			self.border.SetForegroundColour('#CDCDCD')
+
+
+
 		else:
-			print("Default")
+			previousselected = ""
 
 
 

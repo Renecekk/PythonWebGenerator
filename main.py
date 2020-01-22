@@ -2049,11 +2049,11 @@ class editorFrame(wx.Frame):
 			self.textdecorationval.SetBackgroundColour(btncolor)
 
 
-			self.content = wx.StaticText(self.right, label="Content: ", pos=(10,580))
+			self.content = wx.StaticText(self.right, label="Content: ", pos=(10,550))
 			self.content.SetFont(text_font)
 			self.content.SetForegroundColour('#CDCDCD')
 
-			self.contentval = wx.TextCtrl(self.right, pos=(10,610), value=str(elemprop['content']), style=wx.NO_BORDER, size=(480,250))
+			self.contentval = wx.TextCtrl(self.right, pos=(10,580), value=str(elemprop['content']), style=wx.NO_BORDER, size=(480,250))
 			self.contentval.SetFont(text_font)
 			self.contentval.SetForegroundColour('#CDCDCD')
 			self.contentval.SetBackgroundColour(btncolor)
@@ -2596,14 +2596,14 @@ class editorFrame(wx.Frame):
 			self.valueval.SetBackgroundColour(btncolor)
 
 	
-			self.maxlength = wx.StaticText(self.right, label="Max length: ", pos=(10,460))
-			self.maxlength.SetFont(text_font)
-			self.maxlength.SetForegroundColour('#CDCDCD')
+			self.maxlenght = wx.StaticText(self.right, label="Max lenght: ", pos=(10,460))
+			self.maxlenght.SetFont(text_font)
+			self.maxlenght.SetForegroundColour('#CDCDCD')
 
-			self.maxlengthval = wx.TextCtrl(self.right, pos=(100,460), value=str(elemprop['maxlength']), style=wx.NO_BORDER, size=(160,20))
-			self.maxlengthval.SetFont(text_font)
-			self.maxlengthval.SetForegroundColour('#CDCDCD')
-			self.maxlengthval.SetBackgroundColour(btncolor)
+			self.maxlenghtval = wx.TextCtrl(self.right, pos=(100,460), value=str(elemprop['maxlenght']), style=wx.NO_BORDER, size=(160,20))
+			self.maxlenghtval.SetFont(text_font)
+			self.maxlenghtval.SetForegroundColour('#CDCDCD')
+			self.maxlenghtval.SetBackgroundColour(btncolor)
 
 
 			self.name = wx.StaticText(self.right, label="Name: ", pos=(270,460))

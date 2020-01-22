@@ -2053,7 +2053,7 @@ class editorFrame(wx.Frame):
 			self.content.SetFont(text_font)
 			self.content.SetForegroundColour('#CDCDCD')
 
-			self.contentval = wx.TextCtrl(self.right, pos=(10,580), value=str(elemprop['content']), style=wx.NO_BORDER, size=(480,250))
+			self.contentval = wx.TextCtrl(self.right, pos=(10,580), value=str(elemprop['content']), style=wx.NO_BORDER, size=(480,280))
 			self.contentval.SetFont(text_font)
 			self.contentval.SetForegroundColour('#CDCDCD')
 			self.contentval.SetBackgroundColour(btncolor)

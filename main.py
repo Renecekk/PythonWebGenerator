@@ -29,6 +29,13 @@ defpath = str(Path.home())
 
 defaultpath=defpath.replace("\\", r"\\")
 
+
+def rgb_to_hex(rgb):
+    rgba = '%02x%02x%02x-%02x' % rgb
+    rgb,opacity = re.split("-", rgba)
+    rgb = '#'+rgb.upper()
+    return rgb
+
 def CreateConfig():
 
 
@@ -46,11 +53,11 @@ def CreateConfig():
 		json = """{
 	"div":
 	{
+		"parent":"",
 		"class":"",
 		"id":"",
 		"a":"",
-		"a_new_window":"",
-		"type":"",
+		"a_new_window":false,
 		"style":
 		{
 
@@ -87,14 +94,15 @@ def CreateConfig():
 	},
 	"text":
 	{
+		"parent":"",
 		"class":"",
 		"id":"",
 		"a":"",
 		"type":"",
-		"a_new_window":"",
+		"a_new_window":false,
+		"content":"",
 		"style":
 		{
-			"content":"",
 			"position":"",
 			"background-color":"",
 			"background":"",
@@ -131,10 +139,11 @@ def CreateConfig():
 	},
 	"image":
 	{
+		"parent":"",
 		"class":"",
 		"id":"",
 		"a":"",
-		"a_new_window":"",
+		"a_new_window":false,
 		"src":"",
 		"alt":"",
 		"style":
@@ -168,12 +177,13 @@ def CreateConfig():
 	},
 	"button":
 	{
+		"parent":"",
 		"class":"",
 		"id":"",
 		"a":"",
 		"type":"",
-		"a_new_window":"",
-		"disabled":"",
+		"a_new_window":false,
+		"disabled":false,
 		"value":"",
 		"name":"",
 		"style":
@@ -182,6 +192,8 @@ def CreateConfig():
 			"float":"",
 			"width":"",
 			"position":"",
+			"color":"",
+			"background-color":"",
 			"margin":
 			{
 				"margin-top":"",
@@ -207,24 +219,26 @@ def CreateConfig():
 	},
 	"input":
 	{
+		"parent":"",
 		"class":"",
 		"id":"",
 		"type":"",
 		"a":"",
-		"a_new_window":"",
+		"a_new_window":false,
 		"autocomplete":"",
 		"name":"",
 		"placeholder":"",
 		"type":"",
 		"value":"",
-		"readonly":"",
-		"maxlength":"",
+		"readonly":false,
+		"maxlenght":"",
 		"style":
 		{
 			"height":"",
 			"width":"",
 			"position":"",
 			"float":"",
+			"background-color":"",
 			"margin":
 			{
 				"margin-top":"",
@@ -343,7 +357,7 @@ class FirstSetup(wx.Frame):
 class Menu(wx.Frame):
 
 	def __init__(self):
-		global globconf, xMax, yMax, xHalf, yHalf, btn_font, bgColor, hovercolor, currentProjectPath, startingDir, btn_font, text_font, value_font, workingdir
+		global globconf, xMax, yMax, xHalf, yHalf, btn_font, bgColor, hovercolor, currentProjectPath, startingDir, btn_font, text_font, value_font, workingdir, header_font
 
 		filePath = str(Path.home())
 		fp = filePath + "\\" + ".PyWebGen" + "\\" + "config.json"
@@ -375,6 +389,7 @@ class Menu(wx.Frame):
 		panel = wx.Panel(self)
 		btn_font = wx.Font(30, wx.DEFAULT, wx.ITALIC, wx.BOLD, underline=False, faceName="Candara")
 		text_font = wx.Font(13, wx.DEFAULT, wx.ITALIC, wx.BOLD, underline=False, faceName="Calibri")
+		header_font = wx.Font(30, wx.DEFAULT, wx.ITALIC, wx.BOLD, underline=False, faceName="Calibri")
 		value_font = wx.Font(13, wx.DEFAULT, wx.ITALIC, wx.NORMAL, underline=False, faceName="Calibri")
 
 #Splash image
@@ -678,8 +693,15 @@ class NewProjFrame(wx.Frame):
 		mkconffile.write(data)
 		mkconffile.close()
 
-		os.makedirs(pathrepl+"\\"+name+"\\OUTPUT")
 		os.makedirs(pathrepl+"\\"+name+"\\persistent")
+		mkconffile = open("persistent\\elements.properties", "w+")
+		mkconffile.write("{\n\t\n}")
+		mkconffile.close()
+		mkconffile = open("persistent\\config.pwgproj", 'w+')
+		mkconffile.write(data)
+		mkconffile.close()
+
+		os.makedirs(pathrepl+"\\"+name+"\\OUTPUT")
 		os.chdir(currpath)
 
 
@@ -1645,9 +1667,33 @@ class editorFrame(wx.Frame):
 				divcount[num] = num
 
 
+	def redrawcolor(self, event):
+		global bgcolor, elemprop
+
+		dialog = wx.ColourDialog(None)
+		dialog.GetColourData().SetChooseFull(True)
+		if dialog.ShowModal() == wx.ID_OK: 
+			data = dialog.GetColourData()
+		print(str(rgb_to_hex(data.GetColour().Get())))
+		dialog.Destroy()
+
+
 
 	def loadelement(self, event):
-		global elements, right, text_font, previousselected
+		global elements, right, text_font, bgcolor, color, elemprop, header_font, myGrid
+
+		file = os.path.join(wd, 'elements.properties')
+		file = open(file, "r")
+		elemprop = json.load(file)
+		elemprop = elemprop[elements[elementlist.GetSelection()]]
+		file.close()
+
+		children = self.right.GetChildren()
+
+		for child in children:
+			child.Destroy()
+
+
 		num, word = re.split("-", elements[elementlist.GetSelection()])
 
 		leftSplitter.SplitVertically(myGrid, elementlist)
@@ -1655,160 +1701,159 @@ class editorFrame(wx.Frame):
 
 		right = wx.Panel(rightSplitter)
 
-		ps=previousselected
-
-		if ps=="div":
-			self.classname.Destroy()
-			self.idname.Destroy()
-			self.a.Destroy()
-			self.a_new_window.Destroy()
-			self.position.Destroy()
-			self.backgroundcolor.Destroy()
-			self.background.Destroy()
-			self.height.Destroy()
-			self.width.Destroy()
-			self.margin.Destroy()
-			self.padding.Destroy()
-			self.border.Destroy()
-			self.float.Destroy()
-			self.textalign.Destroy()
-
-		elif ps=="text":
-			self.classname.Destroy()
-			self.idname.Destroy()
-			self.a.Destroy()
-			self.type.Destroy()
-			self.a_new_window.Destroy()
-			self.content.Destroy()
-			self.position.Destroy()
-			self.backgroundcolor.Destroy()
-			self.background.Destroy()
-			self.float.Destroy()
-			self.textalign.Destroy()
-			self.fontfamily.Destroy()
-			self.fontweight.Destroy()
-			self.textdecoration.Destroy()
-			self.color.Destroy()
-			self.height.Destroy()
-			self.width.Destroy()
-			self.margin.Destroy()
-			self.padding.Destroy()
-			self.border.Destroy()
-
-		elif ps=="image":
-			self.classname.Destroy()
-			self.idname.Destroy()
-			self.a.Destroy()
-			self.src.Destroy()
-			self.alt.Destroy()
-			self.a_new_window.Destroy()
-			self.height.Destroy()
-			self.width.Destroy()
-			self.float.Destroy()
-			self.position.Destroy()
-			self.margin.Destroy()
-			self.padding.Destroy()
-			self.border.Destroy()
-
-		elif ps=="button":
-			self.classname.Destroy()
-			self.idname.Destroy()
-			self.a.Destroy()
-			self.a_new_window.Destroy()
-			self.type.Destroy()
-			self.disabled.Destroy()
-			self.value.Destroy()
-			self.name.Destroy()
-			self.height.Destroy()
-			self.width.Destroy()
-			self.float.Destroy()
-			self.position.Destroy()
-			self.margin.Destroy()
-			self.padding.Destroy()
-			self.border.Destroy()
-
-		elif ps=="input":
-			self.classname.Destroy()
-			self.idname.Destroy()
-			self.a.Destroy()
-			self.a_new_window.Destroy()
-			self.type.Destroy()
-			self.autocomplete.Destroy()
-			self.placeholder.Destroy()
-			self.readonly.Destroy()
-			self.maxwidth.Destroy()
-			self.value.Destroy()
-			self.name.Destroy()
-			self.height.Destroy()
-			self.width.Destroy()
-			self.float.Destroy()
-			self.position.Destroy()
-			self.margin.Destroy()
-			self.padding.Destroy()
-			self.border.Destroy()
-
-
-
-
+		
 		if word == "div":
-			previousselected = "div"
+			bgcolor = wx.ColourData()
 
-			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,25))
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name.SetFont(header_font)
+			self.name.SetForegroundColour('#CCA3F1')
+
+			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
 			self.classname.SetFont(text_font)
 			self.classname.SetForegroundColour('#CDCDCD')
 
-			self.idname = wx.StaticText(self.right, label="ID: ", pos=(10, 50))
+			self.classnameval = wx.TextCtrl(self.right, pos=(100,130), value=elemprop['class'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.classnameval.SetFont(text_font)
+			self.classnameval.SetForegroundColour('#CDCDCD')
+			self.classnameval.SetBackgroundColour(btncolor)
+
+
+			self.idname = wx.StaticText(self.right, label="ID: ", pos=(10, 160))
 			self.idname.SetFont(text_font)
 			self.idname.SetForegroundColour('#CDCDCD')
 
-			self.a = wx.StaticText(self.right, label="Link to redirect (<a href=''>): ", pos=(10,75))
-			self.a.SetFont(text_font)
-			self.a.SetForegroundColour('#CDCDCD')
+			self.idnameval = wx.TextCtrl(self.right, pos=(100,160), value=elemprop['id'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.idnameval.SetFont(text_font)
+			self.idnameval.SetForegroundColour('#CDCDCD')
+			self.idnameval.SetBackgroundColour(btncolor)
 
-			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(300,75))
-			self.a_new_window.SetFont(text_font)
-			self.a_new_window.SetForegroundColour('#CDCDCD')
 
-			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,100))
-			self.position.SetFont(text_font)
-			self.position.SetForegroundColour('#CDCDCD')
-
-			self.backgroundcolor = wx.StaticText(self.right, label="Background-color: ", pos=(10,125))
-			self.backgroundcolor.SetFont(text_font)
-			self.backgroundcolor.SetForegroundColour('#CDCDCD')
-
-			self.background = wx.StaticText(self.right, label="Background: ", pos=(10,150))
-			self.background.SetFont(text_font)
-			self.background.SetForegroundColour('#CDCDCD')
-
-			self.height = wx.StaticText(self.right, label="Element height: ", pos=(10,175))
+			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
 			self.height.SetFont(text_font)
 			self.height.SetForegroundColour('#CDCDCD')
 
-			self.width = wx.StaticText(self.right, label="Element width: ", pos=(300,175))
+			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
-			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,200))
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval.SetFont(text_font)
+			self.heightval.SetForegroundColour('#CDCDCD')
+			self.heightval.SetBackgroundColour(btncolor)
+
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval.SetFont(text_font)
+			self.widthval.SetForegroundColour('#CDCDCD')
+			self.widthval.SetBackgroundColour(btncolor)
+
+
+			self.a = wx.StaticText(self.right, label="Link to redirect (<a href=' '>): ", pos=(10,220))
+			self.a.SetFont(text_font)
+			self.a.SetForegroundColour('#CDCDCD')
+
+			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(320,250))
+			self.a_new_window.SetFont(text_font)
+			self.a_new_window.SetForegroundColour('#CDCDCD')
+
+			self.aval = wx.TextCtrl(self.right, pos=(230,220), value=elemprop['a'], style=wx.NO_BORDER, size=(260, 20) ) 
+			self.aval.SetFont(text_font)
+			self.aval.SetForegroundColour('#CDCDCD')
+			self.aval.SetBackgroundColour(btncolor)
+
+			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,250) ) 
+			self.a_new_windowval.SetFont(value_font)
+			self.a_new_windowval.SetForegroundColour("#cfcfcf")
+			#self.a_new_window.SetValue()
+
+
+			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
+			self.position.SetFont(text_font)
+			self.position.SetForegroundColour('#CDCDCD')
+
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.positionval.SetFont(text_font)
+			self.positionval.SetBackgroundColour('#CDCDCD')
+
+
+			self.backgroundcolor = wx.StaticText(self.right, label="Background color: ", pos=(10,280))
+			self.backgroundcolor.SetFont(text_font)
+			self.backgroundcolor.SetForegroundColour('#CDCDCD')
+
+			self.backgroundcolorval = wx.Button(self.right, label=elemprop['style']['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(100,20))
+			self.backgroundcolorval.SetFont(text_font)
+			self.backgroundcolorval.SetForegroundColour(elemprop['style']['background-color'])
+			self.backgroundcolorval.SetBackgroundColour(btncolor)
+			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
+			self.backgroundcolorval.Bind(wx.EVT_LEAVE_WINDOW, self.buttonUnhover)
+
+			
+			self.background = wx.StaticText(self.right, label="Background: ", pos=(10,310))
+			self.background.SetFont(text_font)
+			self.background.SetForegroundColour('#CDCDCD')
+
+			self.backgroundval = wx.TextCtrl(self.right, pos=(120,310), value=elemprop['style']['background'], style=wx.NO_BORDER, size=(370,20))
+			self.backgroundval.SetFont(text_font)
+			self.backgroundval.SetForegroundColour('#CDCDCD')
+			self.backgroundval.SetBackgroundColour(btncolor)
+
+
+			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,340))
 			self.float.SetFont(text_font)
 			self.float.SetForegroundColour('#CDCDCD')
 
-			self.margin = wx.StaticText(self.right, label="Margin (top, bottom, left, right): ", pos=(10,225))
-			self.margin.SetFont(text_font)
-			self.margin.SetForegroundColour('#CDCDCD')
+			self.floatval = wx.Choice(self.right, pos=(80,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.floatval.SetFont(text_font)
+			self.floatval.SetBackgroundColour('#CDCDCD')
 
-			self.padding = wx.StaticText(self.right, label="Padding (top, bottom, left, right): ", pos=(10,250))
-			self.padding.SetFont(text_font)
-			self.padding.SetForegroundColour('#CDCDCD')
-
-			self.border = wx.StaticText(self.right, label="Border (top, bottom, left, right): ", pos=(10,275))
-			self.border.SetFont(text_font)
-			self.border.SetForegroundColour('#CDCDCD')
-
-			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(10,300))
+			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(270,340))
 			self.textalign.SetFont(text_font)
 			self.textalign.SetForegroundColour('#CDCDCD')
 
+			self.textalignval = wx.Choice(self.right, pos=(360,340), size=(130,20), choices=['left','center','right','justify','justify-all','start','end','match-parent','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.textalignval.SetFont(text_font)
+			self.textalignval.SetBackgroundColour('#CDCDCD')
+
+
+			self.margin = wx.StaticText(self.right, label="Margin (top bottom left right): ", pos=(10,370))
+			self.margin.SetFont(text_font)
+			self.margin.SetForegroundColour('#CDCDCD')
+
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval.SetFont(text_font)
+			self.marginval.SetForegroundColour('#CDCDCD')
+			self.marginval.SetBackgroundColour(btncolor)
+
+
+			self.padding = wx.StaticText(self.right, label="Padding (top bottom left right): ", pos=(10,400))
+			self.padding.SetFont(text_font)
+			self.padding.SetForegroundColour('#CDCDCD')
+
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval.SetFont(text_font)
+			self.paddingval.SetForegroundColour('#CDCDCD')
+			self.paddingval.SetBackgroundColour(btncolor)
+
+
+			self.border = wx.StaticText(self.right, label="Border (top bottom left right): ", pos=(10,430))
+			self.border.SetFont(text_font)
+			self.border.SetForegroundColour('#CDCDCD')
+
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval.SetFont(text_font)
+			self.borderval.SetForegroundColour('#CDCDCD')
+			self.borderval.SetBackgroundColour(btncolor)
+	
+
+			self.okbutton = wx.Button(self.right, label='Save', pos=(30, yMax-200), style=wx.NO_BORDER, size=(200,80))
+			self.okbutton.SetFont(text_font)
+			self.okbutton.SetForegroundColour('#CFCFCF')
+			self.okbutton.SetBackgroundColour(btncolor)
+			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
+			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
+			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
+			
 
 
 
@@ -1818,297 +1863,795 @@ class editorFrame(wx.Frame):
 
 
 		elif word == "text":
-			previousselected = "text"
+			bgcolor = wx.ColourData()
 
-			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,25))
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name.SetFont(header_font)
+			self.name.SetForegroundColour('#CCA3F1')
+
+			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
 			self.classname.SetFont(text_font)
 			self.classname.SetForegroundColour('#CDCDCD')
 
-			self.idname = wx.StaticText(self.right, label="ID: ", pos=(10, 50))
+			self.classnameval = wx.TextCtrl(self.right, pos=(100,130), value=elemprop['class'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.classnameval.SetFont(text_font)
+			self.classnameval.SetForegroundColour('#CDCDCD')
+			self.classnameval.SetBackgroundColour(btncolor)
+
+
+			self.idname = wx.StaticText(self.right, label="ID: ", pos=(10, 160))
 			self.idname.SetFont(text_font)
 			self.idname.SetForegroundColour('#CDCDCD')
 
-			self.a = wx.StaticText(self.right, label="Link to redirect (<a href=''>): ", pos=(10,75))
+			self.idnameval = wx.TextCtrl(self.right, pos=(100,160), value=elemprop['id'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.idnameval.SetFont(text_font)
+			self.idnameval.SetForegroundColour('#CDCDCD')
+			self.idnameval.SetBackgroundColour(btncolor)
+
+
+			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
+			self.height.SetFont(text_font)
+			self.height.SetForegroundColour('#CDCDCD')
+
+			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
+			self.width.SetFont(text_font)
+			self.width.SetForegroundColour('#CDCDCD')
+
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval.SetFont(text_font)
+			self.heightval.SetForegroundColour('#CDCDCD')
+			self.heightval.SetBackgroundColour(btncolor)
+
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval.SetFont(text_font)
+			self.widthval.SetForegroundColour('#CDCDCD')
+			self.widthval.SetBackgroundColour(btncolor)
+
+
+			self.a = wx.StaticText(self.right, label="Link to redirect (<a href=' '>): ", pos=(10,220))
 			self.a.SetFont(text_font)
 			self.a.SetForegroundColour('#CDCDCD')
 
-			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(300,75))
+			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(320,250))
 			self.a_new_window.SetFont(text_font)
 			self.a_new_window.SetForegroundColour('#CDCDCD')
 
-			self.type = wx.StaticText(self.right, label="Type: (p, h1-h6) ", pos=(10,100))
-			self.type.SetFont(text_font)
-			self.type.SetForegroundColour('#CDCDCD')
+			self.aval = wx.TextCtrl(self.right, pos=(230,220), value=elemprop['a'], style=wx.NO_BORDER, size=(260, 20) ) 
+			self.aval.SetFont(text_font)
+			self.aval.SetForegroundColour('#CDCDCD')
+			self.aval.SetBackgroundColour(btncolor)
 
-			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,125))
+			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,250) ) 
+			self.a_new_windowval.SetFont(value_font)
+			self.a_new_windowval.SetForegroundColour("#cfcfcf")
+			#self.a_new_window.SetValue()
+
+
+			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
 			self.position.SetFont(text_font)
 			self.position.SetForegroundColour('#CDCDCD')
 
-			self.backgroundcolor = wx.StaticText(self.right, label="Background-color: ", pos=(10,150))
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.positionval.SetFont(text_font)
+			self.positionval.SetBackgroundColour('#CDCDCD')
+
+
+			self.backgroundcolor = wx.StaticText(self.right, label="Background color: ", pos=(10,280))
 			self.backgroundcolor.SetFont(text_font)
 			self.backgroundcolor.SetForegroundColour('#CDCDCD')
 
-			self.background = wx.StaticText(self.right, label="Background: ", pos=(10,175))
+			self.backgroundcolorval = wx.Button(self.right, label=elemprop['style']['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(130,20))
+			self.backgroundcolorval.SetFont(text_font)
+			self.backgroundcolorval.SetForegroundColour(elemprop['style']['background-color'])
+			self.backgroundcolorval.SetBackgroundColour(btncolor)
+			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
+			self.backgroundcolorval.Bind(wx.EVT_LEAVE_WINDOW, self.buttonUnhover)
+
+			self.color = wx.StaticText(self.right, label="Color: ", pos=(290,280))
+			self.color.SetFont(text_font)
+			self.color.SetForegroundColour('#CDCDCD')
+		
+			self.colorval = wx.Button(self.right, label=elemprop['style']['color'], pos=(360,280), style=wx.NO_BORDER, size=(130,20))
+			self.colorval.SetFont(text_font)
+			self.colorval.SetForegroundColour(elemprop['style']['color'])
+			self.colorval.SetBackgroundColour(btncolor)
+			self.colorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.colorval.Bind(wx.EVT_ENTER_WINDOW, self.colorHover)
+			self.colorval.Bind(wx.EVT_LEAVE_WINDOW, self.colorHover)
+
+
+			self.background = wx.StaticText(self.right, label="Background: ", pos=(10,310))
 			self.background.SetFont(text_font)
 			self.background.SetForegroundColour('#CDCDCD')
 
-			self.height = wx.StaticText(self.right, label="Element height: ", pos=(10,200))
-			self.height.SetFont(text_font)
-			self.height.SetForegroundColour('#CDCDCD')
+			self.backgroundval = wx.TextCtrl(self.right, pos=(120,310), value=elemprop['style']['background'], style=wx.NO_BORDER, size=(370,20))
+			self.backgroundval.SetFont(text_font)
+			self.backgroundval.SetForegroundColour('#CDCDCD')
+			self.backgroundval.SetBackgroundColour(btncolor)
 
-			self.width = wx.StaticText(self.right, label="Element width: ", pos=(300,200))
-			self.width.SetFont(text_font)
-			self.width.SetForegroundColour('#CDCDCD')
 
-			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,225))
+			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,340))
 			self.float.SetFont(text_font)
 			self.float.SetForegroundColour('#CDCDCD')
 
-			self.margin = wx.StaticText(self.right, label="Margin (top, bottom, left, right): ", pos=(10,250))
-			self.margin.SetFont(text_font)
-			self.margin.SetForegroundColour('#CDCDCD')
+			self.floatval = wx.Choice(self.right, pos=(80,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.floatval.SetFont(text_font)
+			self.floatval.SetBackgroundColour('#CDCDCD')
 
-			self.padding = wx.StaticText(self.right, label="Padding (top, bottom, left, right): ", pos=(10,275))
-			self.padding.SetFont(text_font)
-			self.padding.SetForegroundColour('#CDCDCD')
-
-			self.border = wx.StaticText(self.right, label="Border (top, bottom, left, right): ", pos=(10,300))
-			self.border.SetFont(text_font)
-			self.border.SetForegroundColour('#CDCDCD')
-
-			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(10,325))
+			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(270,340))
 			self.textalign.SetFont(text_font)
 			self.textalign.SetForegroundColour('#CDCDCD')
 
-			self.fontfamily = wx.StaticText(self.right, label="Font Family ", pos=(10,350))
-			self.fontfamily.SetFont(text_font)
-			self.fontfamily.SetForegroundColour('#CDCDCD')
-			
-			self.fontweight = wx.StaticText(self.right, label="Font weight: ", pos=(10,375))
-			self.fontweight.SetFont(text_font)
-			self.fontweight.SetForegroundColour('#CDCDCD')
-			
-			self.textdecoration = wx.StaticText(self.right, label="Text decoration: ", pos=(10,400))
-			self.textdecoration.SetFont(text_font)
-			self.textdecoration.SetForegroundColour('#CDCDCD')
-
-			self.color = wx.StaticText(self.right, label="Color: ", pos=(10,425))
-			self.color.SetFont(text_font)
-			self.color.SetForegroundColour('#CDCDCD')
-
-			self.content = wx.StaticText(self.right, label="Content: ", pos=(10,450))
-			self.content.SetFont(text_font)
-			self.content.SetForegroundColour('#CDCDCD')
-
-			
-			
+			self.textalignval = wx.Choice(self.right, pos=(360,340), size=(130,20), choices=['left','center','right','justify','justify-all','start','end','match-parent','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.textalignval.SetFont(text_font)
+			self.textalignval.SetBackgroundColour('#CDCDCD')
 
 
-		elif word == "image":
-			previousselected = "image"
-
-			self.classname = wx.StaticText(self.right, label="classname: ", pos=(10,25))
-			self.classname.SetFont(text_font)
-			self.classname.SetForegroundColour('#CDCDCD')
-
-			self.idname = wx.StaticText(self.right, label="idname: ", pos=(10,50))
-			self.idname.SetFont(text_font)
-			self.idname.SetForegroundColour('#CDCDCD')
-
-			self.a = wx.StaticText(self.right, label="a: ", pos=(10,75))
-			self.a.SetFont(text_font)
-			self.a.SetForegroundColour('#CDCDCD')
-
-			self.a_new_window = wx.StaticText(self.right, label="a_new_window: ", pos=(300,75))
-			self.a_new_window.SetFont(text_font)
-			self.a_new_window.SetForegroundColour('#CDCDCD')
-
-			self.src = wx.StaticText(self.right, label="src: ", pos=(10,100))
-			self.src.SetFont(text_font)
-			self.src.SetForegroundColour('#CDCDCD')
-
-			self.alt = wx.StaticText(self.right, label="alt: ", pos=(10,125))
-			self.alt.SetFont(text_font)
-			self.alt.SetForegroundColour('#CDCDCD')
-
-			self.height = wx.StaticText(self.right, label="height: ", pos=(10,150))
-			self.height.SetFont(text_font)
-			self.height.SetForegroundColour('#CDCDCD')
-
-			self.width = wx.StaticText(self.right, label="width: ", pos=(300,150))
-			self.width.SetFont(text_font)
-			self.width.SetForegroundColour('#CDCDCD')
-
-			self.float = wx.StaticText(self.right, label="float: ", pos=(10,175))
-			self.float.SetFont(text_font)
-			self.float.SetForegroundColour('#CDCDCD')
-
-			self.position = wx.StaticText(self.right, label="position: ", pos=(10,200))
-			self.position.SetFont(text_font)
-			self.position.SetForegroundColour('#CDCDCD')
-
-			self.margin = wx.StaticText(self.right, label="margin: ", pos=(10,225))
+			self.margin = wx.StaticText(self.right, label="Margin (top bottom left right): ", pos=(10,370))
 			self.margin.SetFont(text_font)
 			self.margin.SetForegroundColour('#CDCDCD')
 
-			self.padding = wx.StaticText(self.right, label="padding: ", pos=(10,250))
+
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval.SetFont(text_font)
+			self.marginval.SetForegroundColour('#CDCDCD')
+			self.marginval.SetBackgroundColour(btncolor)
+
+
+			self.padding = wx.StaticText(self.right, label="Padding (top bottom left right): ", pos=(10,400))
 			self.padding.SetFont(text_font)
 			self.padding.SetForegroundColour('#CDCDCD')
 
-			self.border = wx.StaticText(self.right, label="border: ", pos=(10,275))
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval.SetFont(text_font)
+			self.paddingval.SetForegroundColour('#CDCDCD')
+			self.paddingval.SetBackgroundColour(btncolor)
+
+
+			self.border = wx.StaticText(self.right, label="Border (top bottom left right): ", pos=(10,430))
 			self.border.SetFont(text_font)
 			self.border.SetForegroundColour('#CDCDCD')
+
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval.SetFont(text_font)
+			self.borderval.SetForegroundColour('#CDCDCD')
+			self.borderval.SetBackgroundColour(btncolor)
+
+
+			self.fontfamily = wx.StaticText(self.right, label="Font Family ", pos=(10,460))
+			self.fontfamily.SetFont(text_font)
+			self.fontfamily.SetForegroundColour('#CDCDCD')
+
+			self.fontfamilyval = wx.TextCtrl(self.right, pos=(240,460), value=str(elemprop['style']['font-family']), style=wx.NO_BORDER, size=(250,20))
+			self.fontfamilyval.SetFont(text_font)
+			self.fontfamilyval.SetForegroundColour('#CDCDCD')
+			self.fontfamilyval.SetBackgroundColour(btncolor)
+
+			
+			self.fontweight = wx.StaticText(self.right, label="Font weight: ", pos=(10,490))
+			self.fontweight.SetFont(text_font)
+			self.fontweight.SetForegroundColour('#CDCDCD')
+
+			self.fontweightval = wx.TextCtrl(self.right, pos=(240,490), value=str(elemprop['style']['font-weight']), style=wx.NO_BORDER, size=(250,20))
+			self.fontweightval.SetFont(text_font)
+			self.fontweightval.SetForegroundColour('#CDCDCD')
+			self.fontweightval.SetBackgroundColour(btncolor)
+
+			
+			self.textdecoration = wx.StaticText(self.right, label="Text decoration: ", pos=(10,520))
+			self.textdecoration.SetFont(text_font)
+			self.textdecoration.SetForegroundColour('#CDCDCD')
+
+			self.textdecorationval = wx.TextCtrl(self.right, pos=(240,520), value=str(elemprop['style']['text-decoration']), style=wx.NO_BORDER, size=(250,20))
+			self.textdecorationval.SetFont(text_font)
+			self.textdecorationval.SetForegroundColour('#CDCDCD')
+			self.textdecorationval.SetBackgroundColour(btncolor)
+
+
+			self.content = wx.StaticText(self.right, label="Content: ", pos=(10,580))
+			self.content.SetFont(text_font)
+			self.content.SetForegroundColour('#CDCDCD')
+
+			self.contentval = wx.TextCtrl(self.right, pos=(10,610), value=str(elemprop['content']), style=wx.NO_BORDER, size=(480,250))
+			self.contentval.SetFont(text_font)
+			self.contentval.SetForegroundColour('#CDCDCD')
+			self.contentval.SetBackgroundColour(btncolor)
+
+
+			self.type = wx.StaticText(self.right, label="Type: ", pos=(200,550))
+			self.type.SetFont(text_font)
+			self.type.SetForegroundColour('#CDCDCD')
+
+			self.typeval = wx.Choice(self.right,  pos=(240,550), size=(250,20), choices=['p','h1','h2','h3','h4','h5','h6','span'], style=wx.NO_BORDER)
+			self.typeval.SetFont(text_font)
+			self.typeval.SetBackgroundColour('#CDCDCD')
+
+
+			
+			self.okbutton = wx.Button(self.right, label='Save', pos=(30, yMax-200), style=wx.NO_BORDER, size=(200,80))
+			self.okbutton.SetFont(text_font)
+			self.okbutton.SetForegroundColour('#CFCFCF')
+			self.okbutton.SetBackgroundColour(btncolor)
+			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
+			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
+			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
+
+
+
+
+
+
+		elif word == "image":
+			bgcolor = wx.ColourData()
+
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name.SetFont(header_font)
+			self.name.SetForegroundColour('#CCA3F1')
+
+			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
+			self.classname.SetFont(text_font)
+			self.classname.SetForegroundColour('#CDCDCD')
+
+			self.classnameval = wx.TextCtrl(self.right, pos=(100,130), value=elemprop['class'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.classnameval.SetFont(text_font)
+			self.classnameval.SetForegroundColour('#CDCDCD')
+			self.classnameval.SetBackgroundColour(btncolor)
+
+
+			self.idname = wx.StaticText(self.right, label="ID: ", pos=(10, 160))
+			self.idname.SetFont(text_font)
+			self.idname.SetForegroundColour('#CDCDCD')
+
+			self.idnameval = wx.TextCtrl(self.right, pos=(100,160), value=elemprop['id'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.idnameval.SetFont(text_font)
+			self.idnameval.SetForegroundColour('#CDCDCD')
+			self.idnameval.SetBackgroundColour(btncolor)
+
+
+			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
+			self.height.SetFont(text_font)
+			self.height.SetForegroundColour('#CDCDCD')
+
+			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
+			self.width.SetFont(text_font)
+			self.width.SetForegroundColour('#CDCDCD')
+
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval.SetFont(text_font)
+			self.heightval.SetForegroundColour('#CDCDCD')
+			self.heightval.SetBackgroundColour(btncolor)
+
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval.SetFont(text_font)
+			self.widthval.SetForegroundColour('#CDCDCD')
+			self.widthval.SetBackgroundColour(btncolor)
+
+
+			self.a = wx.StaticText(self.right, label="Link to redirect (<a href=' '>): ", pos=(10,220))
+			self.a.SetFont(text_font)
+			self.a.SetForegroundColour('#CDCDCD')
+
+			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(320,250))
+			self.a_new_window.SetFont(text_font)
+			self.a_new_window.SetForegroundColour('#CDCDCD')
+
+			self.aval = wx.TextCtrl(self.right, pos=(230,220), value=elemprop['a'], style=wx.NO_BORDER, size=(260, 20) ) 
+			self.aval.SetFont(text_font)
+			self.aval.SetForegroundColour('#CDCDCD')
+			self.aval.SetBackgroundColour(btncolor)
+
+			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,250) ) 
+			self.a_new_windowval.SetFont(value_font)
+			self.a_new_windowval.SetForegroundColour("#cfcfcf")
+			#self.a_new_window.SetValue()
+
+
+			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
+			self.position.SetFont(text_font)
+			self.position.SetForegroundColour('#CDCDCD')
+
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.positionval.SetFont(text_font)
+			self.positionval.SetBackgroundColour('#CDCDCD')
+
+
+			self.src = wx.StaticText(self.right, label="Source address: ", pos=(10,280))
+			self.src.SetFont(text_font)
+			self.src.SetForegroundColour('#CDCDCD')
+
+			self.srcval = wx.TextCtrl(self.right, pos=(140,280), value=elemprop['src'], style=wx.NO_BORDER, size=(350, 20) ) 
+			self.srcval.SetFont(text_font)
+			self.srcval.SetForegroundColour('#CDCDCD')
+			self.srcval.SetBackgroundColour(btncolor)
+
+
+			self.alt = wx.StaticText(self.right, label="Alternative text: ", pos=(10,310))
+			self.alt.SetFont(text_font)
+			self.alt.SetForegroundColour('#CDCDCD')
+
+			self.altval = wx.TextCtrl(self.right, pos=(140,310), value=elemprop['alt'], style=wx.NO_BORDER, size=(350, 20) ) 
+			self.altval.SetFont(text_font)
+			self.altval.SetForegroundColour('#CDCDCD')
+			self.altval.SetBackgroundColour(btncolor)
+
+
+			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,340))
+			self.float.SetFont(text_font)
+			self.float.SetForegroundColour('#CDCDCD')
+
+			self.floatval = wx.Choice(self.right, pos=(80,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.floatval.SetFont(text_font)
+			self.floatval.SetBackgroundColour('#CDCDCD')
+
+
+			self.margin = wx.StaticText(self.right, label="Margin (top bottom left right): ", pos=(10,370))
+			self.margin.SetFont(text_font)
+			self.margin.SetForegroundColour('#CDCDCD')
+
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval.SetFont(text_font)
+			self.marginval.SetForegroundColour('#CDCDCD')
+			self.marginval.SetBackgroundColour(btncolor)
+
+
+			self.padding = wx.StaticText(self.right, label="Padding (top bottom left right): ", pos=(10,400))
+			self.padding.SetFont(text_font)
+			self.padding.SetForegroundColour('#CDCDCD')
+
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval.SetFont(text_font)
+			self.paddingval.SetForegroundColour('#CDCDCD')
+			self.paddingval.SetBackgroundColour(btncolor)
+
+
+			self.border = wx.StaticText(self.right, label="Border (top bottom left right): ", pos=(10,430))
+			self.border.SetFont(text_font)
+			self.border.SetForegroundColour('#CDCDCD')
+
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval.SetFont(text_font)
+			self.borderval.SetForegroundColour('#CDCDCD')
+			self.borderval.SetBackgroundColour(btncolor)
+	
+
+			self.okbutton = wx.Button(self.right, label='Save', pos=(30, yMax-200), style=wx.NO_BORDER, size=(200,80))
+			self.okbutton.SetFont(text_font)
+			self.okbutton.SetForegroundColour('#CFCFCF')
+			self.okbutton.SetBackgroundColour(btncolor)
+			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
+			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
+			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
+			
+
+
+
+
+
+
 
 			
 	
 
 
 		elif word == "button":
-			previousselected = "button"
+			bgcolor = wx.ColourData()
 
-			self.classname = wx.StaticText(self.right, label="classname: ", pos=(10,25))
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name.SetFont(header_font)
+			self.name.SetForegroundColour('#CCA3F1')
+
+			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
 			self.classname.SetFont(text_font)
 			self.classname.SetForegroundColour('#CDCDCD')
-			
-			self.idname = wx.StaticText(self.right, label="idname: ", pos=(10,50))
+
+			self.classnameval = wx.TextCtrl(self.right, pos=(100,130), value=elemprop['class'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.classnameval.SetFont(text_font)
+			self.classnameval.SetForegroundColour('#CDCDCD')
+			self.classnameval.SetBackgroundColour(btncolor)
+
+
+			self.idname = wx.StaticText(self.right, label="ID: ", pos=(10, 160))
 			self.idname.SetFont(text_font)
 			self.idname.SetForegroundColour('#CDCDCD')
-			
-			self.a = wx.StaticText(self.right, label="a: ", pos=(10,75))
-			self.a.SetFont(text_font)
-			self.a.SetForegroundColour('#CDCDCD')
-			
-			self.a_new_window = wx.StaticText(self.right, label="a_new_window: ", pos=(300,75))
-			self.a_new_window.SetFont(text_font)
-			self.a_new_window.SetForegroundColour('#CDCDCD')
 
-			self.type = wx.StaticText(self.right, label="type: ", pos=(10,100))
-			self.type.SetFont(text_font)
-			self.type.SetForegroundColour('#CDCDCD')
-			
-			self.disabled = wx.StaticText(self.right, label="disabled: ", pos=(10,125))
-			self.disabled.SetFont(text_font)
-			self.disabled.SetForegroundColour('#CDCDCD')
-			
-			self.value = wx.StaticText(self.right, label="value: ", pos=(10,150))
-			self.value.SetFont(text_font)
-			self.value.SetForegroundColour('#CDCDCD')
-			
-			self.name = wx.StaticText(self.right, label="name: ", pos=(10,175))
-			self.name.SetFont(text_font)
-			self.name.SetForegroundColour('#CDCDCD')
-			
-			self.height = wx.StaticText(self.right, label="height: ", pos=(10,200))
+			self.idnameval = wx.TextCtrl(self.right, pos=(100,160), value=elemprop['id'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.idnameval.SetFont(text_font)
+			self.idnameval.SetForegroundColour('#CDCDCD')
+			self.idnameval.SetBackgroundColour(btncolor)
+
+
+			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
 			self.height.SetFont(text_font)
 			self.height.SetForegroundColour('#CDCDCD')
 
-			self.width = wx.StaticText(self.right, label="width: ", pos=(300,200))
+			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
-			self.float = wx.StaticText(self.right, label="float: ", pos=(10,225))
-			self.float.SetFont(text_font)
-			self.float.SetForegroundColour('#CDCDCD')
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval.SetFont(text_font)
+			self.heightval.SetForegroundColour('#CDCDCD')
+			self.heightval.SetBackgroundColour(btncolor)
 
-			self.position = wx.StaticText(self.right, label="position: ", pos=(10,250))
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval.SetFont(text_font)
+			self.widthval.SetForegroundColour('#CDCDCD')
+			self.widthval.SetBackgroundColour(btncolor)
+
+
+			self.a = wx.StaticText(self.right, label="Link to redirect (<a href=' '>): ", pos=(10,220))
+			self.a.SetFont(text_font)
+			self.a.SetForegroundColour('#CDCDCD')
+
+			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(320,250))
+			self.a_new_window.SetFont(text_font)
+			self.a_new_window.SetForegroundColour('#CDCDCD')
+
+			self.aval = wx.TextCtrl(self.right, pos=(230,220), value=elemprop['a'], style=wx.NO_BORDER, size=(260, 20) ) 
+			self.aval.SetFont(text_font)
+			self.aval.SetForegroundColour('#CDCDCD')
+			self.aval.SetBackgroundColour(btncolor)
+
+			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,254) ) 
+			self.a_new_windowval.SetFont(value_font)
+			self.a_new_windowval.SetForegroundColour("#cfcfcf")
+			#self.a_new_window.SetValue()
+	
+			self.disabled = wx.StaticText(self.right, label="Disabled: ", pos=(400,280))
+			self.disabled.SetFont(text_font)
+			self.disabled.SetForegroundColour('#CDCDCD')
+
+			self.disabledval= wx.CheckBox(self.right, pos=(478,284) ) 
+			self.disabledval.SetFont(value_font)
+			self.disabledval.SetForegroundColour("#cfcfcf")
+
+			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
 			self.position.SetFont(text_font)
 			self.position.SetForegroundColour('#CDCDCD')
 
-			self.margin = wx.StaticText(self.right, label="margin: ", pos=(10,275))
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.positionval.SetFont(text_font)
+			self.positionval.SetBackgroundColour('#CDCDCD')
+
+
+			self.backgroundcolor = wx.StaticText(self.right, label="Background color: ", pos=(10,280))
+			self.backgroundcolor.SetFont(text_font)
+			self.backgroundcolor.SetForegroundColour('#CDCDCD')
+
+			self.backgroundcolorval = wx.Button(self.right, label=elemprop['style']['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(100,20))
+			self.backgroundcolorval.SetFont(text_font)
+			self.backgroundcolorval.SetForegroundColour(elemprop['style']['background-color'])
+			self.backgroundcolorval.SetBackgroundColour(btncolor)
+			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
+			self.backgroundcolorval.Bind(wx.EVT_LEAVE_WINDOW, self.buttonUnhover)
+
+			self.type = wx.StaticText(self.right, label="Type: ", pos=(10,310))
+			self.type.SetFont(text_font)
+			self.type.SetForegroundColour('#CDCDCD')
+
+			self.typeval = wx.Choice(self.right,  pos=(70,310), size=(130,20), choices=['button','submit','reset'], style=wx.NO_BORDER)
+			self.typeval.SetFont(text_font)
+			self.typeval.SetBackgroundColour('#CDCDCD')
+			
+
+			self.value = wx.StaticText(self.right, label="Value: ", pos=(270,310))
+			self.value.SetFont(text_font)
+			self.value.SetForegroundColour('#CDCDCD')
+
+			self.valueval = wx.TextCtrl(self.right, pos=(330,310), value=str(elemprop['value']), style=wx.NO_BORDER, size=(160,20))
+			self.valueval.SetFont(text_font)
+			self.valueval.SetForegroundColour('#CDCDCD')
+			self.valueval.SetBackgroundColour(btncolor)
+
+
+
+			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,340))
+			self.float.SetFont(text_font)
+			self.float.SetForegroundColour('#CDCDCD')
+
+			self.floatval = wx.Choice(self.right, pos=(70,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.floatval.SetFont(text_font)
+			self.floatval.SetBackgroundColour('#CDCDCD')
+
+			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(270,340))
+			self.textalign.SetFont(text_font)
+			self.textalign.SetForegroundColour('#CDCDCD')
+
+			self.textalignval = wx.Choice(self.right, pos=(360,340), size=(130,20), choices=['left','center','right','justify','justify-all','start','end','match-parent','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.textalignval.SetFont(text_font)
+			self.textalignval.SetBackgroundColour('#CDCDCD')
+
+
+			self.margin = wx.StaticText(self.right, label="Margin (top bottom left right): ", pos=(10,370))
 			self.margin.SetFont(text_font)
 			self.margin.SetForegroundColour('#CDCDCD')
 
-			self.padding = wx.StaticText(self.right, label="padding: ", pos=(10,300))
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval.SetFont(text_font)
+			self.marginval.SetForegroundColour('#CDCDCD')
+			self.marginval.SetBackgroundColour(btncolor)
+
+
+			self.padding = wx.StaticText(self.right, label="Padding (top bottom left right): ", pos=(10,400))
 			self.padding.SetFont(text_font)
 			self.padding.SetForegroundColour('#CDCDCD')
 
-			self.border = wx.StaticText(self.right, label="border: ", pos=(10,325))
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval.SetFont(text_font)
+			self.paddingval.SetForegroundColour('#CDCDCD')
+			self.paddingval.SetBackgroundColour(btncolor)
+
+
+			self.border = wx.StaticText(self.right, label="Border (top bottom left right): ", pos=(10,430))
 			self.border.SetFont(text_font)
 			self.border.SetForegroundColour('#CDCDCD')
 
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval.SetFont(text_font)
+			self.borderval.SetForegroundColour('#CDCDCD')
+			self.borderval.SetBackgroundColour(btncolor)
+	
+
+			self.okbutton = wx.Button(self.right, label='Save', pos=(30, yMax-200), style=wx.NO_BORDER, size=(200,80))
+			self.okbutton.SetFont(text_font)
+			self.okbutton.SetForegroundColour('#CFCFCF')
+			self.okbutton.SetBackgroundColour(btncolor)
+			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
+			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
+			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
 			
+
+
+
+
+		
+
+		
+
+
+			
+
+
 
 
 
 		elif word == "input":
-			previousselected = "input"
+			bgcolor = wx.ColourData()
 
-			self.classname = wx.StaticText(self.right, label="classname: ", pos=(10,25))
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name.SetFont(header_font)
+			self.name.SetForegroundColour('#CCA3F1')
+
+			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
 			self.classname.SetFont(text_font)
 			self.classname.SetForegroundColour('#CDCDCD')
-			
-			self.idname = wx.StaticText(self.right, label="idname: ", pos=(10,50))
+
+			self.classnameval = wx.TextCtrl(self.right, pos=(100,130), value=elemprop['class'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.classnameval.SetFont(text_font)
+			self.classnameval.SetForegroundColour('#CDCDCD')
+			self.classnameval.SetBackgroundColour(btncolor)
+
+
+			self.idname = wx.StaticText(self.right, label="ID: ", pos=(10, 160))
 			self.idname.SetFont(text_font)
 			self.idname.SetForegroundColour('#CDCDCD')
-			
-			self.a = wx.StaticText(self.right, label="a: ", pos=(10,75))
-			self.a.SetFont(text_font)
-			self.a.SetForegroundColour('#CDCDCD')
-			
-			self.a_new_window = wx.StaticText(self.right, label="a_new_window: ", pos=(300,75))
-			self.a_new_window.SetFont(text_font)
-			self.a_new_window.SetForegroundColour('#CDCDCD')
 
-			self.type = wx.StaticText(self.right, label="type: ", pos=(10,100))
-			self.type.SetFont(text_font)
-			self.type.SetForegroundColour('#CDCDCD')
-			
-			self.autocomplete = wx.StaticText(self.right, label="autocomplete: ", pos=(10,125))
-			self.autocomplete.SetFont(text_font)
-			self.autocomplete.SetForegroundColour('#CDCDCD')
-			
-			self.placeholder = wx.StaticText(self.right, label="placeholder: ", pos=(10,150))
-			self.placeholder.SetFont(text_font)
-			self.placeholder.SetForegroundColour('#CDCDCD')
-			
-			self.readonly = wx.StaticText(self.right, label="readonly: ", pos=(10,175))
-			self.readonly.SetFont(text_font)
-			self.readonly.SetForegroundColour('#CDCDCD')
-			
-			self.maxwidth = wx.StaticText(self.right, label="maxwidth: ", pos=(10,200))
-			self.maxwidth.SetFont(text_font)
-			self.maxwidth.SetForegroundColour('#CDCDCD')
-			
-			self.value = wx.StaticText(self.right, label="value: ", pos=(10,225))
-			self.value.SetFont(text_font)
-			self.value.SetForegroundColour('#CDCDCD')
-			
-			self.name = wx.StaticText(self.right, label="name: ", pos=(10,250))
-			self.name.SetFont(text_font)
-			self.name.SetForegroundColour('#CDCDCD')
-			
-			self.height = wx.StaticText(self.right, label="height: ", pos=(10,275))
+			self.idnameval = wx.TextCtrl(self.right, pos=(100,160), value=elemprop['id'], style=wx.NO_BORDER, size=(390, 20) ) 
+			self.idnameval.SetFont(text_font)
+			self.idnameval.SetForegroundColour('#CDCDCD')
+			self.idnameval.SetBackgroundColour(btncolor)
+
+
+			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
 			self.height.SetFont(text_font)
 			self.height.SetForegroundColour('#CDCDCD')
 
-			self.width = wx.StaticText(self.right, label="width: ", pos=(300,275))
+			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
-			self.float = wx.StaticText(self.right, label="float: ", pos=(10,300))
-			self.float.SetFont(text_font)
-			self.float.SetForegroundColour('#CDCDCD')
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval.SetFont(text_font)
+			self.heightval.SetForegroundColour('#CDCDCD')
+			self.heightval.SetBackgroundColour(btncolor)
 
-			self.position = wx.StaticText(self.right, label="position: ", pos=(10,325))
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval.SetFont(text_font)
+			self.widthval.SetForegroundColour('#CDCDCD')
+			self.widthval.SetBackgroundColour(btncolor)
+
+
+			self.a = wx.StaticText(self.right, label="Link to redirect (<a href=' '>): ", pos=(10,220))
+			self.a.SetFont(text_font)
+			self.a.SetForegroundColour('#CDCDCD')
+
+			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(320,250))
+			self.a_new_window.SetFont(text_font)
+			self.a_new_window.SetForegroundColour('#CDCDCD')
+
+			self.aval = wx.TextCtrl(self.right, pos=(230,220), value=elemprop['a'], style=wx.NO_BORDER, size=(260, 20) ) 
+			self.aval.SetFont(text_font)
+			self.aval.SetForegroundColour('#CDCDCD')
+			self.aval.SetBackgroundColour(btncolor)
+
+			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,250) ) 
+			self.a_new_windowval.SetFont(value_font)
+			self.a_new_windowval.SetForegroundColour("#cfcfcf")
+			#self.a_new_window.SetValue()
+
+
+			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
 			self.position.SetFont(text_font)
 			self.position.SetForegroundColour('#CDCDCD')
 
-			self.margin = wx.StaticText(self.right, label="margin: ", pos=(10,350))
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.positionval.SetFont(text_font)
+			self.positionval.SetBackgroundColour('#CDCDCD')
+
+
+			self.backgroundcolor = wx.StaticText(self.right, label="Background color: ", pos=(10,280))
+			self.backgroundcolor.SetFont(text_font)
+			self.backgroundcolor.SetForegroundColour('#CDCDCD')
+
+			self.backgroundcolorval = wx.Button(self.right, label=elemprop['style']['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(100,20))
+			self.backgroundcolorval.SetFont(text_font)
+			self.backgroundcolorval.SetForegroundColour(elemprop['style']['background-color'])
+			self.backgroundcolorval.SetBackgroundColour(btncolor)
+			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
+			self.backgroundcolorval.Bind(wx.EVT_LEAVE_WINDOW, self.buttonUnhover)
+
+			self.autocomplete = wx.StaticText(self.right, label="Autocomplete: ", pos=(365,280))
+			self.autocomplete.SetFont(text_font)
+			self.autocomplete.SetForegroundColour('#CDCDCD')
+
+			self.autocompleteval= wx.CheckBox(self.right, pos=(478,284) ) 
+			self.autocompleteval.SetFont(value_font)
+			self.autocompleteval.SetForegroundColour("#cfcfcf")
+
+
+			self.type = wx.StaticText(self.right, label="Type: ", pos=(10,310))
+			self.type.SetFont(text_font)
+			self.type.SetForegroundColour('#CDCDCD')
+
+			self.typeval = wx.Choice(self.right,  pos=(70,310), size=(130,20), choices=['button','submit','reset'], style=wx.NO_BORDER)
+			self.typeval.SetFont(text_font)
+			self.typeval.SetBackgroundColour('#CDCDCD')
+			
+
+			self.readonly = wx.StaticText(self.right, label="Read-only: ", pos=(392,310))
+			self.readonly.SetFont(text_font)
+			self.readonly.SetForegroundColour('#CDCDCD')
+
+			self.readonlyval= wx.CheckBox(self.right, pos=(478,314) ) 
+			self.readonlyval.SetFont(value_font)
+			self.readonlyval.SetForegroundColour("#cfcfcf")
+
+
+			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,340))
+			self.float.SetFont(text_font)
+			self.float.SetForegroundColour('#CDCDCD')
+
+			self.floatval = wx.Choice(self.right, pos=(70,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.floatval.SetFont(text_font)
+			self.floatval.SetBackgroundColour('#CDCDCD')
+
+			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(270,340))
+			self.textalign.SetFont(text_font)
+			self.textalign.SetForegroundColour('#CDCDCD')
+
+			self.textalignval = wx.Choice(self.right, pos=(360,340), size=(130,20), choices=['left','center','right','justify','justify-all','start','end','match-parent','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.textalignval.SetFont(text_font)
+			self.textalignval.SetBackgroundColour('#CDCDCD')
+
+
+			self.margin = wx.StaticText(self.right, label="Margin (top bottom left right): ", pos=(10,370))
 			self.margin.SetFont(text_font)
 			self.margin.SetForegroundColour('#CDCDCD')
 
-			self.padding = wx.StaticText(self.right, label="padding: ", pos=(10,375))
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval.SetFont(text_font)
+			self.marginval.SetForegroundColour('#CDCDCD')
+			self.marginval.SetBackgroundColour(btncolor)
+
+
+			self.padding = wx.StaticText(self.right, label="Padding (top bottom left right): ", pos=(10,400))
 			self.padding.SetFont(text_font)
 			self.padding.SetForegroundColour('#CDCDCD')
 
-			self.border = wx.StaticText(self.right, label="border: ", pos=(10,400))
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval.SetFont(text_font)
+			self.paddingval.SetForegroundColour('#CDCDCD')
+			self.paddingval.SetBackgroundColour(btncolor)
+
+
+			self.border = wx.StaticText(self.right, label="Border (top bottom left right): ", pos=(10,430))
 			self.border.SetFont(text_font)
 			self.border.SetForegroundColour('#CDCDCD')
 
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval.SetFont(text_font)
+			self.borderval.SetForegroundColour('#CDCDCD')
+			self.borderval.SetBackgroundColour(btncolor)
+	
+		
+			self.placeholder = wx.StaticText(self.right, label="Placeholder: ", pos=(10,490))
+			self.placeholder.SetFont(text_font)
+			self.placeholder.SetForegroundColour('#CDCDCD')
+
+			self.placeholderval = wx.TextCtrl(self.right, pos=(100,490), value=str(elemprop['placeholder']), style=wx.NO_BORDER, size=(160,20))
+			self.placeholderval.SetFont(text_font)
+			self.placeholderval.SetForegroundColour('#CDCDCD')
+			self.placeholderval.SetBackgroundColour(btncolor)
+
+			self.value = wx.StaticText(self.right, label="Value: ", pos=(270,490))
+			self.value.SetFont(text_font)
+			self.value.SetForegroundColour('#CDCDCD')
+
+			self.valueval = wx.TextCtrl(self.right, pos=(330,490), value=str(elemprop['value']), style=wx.NO_BORDER, size=(160,20))
+			self.valueval.SetFont(text_font)
+			self.valueval.SetForegroundColour('#CDCDCD')
+			self.valueval.SetBackgroundColour(btncolor)
+
+	
+			self.maxlength = wx.StaticText(self.right, label="Max length: ", pos=(10,460))
+			self.maxlength.SetFont(text_font)
+			self.maxlength.SetForegroundColour('#CDCDCD')
+
+			self.maxlengthval = wx.TextCtrl(self.right, pos=(100,460), value=str(elemprop['maxlength']), style=wx.NO_BORDER, size=(160,20))
+			self.maxlengthval.SetFont(text_font)
+			self.maxlengthval.SetForegroundColour('#CDCDCD')
+			self.maxlengthval.SetBackgroundColour(btncolor)
+
+
+			self.name = wx.StaticText(self.right, label="Name: ", pos=(270,460))
+			self.name.SetFont(text_font)
+			self.name.SetForegroundColour('#CDCDCD')
+
+			self.nameval = wx.TextCtrl(self.right, pos=(330,460), value=str(elemprop['name']), style=wx.NO_BORDER, size=(160,20))
+			self.nameval.SetFont(text_font)
+			self.nameval.SetForegroundColour('#CDCDCD')
+			self.nameval.SetBackgroundColour(btncolor)
+
+
+			self.okbutton = wx.Button(self.right, label='Save', pos=(30, yMax-200), style=wx.NO_BORDER, size=(200,80))
+			self.okbutton.SetFont(text_font)
+			self.okbutton.SetForegroundColour('#CFCFCF')
+			self.okbutton.SetBackgroundColour(btncolor)
+			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
+			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
+			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
+			
 
 
 		else:
 			previousselected = ""
+
+	def buttonHover(self, event):
+		self.backgroundcolorval.SetBackgroundColour(hovercolor)
+		event.Skip()
+
+	def buttonUnhover(self, event):
+		self.backgroundcolorval.SetBackgroundColour(btncolor)
+		event.Skip()
+
+	def okbuttonHover(self, event):
+		self.okbutton.SetBackgroundColour(hovercolor)
+		event.Skip()
+
+	def okbuttonUnhover(self, event):
+		self.okbutton.SetBackgroundColour(btncolor)
+		event.Skip()
+
+	def colorHover(self, event):
+		self.colorval.SetBackgroundColour(hovercolor)
+		event.Skip()
+
+	def colorUnhover(self, event):
+		self.colorval.SetBackgroundColour(btncolor)
+		event.Skip()
 
 
 

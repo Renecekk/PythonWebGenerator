@@ -1688,6 +1688,15 @@ class editorFrame(wx.Frame):
 		elemprop = elemprop[elements[elementlist.GetSelection()]]
 		file.close()
 
+		elementname = elements[elementlist.GetSelection()]
+
+		divs = []
+
+		for x in elements:
+			num, word = re.split("-", x)
+			if word == "div":
+				divs.append(x)
+
 		children = self.right.GetChildren()
 
 		for child in children:
@@ -1852,7 +1861,7 @@ class editorFrame(wx.Frame):
 			self.okbutton.SetBackgroundColour(btncolor)
 			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
 			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
-			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
+			self.okbutton.Bind(wx.EVT_BUTTON, lambda evt:self.updateConfig(event, elementname))
 			
 
 
@@ -2075,7 +2084,7 @@ class editorFrame(wx.Frame):
 			self.okbutton.SetBackgroundColour(btncolor)
 			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
 			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
-			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
+			self.okbutton.Bind(wx.EVT_BUTTON, lambda evt:self.updateConfig(event, elementname))
 
 
 
@@ -2221,7 +2230,7 @@ class editorFrame(wx.Frame):
 			self.okbutton.SetBackgroundColour(btncolor)
 			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
 			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
-			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
+			self.okbutton.Bind(wx.EVT_BUTTON, lambda evt:self.updateConfig(event, elementname))
 			
 
 
@@ -2400,7 +2409,7 @@ class editorFrame(wx.Frame):
 			self.okbutton.SetBackgroundColour(btncolor)
 			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
 			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
-			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
+			self.okbutton.Bind(wx.EVT_BUTTON, lambda evt:self.updateConfig(event, elementname))
 			
 
 
@@ -2622,12 +2631,34 @@ class editorFrame(wx.Frame):
 			self.okbutton.SetBackgroundColour(btncolor)
 			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
 			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
-			#self.okbutton.Bind(wx.EVT_BUTTON, self.updateConfig)
+			self.okbutton.Bind(wx.EVT_BUTTON, lambda evt:self.updateConfig(event, elementname))
 			
 
 
 		else:
 			previousselected = ""
+
+
+
+	def updateConfig(self, evt, name):
+		global right
+
+
+		num, word = re.split('-', name)
+		print(name, num, word)
+
+		if word == "div":
+			print(self.classnameval.GetValue())
+		elif word == "text":
+			print(self.classnameval.GetValue())
+		elif word == "image":
+			print(self.classnameval.GetValue())
+		elif word == "button":
+			print(self.classnameval.GetValue())
+		elif word == "input":
+			print(self.classnameval.GetValue())
+
+			
 
 	def buttonHover(self, event):
 		self.backgroundcolorval.SetBackgroundColour(hovercolor)
@@ -2653,8 +2684,8 @@ class editorFrame(wx.Frame):
 		self.colorval.SetBackgroundColour(btncolor)
 		event.Skip()
 
-
-
+	def export(self, event):
+		print("Export")
 
 
 

@@ -62,7 +62,6 @@ def CreateConfig():
 		"background-color":"",
 		"text-align":"left",
 		"background":"",
-		"text-align":"left",
 		"height":"",
 		"float":"left",
 		"width":"",
@@ -1563,15 +1562,33 @@ class editorFrame(wx.Frame):
 				divcount[num] = num
 
 
-	def redrawcolor(self, event):
-		global bgcolor, elemprop
+	def pickbackgroundcolor(self, event):
+		global right, elemprop
 
 		dialog = wx.ColourDialog(None)
-		dialog.GetColourData().SetChooseFull(True)
+		dialog.GetColourData().SetChooseFull(False)
 		if dialog.ShowModal() == wx.ID_OK: 
 			data = dialog.GetColourData()
-		print(str(rgb_to_hex(data.GetColour().Get())))
+		out = str(rgb_to_hex(data.GetColour().Get()))
 		dialog.Destroy()
+
+		self.backgroundcolorval.SetLabel(out)
+		self.backgroundcolorval.SetForegroundColour(out)
+
+
+	def pickforegroundcolor(self, event):
+		global right, elemprop
+
+		dialog = wx.ColourDialog(None)
+		dialog.GetColourData().SetChooseFull(False)
+		if dialog.ShowModal() == wx.ID_OK: 
+			data = dialog.GetColourData()
+		out = str(rgb_to_hex(data.GetColour().Get()))
+		dialog.Destroy()
+
+		self.colorval.SetLabel(out)
+		self.colorval.SetForegroundColour(out)
+
 
 
 
@@ -1680,7 +1697,10 @@ class editorFrame(wx.Frame):
 			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,250) ) 
 			self.a_new_windowval.SetFont(value_font)
 			self.a_new_windowval.SetForegroundColour("#cfcfcf")
-			#self.a_new_window.SetValue()
+			if elemprop['a_new_window'] == "true":
+				self.a_new_windowval.SetValue(True)
+			else:
+				self.a_new_windowval.SetValue(False)
 
 
 			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
@@ -1702,7 +1722,7 @@ class editorFrame(wx.Frame):
 			self.backgroundcolorval.SetFont(text_font)
 			self.backgroundcolorval.SetForegroundColour(elemprop['background-color'])
 			self.backgroundcolorval.SetBackgroundColour(btncolor)
-			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.pickbackgroundcolor)
 			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
 			self.backgroundcolorval.Bind(wx.EVT_LEAVE_WINDOW, self.buttonUnhover)
 
@@ -1847,6 +1867,7 @@ class editorFrame(wx.Frame):
 			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(320,250))
 			self.a_new_window.SetFont(text_font)
 			self.a_new_window.SetForegroundColour('#CDCDCD')
+			
 
 			self.aval = wx.TextCtrl(self.right, pos=(230,220), value=elemprop['a'], style=wx.NO_BORDER, size=(260, 20) ) 
 			self.aval.SetFont(text_font)
@@ -1856,7 +1877,10 @@ class editorFrame(wx.Frame):
 			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,250) ) 
 			self.a_new_windowval.SetFont(value_font)
 			self.a_new_windowval.SetForegroundColour("#cfcfcf")
-			#self.a_new_window.SetValue()
+			if elemprop['a_new_window'] == "true":
+				self.a_new_windowval.SetValue(True)
+			else:
+				self.a_new_windowval.SetValue(False)
 
 
 			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
@@ -1878,7 +1902,7 @@ class editorFrame(wx.Frame):
 			self.backgroundcolorval.SetFont(text_font)
 			self.backgroundcolorval.SetForegroundColour(elemprop['background-color'])
 			self.backgroundcolorval.SetBackgroundColour(btncolor)
-			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.pickbackgroundcolor)
 			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
 			self.backgroundcolorval.Bind(wx.EVT_LEAVE_WINDOW, self.buttonUnhover)
 
@@ -1890,7 +1914,7 @@ class editorFrame(wx.Frame):
 			self.colorval.SetFont(text_font)
 			self.colorval.SetForegroundColour(elemprop['color'])
 			self.colorval.SetBackgroundColour(btncolor)
-			self.colorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.colorval.Bind(wx.EVT_BUTTON, self.pickforegroundcolor)
 			self.colorval.Bind(wx.EVT_ENTER_WINDOW, self.colorHover)
 			self.colorval.Bind(wx.EVT_LEAVE_WINDOW, self.colorHover)
 
@@ -2086,7 +2110,7 @@ class editorFrame(wx.Frame):
 			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(320,250))
 			self.a_new_window.SetFont(text_font)
 			self.a_new_window.SetForegroundColour('#CDCDCD')
-
+			
 			self.aval = wx.TextCtrl(self.right, pos=(230,220), value=elemprop['a'], style=wx.NO_BORDER, size=(260, 20) ) 
 			self.aval.SetFont(text_font)
 			self.aval.SetForegroundColour('#CDCDCD')
@@ -2095,7 +2119,10 @@ class editorFrame(wx.Frame):
 			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,250) ) 
 			self.a_new_windowval.SetFont(value_font)
 			self.a_new_windowval.SetForegroundColour("#cfcfcf")
-			#self.a_new_window.SetValue()
+			if elemprop['a_new_window'] == "true":
+				self.a_new_windowval.SetValue(True)
+			else:
+				self.a_new_windowval.SetValue(False)
 
 
 			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
@@ -2253,6 +2280,7 @@ class editorFrame(wx.Frame):
 			self.a_new_window = wx.StaticText(self.right, label="Open link in new tab: ", pos=(320,250))
 			self.a_new_window.SetFont(text_font)
 			self.a_new_window.SetForegroundColour('#CDCDCD')
+			
 
 			self.aval = wx.TextCtrl(self.right, pos=(230,220), value=elemprop['a'], style=wx.NO_BORDER, size=(260, 20) ) 
 			self.aval.SetFont(text_font)
@@ -2262,8 +2290,11 @@ class editorFrame(wx.Frame):
 			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,254) ) 
 			self.a_new_windowval.SetFont(value_font)
 			self.a_new_windowval.SetForegroundColour("#cfcfcf")
-			#self.a_new_window.SetValue()
-	
+			if elemprop['a_new_window'] == "true":
+				self.a_new_windowval.SetValue(True)
+			else:
+				self.a_new_windowval.SetValue(False)
+
 			self.disabled = wx.StaticText(self.right, label="Disabled: ", pos=(400,280))
 			self.disabled.SetFont(text_font)
 			self.disabled.SetForegroundColour('#CDCDCD')
@@ -2271,6 +2302,10 @@ class editorFrame(wx.Frame):
 			self.disabledval= wx.CheckBox(self.right, pos=(478,284) ) 
 			self.disabledval.SetFont(value_font)
 			self.disabledval.SetForegroundColour("#cfcfcf")
+			if elemprop['disabled'] == "true":
+				self.disabledval.SetValue(True)
+			else:
+				self.disabledval.SetValue(False)
 
 			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
 			self.position.SetFont(text_font)
@@ -2291,7 +2326,7 @@ class editorFrame(wx.Frame):
 			self.backgroundcolorval.SetFont(text_font)
 			self.backgroundcolorval.SetForegroundColour(elemprop['background-color'])
 			self.backgroundcolorval.SetBackgroundColour(btncolor)
-			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.pickbackgroundcolor)
 			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
 			self.backgroundcolorval.Bind(wx.EVT_LEAVE_WINDOW, self.buttonUnhover)
 
@@ -2454,8 +2489,10 @@ class editorFrame(wx.Frame):
 			self.a_new_windowval= wx.CheckBox(self.right, pos=(478,250) ) 
 			self.a_new_windowval.SetFont(value_font)
 			self.a_new_windowval.SetForegroundColour("#cfcfcf")
-			#self.a_new_window.SetValue()
-
+			if elemprop['a_new_window'] == "true":
+				self.a_new_windowval.SetValue(True)
+			else:
+				self.a_new_windowval.SetValue(False)
 
 			self.position = wx.StaticText(self.right, label="Position: ", pos=(10,250))
 			self.position.SetFont(text_font)
@@ -2476,7 +2513,7 @@ class editorFrame(wx.Frame):
 			self.backgroundcolorval.SetFont(text_font)
 			self.backgroundcolorval.SetForegroundColour(elemprop['background-color'])
 			self.backgroundcolorval.SetBackgroundColour(btncolor)
-			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
+			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.pickbackgroundcolor)
 			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
 			self.backgroundcolorval.Bind(wx.EVT_LEAVE_WINDOW, self.buttonUnhover)
 
@@ -2487,6 +2524,10 @@ class editorFrame(wx.Frame):
 			self.autocompleteval= wx.CheckBox(self.right, pos=(478,284) ) 
 			self.autocompleteval.SetFont(value_font)
 			self.autocompleteval.SetForegroundColour("#cfcfcf")
+			if elemprop['autocomplete'] == "on":
+				self.autocompleteval.SetValue(True)
+			else:
+				self.autocompleteval.SetValue(False)
 
 
 			self.type = wx.StaticText(self.right, label="Type: ", pos=(10,310))
@@ -2507,6 +2548,10 @@ class editorFrame(wx.Frame):
 			self.readonlyval= wx.CheckBox(self.right, pos=(478,314) ) 
 			self.readonlyval.SetFont(value_font)
 			self.readonlyval.SetForegroundColour("#cfcfcf")
+			if elemprop['readonly'] == "true":
+				self.readonlyval.SetValue(True)
+			else:
+				self.readonlyval.SetValue(False)
 
 
 			self.float = wx.StaticText(self.right, label="Float: ", pos=(10,340))
@@ -2615,12 +2660,7 @@ class editorFrame(wx.Frame):
 
 	def updateConfig(self, evt, name):
 		global right, elemprop, elementname, wd
-
-		print(str(elemprop), str(elementname), str(wd))
-
-
 		num, word = re.split('-', name)
-		print(name, num, word)
 
 		replaceline = ""
 
@@ -2754,9 +2794,9 @@ class editorFrame(wx.Frame):
 			elemprop['background-color'] = self.backgroundcolorval.GetLabel()
 			elemprop['autocomplete'] = self.autocompleteval.GetValue()
 			if elemprop['autocomplete']:
-				elemprop['autocomplete'] = "true"
+				elemprop['autocomplete'] = "on"
 			else:
-				elemprop['autocomplete'] = "false"
+				elemprop['autocomplete'] = "off"
 			elemprop['type'] = self.typeval.GetCurrentSelection()
 			elemprop['type'] = self.typeval.GetString(elemprop['type'])
 			elemprop['readonly'] = self.readonlyval.GetValue()
@@ -2789,7 +2829,6 @@ class editorFrame(wx.Frame):
 				line = line.replace("'", '"')
 
 			file.write(line)
-			print(line)
 		file.close()
 
 
@@ -2836,7 +2875,76 @@ class editorFrame(wx.Frame):
 		event.Skip()
 
 	def export(self, event):
-		print("Export")
+		global wd, elements, webpage
+
+		file = os.path.join(wd, 'elements.properties')
+		file = open(file, "r")
+		lines = file.readlines()
+		file.close()
+
+		file = os.path.join(wd, 'elements.properties')
+		file = open(file, 'r')
+		js = json.load(file)
+		file.close()
+
+		destination = os.path.join(wd, 'OUTPUT')
+
+		css = open(destination+"\\generated_styles.css", 'w+')
+
+
+		pregenerated = "<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset='UTF-8'>\n\t\t<meta name='viewport' content='width=device-width, initial-scale=1.0'>\n\t\t<link rel='stylesheet' type='text/css' href='generated_styles.css'>\n\t</head>\n\t<body>"
+
+		for element in elements:
+			string = str(js[element])
+			num, word = re.split('-', element)
+			print(element, word, num)
+
+			if word == "div":
+				style = js[element]['class']+" {\n\t"
+				if js[element]['background-color']:
+					style = style + "background-color: " + js[element]['background-color'] + ",\n\t"
+				if js[element]['text-align']:
+					style = style + "text-align: " + js[element]['text-align'] + ",\n\t"
+				if js[element]['background']:
+					style = style + "background: " + js[element]['background'] + ",\n\t"
+				if js[element]['float']:
+					style = style + "float: " + js[element]['float'] + ",\n\t"
+				if js[element]['margin']:
+					style = style + "margin: " + js[element]['margin'] + ",\n\t"
+				if js[element]['padding']:
+					style = style + "padding: " + js[element]['padding'] + ",\n\t"
+				if js[element]['border']:
+					style = style + "border: " + js[element]['border'] + "\n}\n\n"
+
+				css.write(style)
+
+
+
+			elif word == "text":
+				pass
+			elif word == "image":
+				pass
+			elif word == "button":
+				pass
+			elif word == "input":
+				pass
+			print(string)
+
+		for line in lines:
+			print(line)
+
+		css.close()
+
+
+
+
+
+		
+
+		
+
+
+		
 
 
 

@@ -1593,7 +1593,7 @@ class editorFrame(wx.Frame):
 
 
 	def loadelement(self, event):
-		global elements, right, text_font, bgcolor, color, elemprop, header_font, myGrid, elementname
+		global elements, right, text_font, bgcolor, color, elemprop, header_font, myGrid, elementname, left
 
 		file = os.path.join(wd, 'elements.properties')
 		file = open(file, "r")
@@ -1795,6 +1795,8 @@ class editorFrame(wx.Frame):
 			self.okbutton.Bind(wx.EVT_ENTER_WINDOW, self.okbuttonHover)
 			self.okbutton.Bind(wx.EVT_LEAVE_WINDOW, self.okbuttonUnhover)
 			self.okbutton.Bind(wx.EVT_BUTTON, lambda evt:self.updateConfig(event, elementname))
+
+			myGrid.SetCellBackgroundColour(int(elemprop['height'])/2, int(elemprop['width'])/2, elemprop['background-color'])
 			
 
 
@@ -2657,6 +2659,9 @@ class editorFrame(wx.Frame):
 			previousselected = ""
 
 
+		
+
+
 
 	def updateConfig(self, evt, name):
 		global right, elemprop, elementname, wd
@@ -2897,26 +2902,34 @@ class editorFrame(wx.Frame):
 		for element in elements:
 			string = str(js[element])
 			num, word = re.split('-', element)
-			print(element, word, num)
 
 			if word == "div":
-				style = js[element]['class']+" {\n\t"
-				if js[element]['background-color']:
-					style = style + "background-color: " + js[element]['background-color'] + ",\n\t"
-				if js[element]['text-align']:
-					style = style + "text-align: " + js[element]['text-align'] + ",\n\t"
-				if js[element]['background']:
-					style = style + "background: " + js[element]['background'] + ",\n\t"
-				if js[element]['float']:
-					style = style + "float: " + js[element]['float'] + ",\n\t"
-				if js[element]['margin']:
-					style = style + "margin: " + js[element]['margin'] + ",\n\t"
-				if js[element]['padding']:
-					style = style + "padding: " + js[element]['padding'] + ",\n\t"
-				if js[element]['border']:
-					style = style + "border: " + js[element]['border'] + "\n}\n\n"
+				if js[element]['class']:
+					style = js[element]['class']+" {\n\t"
+					if js[element]['background-color'] != "":
+						style = style + "background-color: " + js[element]['background-color']
+					if js[element]['text-align'] != "":
+						style = style + ",\n\t"
+						style = style + "text-align: " + js[element]['text-align']
+					if js[element]['background'] != "":
+						style = style + ",\n\t"
+						style = style + "background: " + js[element]['background']
+					if js[element]['float'] != "":
+						style = style + ",\n\t"
+						style = style + "float: " + js[element]['float']
+					if js[element]['margin'] != "":
+						style = style + ",\n\t"
+						style = style + "margin: " + js[element]['margin']
+					if js[element]['padding'] != "":
+						style = style + ",\n\t"
+						style = style + "padding: " + js[element]['padding']
+					if js[element]['border'] != "":
+						style = style + ",\n\t"
+						style = style + "border: " + js[element]['border']
+					style = style + "\n}\n\n"
 
-				css.write(style)
+					css.write(style)
+
 
 
 
@@ -2928,10 +2941,6 @@ class editorFrame(wx.Frame):
 				pass
 			elif word == "input":
 				pass
-			print(string)
-
-		for line in lines:
-			print(line)
 
 		css.close()
 

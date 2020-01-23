@@ -53,214 +53,109 @@ def CreateConfig():
 		json = """{
 	"div":
 	{
-		"parent":"",
+		"parent":"body",
 		"class":"",
 		"id":"",
 		"a":"",
-		"a_new_window":false,
-		"style":
-		{
-
-			"position":"",
-			"background-color":"",
-			"text-align":"",
-			"background":"",
-			"text-align":"",
-			"height":"",
-			"float":"",
-			"width":"",
-			"margin":
-			{
-				"margin-top":"",
-				"margin-bottom":"",
-				"margin-left":"",
-				"margin-right":""
-			},
-			"padding":
-			{
-				"padding-top":"",
-				"padding-bottom":"",
-				"padding-left":"",
-				"padding-right":""
-			},
-			"border":
-			{
-				"border-top":"",
-				"border-bottom":"",
-				"border-left":"",
-				"border-right":""
-			}
-		}
+		"a_new_window":"false",
+		"position":"relative",
+		"background-color":"",
+		"text-align":"left",
+		"background":"",
+		"text-align":"left",
+		"height":"",
+		"float":"left",
+		"width":"",
+		"margin":"",
+		"padding":"",
+		"border":""
 	},
 	"text":
 	{
-		"parent":"",
+		"parent":"body",
 		"class":"",
 		"id":"",
 		"a":"",
-		"type":"",
-		"a_new_window":false,
+		"type":"p",
+		"a_new_window":"false",
 		"content":"",
-		"style":
-		{
-			"position":"",
-			"background-color":"",
-			"background":"",
-			"float":"",
-			"text-align":"",
-			"font-family":"",
-			"font-weight":"",
-			"text-decoration":"",
-			"color":"",
-			"height":"",
-			"width":"",
-			"margin":
-			{
-				"margin-top":"",
-				"margin-bottom":"",
-				"margin-left":"",
-				"margin-right":""
-			},
-			"padding":
-			{
-				"padding-top":"",
-				"padding-bottom":"",
-				"padding-left":"",
-				"padding-right":""
-			},
-			"border":
-			{
-				"border-top":"",
-				"border-bottom":"",
-				"border-left":"",
-				"border-right":""
-			}
-		}
+		"position":"relative",
+		"background-color":"",
+		"background":"",
+		"float":"left",
+		"text-align":"left",
+		"font-family":"",
+		"font-weight":"",
+		"text-decoration":"",
+		"color":"",
+		"height":"",
+		"width":"",
+		"margin":"",
+		"padding":"",
+		"border":""		
 	},
 	"image":
 	{
-		"parent":"",
+		"parent":"body",
 		"class":"",
 		"id":"",
 		"a":"",
-		"a_new_window":false,
+		"a_new_window":"false",
 		"src":"",
 		"alt":"",
-		"style":
-		{
-			"height":"",
-			"width":"",
-			"float":"",
-			"position":"",
-			"margin":
-			{
-				"margin-top":"",
-				"margin-bottom":"",
-				"margin-left":"",
-				"margin-right":""
-			},
-			"padding":
-			{
-				"padding-top":"",
-				"padding-bottom":"",
-				"padding-left":"",
-				"padding-right":""
-			},
-			"border":
-			{
-				"border-top":"",
-				"border-bottom":"",
-				"border-left":"",
-				"border-right":""
-			}
-		}
+		"height":"",
+		"width":"",
+		"float":"left",
+		"position":"relative",
+		"margin":"",
+		"padding":"",
+		"border":""
 	},
 	"button":
 	{
-		"parent":"",
+		"parent":"body",
 		"class":"",
 		"id":"",
 		"a":"",
-		"type":"",
-		"a_new_window":false,
-		"disabled":false,
+		"type":"submit",
+		"a_new_window":"false",
+		"disabled":"false",
 		"value":"",
+		"text-align":"left",
 		"name":"",
-		"style":
-		{
-			"height":"",
-			"float":"",
-			"width":"",
-			"position":"",
-			"color":"",
-			"background-color":"",
-			"margin":
-			{
-				"margin-top":"",
-				"margin-bottom":"",
-				"margin-left":"",
-				"margin-right":""
-			},
-			"padding":
-			{
-				"padding-top":"",
-				"padding-bottom":"",
-				"padding-left":"",
-				"padding-right":""
-			},
-			"border":
-			{
-				"border-top":"",
-				"border-bottom":"",
-				"border-left":"",
-				"border-right":""
-			}
-		}
+		"height":"",
+		"float":"left",
+		"width":"",
+		"position":"relative",
+		"color":"",
+		"background-color":"",
+		"margin":"",
+		"padding":"",
+		"border":""
 	},
 	"input":
 	{
-		"parent":"",
+		"parent":"body",
 		"class":"",
 		"id":"",
-		"type":"",
+		"type":"text",
 		"a":"",
-		"a_new_window":false,
-		"autocomplete":"",
+		"a_new_window":"false",
+		"autocomplete":"on",
 		"name":"",
+		"text-align":"left",
 		"placeholder":"",
-		"type":"",
 		"value":"",
-		"readonly":false,
+		"readonly":"false",
 		"maxlenght":"",
-		"style":
-		{
-			"height":"",
-			"width":"",
-			"position":"",
-			"float":"",
-			"background-color":"",
-			"margin":
-			{
-				"margin-top":"",
-				"margin-bottom":"",
-				"margin-left":"",
-				"margin-right":""
-			},
-			"padding":
-			{
-				"padding-top":"",
-				"padding-bottom":"",
-				"padding-left":"",
-				"padding-right":""
-			},
-			"border":
-			{
-				"border-top":"",
-				"border-bottom":"",
-				"border-left":"",
-				"border-right":""
-			}
-		}
+		"height":"",
+		"width":"",
+		"position":"relative",
+		"float":"left",
+		"background-color":"",
+		"margin":"",
+		"padding":"",
+		"border":""
 	}
 }"""
 		f = open(defaultpath + '\\.PyWebGen\\elements.properties', 'w+')
@@ -357,7 +252,7 @@ class FirstSetup(wx.Frame):
 class Menu(wx.Frame):
 
 	def __init__(self):
-		global globconf, xMax, yMax, xHalf, yHalf, btn_font, bgColor, hovercolor, currentProjectPath, startingDir, btn_font, text_font, value_font, workingdir, header_font
+		global globconf, xMax, yMax, xHalf, yHalf, btn_font, bgColor, hovercolor, currentProjectPath, startingDir, btn_font, text_font, value_font, workingdir, header_font, choice_font
 
 		filePath = str(Path.home())
 		fp = filePath + "\\" + ".PyWebGen" + "\\" + "config.json"
@@ -391,6 +286,7 @@ class Menu(wx.Frame):
 		text_font = wx.Font(13, wx.DEFAULT, wx.ITALIC, wx.BOLD, underline=False, faceName="Calibri")
 		header_font = wx.Font(30, wx.DEFAULT, wx.ITALIC, wx.BOLD, underline=False, faceName="Calibri")
 		value_font = wx.Font(13, wx.DEFAULT, wx.ITALIC, wx.NORMAL, underline=False, faceName="Calibri")
+		choice_font = wx.Font(9, wx.DEFAULT, wx.ITALIC, wx.BOLD, underline=False, faceName="Calibri")
 
 #Splash image
 		imgData = "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"
@@ -923,7 +819,7 @@ class editorFrame(wx.Frame):
 
 	def __init__(self):
 
-		global divcount, textcount, imagecount, buttoncount, inputcount, elements, workingdir, elementlist, webpage, wd, props, dep, leftSplitter, rightSplitter, myGrid, currentlySelectedCell, right, previousselected
+		global divcount, textcount, imagecount, buttoncount, inputcount, elements, workingdir, elementlist, webpage, wd, props, dep, leftSplitter, rightSplitter, myGrid, currentlySelectedCell, right, previousselected, choice_font
 
 
 		super().__init__(parent=None, title="PWG | Editor ", size=(xHalf, yHalf), style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER  |  wx.MAXIMIZE_BOX)
@@ -1680,7 +1576,7 @@ class editorFrame(wx.Frame):
 
 
 	def loadelement(self, event):
-		global elements, right, text_font, bgcolor, color, elemprop, header_font, myGrid
+		global elements, right, text_font, bgcolor, color, elemprop, header_font, myGrid, elementname
 
 		file = os.path.join(wd, 'elements.properties')
 		file = open(file, "r")
@@ -1690,11 +1586,11 @@ class editorFrame(wx.Frame):
 
 		elementname = elements[elementlist.GetSelection()]
 
-		divs = []
+		divs = ['body']
 
 		for x in elements:
 			num, word = re.split("-", x)
-			if word == "div":
+			if word == "div" and x != elementname:
 				divs.append(x)
 
 		children = self.right.GetChildren()
@@ -1714,9 +1610,20 @@ class editorFrame(wx.Frame):
 		if word == "div":
 			bgcolor = wx.ColourData()
 
-			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,20))
 			self.name.SetFont(header_font)
 			self.name.SetForegroundColour('#CCA3F1')
+
+			self.parent = wx.StaticText(self.right, label="Parent: ", pos=(10,100))
+			self.parent.SetFont(text_font)
+			self.parent.SetForegroundColour('#CDCDCD')
+
+			self.parentval = wx.Choice(self.right, pos=(100,100), size=(390,20), choices=divs, style=wx.NO_BORDER)
+			self.parentval.SetFont(choice_font)
+			a = self.parentval.FindString(elemprop['parent'])
+			self.parentval.SetSelection(a)
+			self.parentval.SetBackgroundColour('#CDCDCD')
+
 
 			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
 			self.classname.SetFont(text_font)
@@ -1746,12 +1653,12 @@ class editorFrame(wx.Frame):
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
-			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['height'], style=wx.NO_BORDER, size=(70, 20)) 
 			self.heightval.SetFont(text_font)
 			self.heightval.SetForegroundColour('#CDCDCD')
 			self.heightval.SetBackgroundColour(btncolor)
 
-			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['width'], style=wx.NO_BORDER, size=(70, 20) ) 
 			self.widthval.SetFont(text_font)
 			self.widthval.SetForegroundColour('#CDCDCD')
 			self.widthval.SetBackgroundColour(btncolor)
@@ -1780,8 +1687,10 @@ class editorFrame(wx.Frame):
 			self.position.SetFont(text_font)
 			self.position.SetForegroundColour('#CDCDCD')
 
-			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.positionval.SetFont(text_font)
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['relative','static','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			a = self.positionval.FindString(elemprop['position'])
+			self.positionval.SetSelection(a)
+			self.positionval.SetFont(choice_font)
 			self.positionval.SetBackgroundColour('#CDCDCD')
 
 
@@ -1789,9 +1698,9 @@ class editorFrame(wx.Frame):
 			self.backgroundcolor.SetFont(text_font)
 			self.backgroundcolor.SetForegroundColour('#CDCDCD')
 
-			self.backgroundcolorval = wx.Button(self.right, label=elemprop['style']['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(100,20))
+			self.backgroundcolorval = wx.Button(self.right, label=elemprop['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(100,20))
 			self.backgroundcolorval.SetFont(text_font)
-			self.backgroundcolorval.SetForegroundColour(elemprop['style']['background-color'])
+			self.backgroundcolorval.SetForegroundColour(elemprop['background-color'])
 			self.backgroundcolorval.SetBackgroundColour(btncolor)
 			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
 			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
@@ -1802,7 +1711,7 @@ class editorFrame(wx.Frame):
 			self.background.SetFont(text_font)
 			self.background.SetForegroundColour('#CDCDCD')
 
-			self.backgroundval = wx.TextCtrl(self.right, pos=(120,310), value=elemprop['style']['background'], style=wx.NO_BORDER, size=(370,20))
+			self.backgroundval = wx.TextCtrl(self.right, pos=(120,310), value=elemprop['background'], style=wx.NO_BORDER, size=(370,20))
 			self.backgroundval.SetFont(text_font)
 			self.backgroundval.SetForegroundColour('#CDCDCD')
 			self.backgroundval.SetBackgroundColour(btncolor)
@@ -1813,7 +1722,9 @@ class editorFrame(wx.Frame):
 			self.float.SetForegroundColour('#CDCDCD')
 
 			self.floatval = wx.Choice(self.right, pos=(80,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.floatval.SetFont(text_font)
+			self.floatval.SetFont(choice_font)
+			a = self.floatval.FindString(elemprop['float'])
+			self.floatval.SetSelection(a)
 			self.floatval.SetBackgroundColour('#CDCDCD')
 
 			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(270,340))
@@ -1821,7 +1732,9 @@ class editorFrame(wx.Frame):
 			self.textalign.SetForegroundColour('#CDCDCD')
 
 			self.textalignval = wx.Choice(self.right, pos=(360,340), size=(130,20), choices=['left','center','right','justify','justify-all','start','end','match-parent','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.textalignval.SetFont(text_font)
+			self.textalignval.SetFont(choice_font)
+			a = self.textalignval.FindString(elemprop['text-align'])
+			self.textalignval.SetSelection(a)
 			self.textalignval.SetBackgroundColour('#CDCDCD')
 
 
@@ -1829,7 +1742,7 @@ class editorFrame(wx.Frame):
 			self.margin.SetFont(text_font)
 			self.margin.SetForegroundColour('#CDCDCD')
 
-			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['margin']), style=wx.NO_BORDER, size=(250,20))
 			self.marginval.SetFont(text_font)
 			self.marginval.SetForegroundColour('#CDCDCD')
 			self.marginval.SetBackgroundColour(btncolor)
@@ -1839,7 +1752,7 @@ class editorFrame(wx.Frame):
 			self.padding.SetFont(text_font)
 			self.padding.SetForegroundColour('#CDCDCD')
 
-			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['padding']), style=wx.NO_BORDER, size=(250,20))
 			self.paddingval.SetFont(text_font)
 			self.paddingval.SetForegroundColour('#CDCDCD')
 			self.paddingval.SetBackgroundColour(btncolor)
@@ -1849,7 +1762,7 @@ class editorFrame(wx.Frame):
 			self.border.SetFont(text_font)
 			self.border.SetForegroundColour('#CDCDCD')
 
-			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['border']), style=wx.NO_BORDER, size=(250,20))
 			self.borderval.SetFont(text_font)
 			self.borderval.SetForegroundColour('#CDCDCD')
 			self.borderval.SetBackgroundColour(btncolor)
@@ -1874,9 +1787,19 @@ class editorFrame(wx.Frame):
 		elif word == "text":
 			bgcolor = wx.ColourData()
 
-			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,20))
 			self.name.SetFont(header_font)
 			self.name.SetForegroundColour('#CCA3F1')
+
+			self.parent = wx.StaticText(self.right, label="Parent: ", pos=(10,100))
+			self.parent.SetFont(text_font)
+			self.parent.SetForegroundColour('#CDCDCD')
+
+			self.parentval = wx.Choice(self.right, pos=(100,100), size=(390,20), choices=divs, style=wx.NO_BORDER)
+			self.parentval.SetFont(choice_font)
+			a = self.parentval.FindString(elemprop['parent'])
+			self.parentval.SetSelection(a)
+			self.parentval.SetBackgroundColour('#CDCDCD')
 
 			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
 			self.classname.SetFont(text_font)
@@ -1906,12 +1829,12 @@ class editorFrame(wx.Frame):
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
-			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['height'], style=wx.NO_BORDER, size=(70, 20) ) 
 			self.heightval.SetFont(text_font)
 			self.heightval.SetForegroundColour('#CDCDCD')
 			self.heightval.SetBackgroundColour(btncolor)
 
-			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['width'], style=wx.NO_BORDER, size=(70, 20) ) 
 			self.widthval.SetFont(text_font)
 			self.widthval.SetForegroundColour('#CDCDCD')
 			self.widthval.SetBackgroundColour(btncolor)
@@ -1940,8 +1863,10 @@ class editorFrame(wx.Frame):
 			self.position.SetFont(text_font)
 			self.position.SetForegroundColour('#CDCDCD')
 
-			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.positionval.SetFont(text_font)
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['relative','static','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.positionval.SetFont(choice_font)
+			a = self.positionval.FindString(elemprop['position'])
+			self.positionval.SetSelection(a)
 			self.positionval.SetBackgroundColour('#CDCDCD')
 
 
@@ -1949,9 +1874,9 @@ class editorFrame(wx.Frame):
 			self.backgroundcolor.SetFont(text_font)
 			self.backgroundcolor.SetForegroundColour('#CDCDCD')
 
-			self.backgroundcolorval = wx.Button(self.right, label=elemprop['style']['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(130,20))
+			self.backgroundcolorval = wx.Button(self.right, label=elemprop['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(130,20))
 			self.backgroundcolorval.SetFont(text_font)
-			self.backgroundcolorval.SetForegroundColour(elemprop['style']['background-color'])
+			self.backgroundcolorval.SetForegroundColour(elemprop['background-color'])
 			self.backgroundcolorval.SetBackgroundColour(btncolor)
 			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
 			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
@@ -1961,9 +1886,9 @@ class editorFrame(wx.Frame):
 			self.color.SetFont(text_font)
 			self.color.SetForegroundColour('#CDCDCD')
 		
-			self.colorval = wx.Button(self.right, label=elemprop['style']['color'], pos=(360,280), style=wx.NO_BORDER, size=(130,20))
+			self.colorval = wx.Button(self.right, label=elemprop['color'], pos=(360,280), style=wx.NO_BORDER, size=(130,20))
 			self.colorval.SetFont(text_font)
-			self.colorval.SetForegroundColour(elemprop['style']['color'])
+			self.colorval.SetForegroundColour(elemprop['color'])
 			self.colorval.SetBackgroundColour(btncolor)
 			self.colorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
 			self.colorval.Bind(wx.EVT_ENTER_WINDOW, self.colorHover)
@@ -1974,7 +1899,7 @@ class editorFrame(wx.Frame):
 			self.background.SetFont(text_font)
 			self.background.SetForegroundColour('#CDCDCD')
 
-			self.backgroundval = wx.TextCtrl(self.right, pos=(120,310), value=elemprop['style']['background'], style=wx.NO_BORDER, size=(370,20))
+			self.backgroundval = wx.TextCtrl(self.right, pos=(120,310), value=elemprop['background'], style=wx.NO_BORDER, size=(370,20))
 			self.backgroundval.SetFont(text_font)
 			self.backgroundval.SetForegroundColour('#CDCDCD')
 			self.backgroundval.SetBackgroundColour(btncolor)
@@ -1985,7 +1910,9 @@ class editorFrame(wx.Frame):
 			self.float.SetForegroundColour('#CDCDCD')
 
 			self.floatval = wx.Choice(self.right, pos=(80,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.floatval.SetFont(text_font)
+			self.floatval.SetFont(choice_font)
+			a = self.floatval.FindString(elemprop['float'])
+			self.floatval.SetSelection(a)
 			self.floatval.SetBackgroundColour('#CDCDCD')
 
 			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(270,340))
@@ -1993,7 +1920,9 @@ class editorFrame(wx.Frame):
 			self.textalign.SetForegroundColour('#CDCDCD')
 
 			self.textalignval = wx.Choice(self.right, pos=(360,340), size=(130,20), choices=['left','center','right','justify','justify-all','start','end','match-parent','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.textalignval.SetFont(text_font)
+			self.textalignval.SetFont(choice_font)
+			a = self.textalignval.FindString(elemprop['text-align'])
+			self.textalignval.SetSelection(a)
 			self.textalignval.SetBackgroundColour('#CDCDCD')
 
 
@@ -2002,7 +1931,7 @@ class editorFrame(wx.Frame):
 			self.margin.SetForegroundColour('#CDCDCD')
 
 
-			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['margin']), style=wx.NO_BORDER, size=(250,20))
 			self.marginval.SetFont(text_font)
 			self.marginval.SetForegroundColour('#CDCDCD')
 			self.marginval.SetBackgroundColour(btncolor)
@@ -2012,7 +1941,7 @@ class editorFrame(wx.Frame):
 			self.padding.SetFont(text_font)
 			self.padding.SetForegroundColour('#CDCDCD')
 
-			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['padding']), style=wx.NO_BORDER, size=(250,20))
 			self.paddingval.SetFont(text_font)
 			self.paddingval.SetForegroundColour('#CDCDCD')
 			self.paddingval.SetBackgroundColour(btncolor)
@@ -2022,7 +1951,7 @@ class editorFrame(wx.Frame):
 			self.border.SetFont(text_font)
 			self.border.SetForegroundColour('#CDCDCD')
 
-			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['border']), style=wx.NO_BORDER, size=(250,20))
 			self.borderval.SetFont(text_font)
 			self.borderval.SetForegroundColour('#CDCDCD')
 			self.borderval.SetBackgroundColour(btncolor)
@@ -2032,7 +1961,7 @@ class editorFrame(wx.Frame):
 			self.fontfamily.SetFont(text_font)
 			self.fontfamily.SetForegroundColour('#CDCDCD')
 
-			self.fontfamilyval = wx.TextCtrl(self.right, pos=(240,460), value=str(elemprop['style']['font-family']), style=wx.NO_BORDER, size=(250,20))
+			self.fontfamilyval = wx.TextCtrl(self.right, pos=(240,460), value=str(elemprop['font-family']), style=wx.NO_BORDER, size=(250,20))
 			self.fontfamilyval.SetFont(text_font)
 			self.fontfamilyval.SetForegroundColour('#CDCDCD')
 			self.fontfamilyval.SetBackgroundColour(btncolor)
@@ -2042,7 +1971,7 @@ class editorFrame(wx.Frame):
 			self.fontweight.SetFont(text_font)
 			self.fontweight.SetForegroundColour('#CDCDCD')
 
-			self.fontweightval = wx.TextCtrl(self.right, pos=(240,490), value=str(elemprop['style']['font-weight']), style=wx.NO_BORDER, size=(250,20))
+			self.fontweightval = wx.TextCtrl(self.right, pos=(240,490), value=str(elemprop['font-weight']), style=wx.NO_BORDER, size=(250,20))
 			self.fontweightval.SetFont(text_font)
 			self.fontweightval.SetForegroundColour('#CDCDCD')
 			self.fontweightval.SetBackgroundColour(btncolor)
@@ -2052,7 +1981,7 @@ class editorFrame(wx.Frame):
 			self.textdecoration.SetFont(text_font)
 			self.textdecoration.SetForegroundColour('#CDCDCD')
 
-			self.textdecorationval = wx.TextCtrl(self.right, pos=(240,520), value=str(elemprop['style']['text-decoration']), style=wx.NO_BORDER, size=(250,20))
+			self.textdecorationval = wx.TextCtrl(self.right, pos=(240,520), value=str(elemprop['text-decoration']), style=wx.NO_BORDER, size=(250,20))
 			self.textdecorationval.SetFont(text_font)
 			self.textdecorationval.SetForegroundColour('#CDCDCD')
 			self.textdecorationval.SetBackgroundColour(btncolor)
@@ -2073,7 +2002,9 @@ class editorFrame(wx.Frame):
 			self.type.SetForegroundColour('#CDCDCD')
 
 			self.typeval = wx.Choice(self.right,  pos=(240,550), size=(250,20), choices=['p','h1','h2','h3','h4','h5','h6','span'], style=wx.NO_BORDER)
-			self.typeval.SetFont(text_font)
+			self.typeval.SetFont(choice_font)
+			a = self.typeval.FindString(elemprop['type'])
+			self.typeval.SetSelection(a)
 			self.typeval.SetBackgroundColour('#CDCDCD')
 
 
@@ -2094,9 +2025,20 @@ class editorFrame(wx.Frame):
 		elif word == "image":
 			bgcolor = wx.ColourData()
 
-			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,20))
 			self.name.SetFont(header_font)
 			self.name.SetForegroundColour('#CCA3F1')
+
+			self.parent = wx.StaticText(self.right, label="Parent: ", pos=(10,100))
+			self.parent.SetFont(text_font)
+			self.parent.SetForegroundColour('#CDCDCD')
+
+			self.parentval = wx.Choice(self.right, pos=(100,100), size=(390,20), choices=divs, style=wx.NO_BORDER)
+			self.parentval.SetFont(choice_font)
+			a = self.parentval.FindString(elemprop['parent'])
+			self.parentval.SetSelection(a)
+			self.parentval.SetBackgroundColour('#CDCDCD')
+
 
 			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
 			self.classname.SetFont(text_font)
@@ -2126,12 +2068,12 @@ class editorFrame(wx.Frame):
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
-			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['height'], style=wx.NO_BORDER, size=(70, 20) ) 
 			self.heightval.SetFont(text_font)
 			self.heightval.SetForegroundColour('#CDCDCD')
 			self.heightval.SetBackgroundColour(btncolor)
 
-			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['width'], style=wx.NO_BORDER, size=(70, 20) ) 
 			self.widthval.SetFont(text_font)
 			self.widthval.SetForegroundColour('#CDCDCD')
 			self.widthval.SetBackgroundColour(btncolor)
@@ -2160,8 +2102,10 @@ class editorFrame(wx.Frame):
 			self.position.SetFont(text_font)
 			self.position.SetForegroundColour('#CDCDCD')
 
-			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.positionval.SetFont(text_font)
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['relative','static','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.positionval.SetFont(choice_font)
+			a = self.positionval.FindString(elemprop['position'])
+			self.positionval.SetSelection(a)
 			self.positionval.SetBackgroundColour('#CDCDCD')
 
 
@@ -2190,7 +2134,9 @@ class editorFrame(wx.Frame):
 			self.float.SetForegroundColour('#CDCDCD')
 
 			self.floatval = wx.Choice(self.right, pos=(80,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.floatval.SetFont(text_font)
+			self.floatval.SetFont(choice_font)
+			a = self.floatval.FindString(elemprop['float'])
+			self.floatval.SetSelection(a)
 			self.floatval.SetBackgroundColour('#CDCDCD')
 
 
@@ -2198,7 +2144,7 @@ class editorFrame(wx.Frame):
 			self.margin.SetFont(text_font)
 			self.margin.SetForegroundColour('#CDCDCD')
 
-			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['margin']), style=wx.NO_BORDER, size=(250,20))
 			self.marginval.SetFont(text_font)
 			self.marginval.SetForegroundColour('#CDCDCD')
 			self.marginval.SetBackgroundColour(btncolor)
@@ -2208,7 +2154,7 @@ class editorFrame(wx.Frame):
 			self.padding.SetFont(text_font)
 			self.padding.SetForegroundColour('#CDCDCD')
 
-			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['padding']), style=wx.NO_BORDER, size=(250,20))
 			self.paddingval.SetFont(text_font)
 			self.paddingval.SetForegroundColour('#CDCDCD')
 			self.paddingval.SetBackgroundColour(btncolor)
@@ -2218,7 +2164,7 @@ class editorFrame(wx.Frame):
 			self.border.SetFont(text_font)
 			self.border.SetForegroundColour('#CDCDCD')
 
-			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['border']), style=wx.NO_BORDER, size=(250,20))
 			self.borderval.SetFont(text_font)
 			self.borderval.SetForegroundColour('#CDCDCD')
 			self.borderval.SetBackgroundColour(btncolor)
@@ -2246,9 +2192,20 @@ class editorFrame(wx.Frame):
 		elif word == "button":
 			bgcolor = wx.ColourData()
 
-			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,20))
 			self.name.SetFont(header_font)
 			self.name.SetForegroundColour('#CCA3F1')
+
+			self.parent = wx.StaticText(self.right, label="Parent: ", pos=(10,100))
+			self.parent.SetFont(text_font)
+			self.parent.SetForegroundColour('#CDCDCD')
+
+			self.parentval = wx.Choice(self.right, pos=(100,100), size=(390,20), choices=divs, style=wx.NO_BORDER)
+			self.parentval.SetFont(choice_font)
+			a = self.parentval.FindString(elemprop['parent'])
+			self.parentval.SetSelection(a)
+			self.parentval.SetBackgroundColour('#CDCDCD')
+
 
 			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
 			self.classname.SetFont(text_font)
@@ -2278,12 +2235,12 @@ class editorFrame(wx.Frame):
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
-			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['height'], style=wx.NO_BORDER, size=(70, 20) ) 
 			self.heightval.SetFont(text_font)
 			self.heightval.SetForegroundColour('#CDCDCD')
 			self.heightval.SetBackgroundColour(btncolor)
 
-			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['width'], style=wx.NO_BORDER, size=(70, 20) ) 
 			self.widthval.SetFont(text_font)
 			self.widthval.SetForegroundColour('#CDCDCD')
 			self.widthval.SetBackgroundColour(btncolor)
@@ -2319,8 +2276,10 @@ class editorFrame(wx.Frame):
 			self.position.SetFont(text_font)
 			self.position.SetForegroundColour('#CDCDCD')
 
-			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.positionval.SetFont(text_font)
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['relative','static','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.positionval.SetFont(choice_font)
+			a = self.positionval.FindString(elemprop['position'])
+			self.positionval.SetSelection(a)
 			self.positionval.SetBackgroundColour('#CDCDCD')
 
 
@@ -2328,9 +2287,9 @@ class editorFrame(wx.Frame):
 			self.backgroundcolor.SetFont(text_font)
 			self.backgroundcolor.SetForegroundColour('#CDCDCD')
 
-			self.backgroundcolorval = wx.Button(self.right, label=elemprop['style']['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(100,20))
+			self.backgroundcolorval = wx.Button(self.right, label=elemprop['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(100,20))
 			self.backgroundcolorval.SetFont(text_font)
-			self.backgroundcolorval.SetForegroundColour(elemprop['style']['background-color'])
+			self.backgroundcolorval.SetForegroundColour(elemprop['background-color'])
 			self.backgroundcolorval.SetBackgroundColour(btncolor)
 			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
 			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
@@ -2341,7 +2300,9 @@ class editorFrame(wx.Frame):
 			self.type.SetForegroundColour('#CDCDCD')
 
 			self.typeval = wx.Choice(self.right,  pos=(70,310), size=(130,20), choices=['button','submit','reset'], style=wx.NO_BORDER)
-			self.typeval.SetFont(text_font)
+			self.typeval.SetFont(choice_font)
+			a = self.typeval.FindString(elemprop['type'])
+			self.typeval.SetSelection(a)
 			self.typeval.SetBackgroundColour('#CDCDCD')
 			
 
@@ -2361,7 +2322,9 @@ class editorFrame(wx.Frame):
 			self.float.SetForegroundColour('#CDCDCD')
 
 			self.floatval = wx.Choice(self.right, pos=(70,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.floatval.SetFont(text_font)
+			self.floatval.SetFont(choice_font)
+			a = self.floatval.FindString(elemprop['float'])
+			self.floatval.SetSelection(a)
 			self.floatval.SetBackgroundColour('#CDCDCD')
 
 			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(270,340))
@@ -2369,7 +2332,9 @@ class editorFrame(wx.Frame):
 			self.textalign.SetForegroundColour('#CDCDCD')
 
 			self.textalignval = wx.Choice(self.right, pos=(360,340), size=(130,20), choices=['left','center','right','justify','justify-all','start','end','match-parent','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.textalignval.SetFont(text_font)
+			self.textalignval.SetFont(choice_font)
+			a = self.textalignval.FindString(elemprop['text-align'])
+			self.textalignval.SetSelection(a)
 			self.textalignval.SetBackgroundColour('#CDCDCD')
 
 
@@ -2377,7 +2342,7 @@ class editorFrame(wx.Frame):
 			self.margin.SetFont(text_font)
 			self.margin.SetForegroundColour('#CDCDCD')
 
-			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['margin']), style=wx.NO_BORDER, size=(250,20))
 			self.marginval.SetFont(text_font)
 			self.marginval.SetForegroundColour('#CDCDCD')
 			self.marginval.SetBackgroundColour(btncolor)
@@ -2387,7 +2352,7 @@ class editorFrame(wx.Frame):
 			self.padding.SetFont(text_font)
 			self.padding.SetForegroundColour('#CDCDCD')
 
-			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['padding']), style=wx.NO_BORDER, size=(250,20))
 			self.paddingval.SetFont(text_font)
 			self.paddingval.SetForegroundColour('#CDCDCD')
 			self.paddingval.SetBackgroundColour(btncolor)
@@ -2397,7 +2362,7 @@ class editorFrame(wx.Frame):
 			self.border.SetFont(text_font)
 			self.border.SetForegroundColour('#CDCDCD')
 
-			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['border']), style=wx.NO_BORDER, size=(250,20))
 			self.borderval.SetFont(text_font)
 			self.borderval.SetForegroundColour('#CDCDCD')
 			self.borderval.SetBackgroundColour(btncolor)
@@ -2415,23 +2380,24 @@ class editorFrame(wx.Frame):
 
 
 
-		
-
-		
-
-
-			
-
-
-
-
 
 		elif word == "input":
 			bgcolor = wx.ColourData()
 
-			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,30))
+			self.name = wx.StaticText(self.right, label=elements[elementlist.GetSelection()], pos=(180,20))
 			self.name.SetFont(header_font)
 			self.name.SetForegroundColour('#CCA3F1')
+
+			self.parent = wx.StaticText(self.right, label="Parent: ", pos=(10,100))
+			self.parent.SetFont(text_font)
+			self.parent.SetForegroundColour('#CDCDCD')
+
+			self.parentval = wx.Choice(self.right, pos=(100,100), size=(390,20), choices=divs, style=wx.NO_BORDER)
+			self.parentval.SetFont(choice_font)
+			a = self.parentval.FindString(elemprop['parent'])
+			self.parentval.SetSelection(a)
+			self.parentval.SetBackgroundColour('#CDCDCD')
+
 
 			self.classname = wx.StaticText(self.right, label="Class: ", pos=(10,130))
 			self.classname.SetFont(text_font)
@@ -2461,12 +2427,12 @@ class editorFrame(wx.Frame):
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
-			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['style']['height'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.heightval = wx.TextCtrl(self.right, pos=(170,190), value=elemprop['height'], style=wx.NO_BORDER, size=(70, 20) ) 
 			self.heightval.SetFont(text_font)
 			self.heightval.SetForegroundColour('#CDCDCD')
 			self.heightval.SetBackgroundColour(btncolor)
 
-			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['style']['width'], style=wx.NO_BORDER, size=(70, 20) ) 
+			self.widthval = wx.TextCtrl(self.right, pos=(420,190), value=elemprop['width'], style=wx.NO_BORDER, size=(70, 20) ) 
 			self.widthval.SetFont(text_font)
 			self.widthval.SetForegroundColour('#CDCDCD')
 			self.widthval.SetBackgroundColour(btncolor)
@@ -2495,8 +2461,10 @@ class editorFrame(wx.Frame):
 			self.position.SetFont(text_font)
 			self.position.SetForegroundColour('#CDCDCD')
 
-			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['static','relative','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.positionval.SetFont(text_font)
+			self.positionval = wx.Choice(self.right, pos=(100,250), size=(100,20), choices=['relative','static','absolute','fixed','sticky','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.positionval.SetFont(choice_font)
+			a = self.positionval.FindString(elemprop['position'])
+			self.positionval.SetSelection(a)
 			self.positionval.SetBackgroundColour('#CDCDCD')
 
 
@@ -2504,9 +2472,9 @@ class editorFrame(wx.Frame):
 			self.backgroundcolor.SetFont(text_font)
 			self.backgroundcolor.SetForegroundColour('#CDCDCD')
 
-			self.backgroundcolorval = wx.Button(self.right, label=elemprop['style']['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(100,20))
+			self.backgroundcolorval = wx.Button(self.right, label=elemprop['background-color'], pos=(150,280), style=wx.NO_BORDER, size=(100,20))
 			self.backgroundcolorval.SetFont(text_font)
-			self.backgroundcolorval.SetForegroundColour(elemprop['style']['background-color'])
+			self.backgroundcolorval.SetForegroundColour(elemprop['background-color'])
 			self.backgroundcolorval.SetBackgroundColour(btncolor)
 			self.backgroundcolorval.Bind(wx.EVT_BUTTON, self.redrawcolor)
 			self.backgroundcolorval.Bind(wx.EVT_ENTER_WINDOW, self.buttonHover)
@@ -2525,10 +2493,12 @@ class editorFrame(wx.Frame):
 			self.type.SetFont(text_font)
 			self.type.SetForegroundColour('#CDCDCD')
 
-			self.typeval = wx.Choice(self.right,  pos=(70,310), size=(130,20), choices=['button','submit','reset'], style=wx.NO_BORDER)
-			self.typeval.SetFont(text_font)
+			self.typeval = wx.Choice(self.right,  pos=(70,310), size=(130,20), choices=['button','checkbox','color','date','datetime-local','email','file','hidden','image','month','number','password','radio','range','reset','reset','search','search','submit','tel','text','time','url','week'], style=wx.NO_BORDER)
+			self.typeval.SetFont(choice_font)
+			a = self.typeval.FindString(elemprop['type'])
+			self.typeval.SetSelection(a)
 			self.typeval.SetBackgroundColour('#CDCDCD')
-			
+
 
 			self.readonly = wx.StaticText(self.right, label="Read-only: ", pos=(392,310))
 			self.readonly.SetFont(text_font)
@@ -2543,8 +2513,10 @@ class editorFrame(wx.Frame):
 			self.float.SetFont(text_font)
 			self.float.SetForegroundColour('#CDCDCD')
 
-			self.floatval = wx.Choice(self.right, pos=(70,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.floatval.SetFont(text_font)
+			self.floatval = wx.Choice(self.right, pos=(80,340), size=(130,20), choices=['left','right','none','inline-start','inline-end','inherit','initial','unset'], style=wx.NO_BORDER)
+			self.floatval.SetFont(choice_font)
+			a = self.floatval.FindString(elemprop['float'])
+			self.floatval.SetSelection(a)
 			self.floatval.SetBackgroundColour('#CDCDCD')
 
 			self.textalign = wx.StaticText(self.right, label="Text align: ", pos=(270,340))
@@ -2552,15 +2524,16 @@ class editorFrame(wx.Frame):
 			self.textalign.SetForegroundColour('#CDCDCD')
 
 			self.textalignval = wx.Choice(self.right, pos=(360,340), size=(130,20), choices=['left','center','right','justify','justify-all','start','end','match-parent','inherit','initial','unset'], style=wx.NO_BORDER)
-			self.textalignval.SetFont(text_font)
+			self.textalignval.SetFont(choice_font)
+			a = self.textalignval.FindString(elemprop['text-align'])
+			self.textalignval.SetSelection(a)
 			self.textalignval.SetBackgroundColour('#CDCDCD')
-
 
 			self.margin = wx.StaticText(self.right, label="Margin (top bottom left right): ", pos=(10,370))
 			self.margin.SetFont(text_font)
 			self.margin.SetForegroundColour('#CDCDCD')
 
-			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['style']['margin']), style=wx.NO_BORDER, size=(250,20))
+			self.marginval = wx.TextCtrl(self.right, pos=(240,370), value=str(elemprop['margin']), style=wx.NO_BORDER, size=(250,20))
 			self.marginval.SetFont(text_font)
 			self.marginval.SetForegroundColour('#CDCDCD')
 			self.marginval.SetBackgroundColour(btncolor)
@@ -2570,7 +2543,7 @@ class editorFrame(wx.Frame):
 			self.padding.SetFont(text_font)
 			self.padding.SetForegroundColour('#CDCDCD')
 
-			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['style']['padding']), style=wx.NO_BORDER, size=(250,20))
+			self.paddingval = wx.TextCtrl(self.right, pos=(240,400), value=str(elemprop['padding']), style=wx.NO_BORDER, size=(250,20))
 			self.paddingval.SetFont(text_font)
 			self.paddingval.SetForegroundColour('#CDCDCD')
 			self.paddingval.SetBackgroundColour(btncolor)
@@ -2580,7 +2553,7 @@ class editorFrame(wx.Frame):
 			self.border.SetFont(text_font)
 			self.border.SetForegroundColour('#CDCDCD')
 
-			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['style']['border']), style=wx.NO_BORDER, size=(250,20))
+			self.borderval = wx.TextCtrl(self.right, pos=(240,430), value=str(elemprop['border']), style=wx.NO_BORDER, size=(250,20))
 			self.borderval.SetFont(text_font)
 			self.borderval.SetForegroundColour('#CDCDCD')
 			self.borderval.SetBackgroundColour(btncolor)
@@ -2641,22 +2614,200 @@ class editorFrame(wx.Frame):
 
 
 	def updateConfig(self, evt, name):
-		global right
+		global right, elemprop, elementname, wd
+
+		print(str(elemprop), str(elementname), str(wd))
 
 
 		num, word = re.split('-', name)
 		print(name, num, word)
 
+		replaceline = ""
+
 		if word == "div":
-			print(self.classnameval.GetValue())
+			elemprop['parent'] = self.parentval.GetCurrentSelection()
+			elemprop['parent'] = self.parentval.GetString(elemprop['parent'])
+			elemprop['class'] = self.classnameval.GetValue()
+			elemprop['id'] = self.idnameval.GetValue()
+			elemprop['height'] = self.heightval.GetValue()
+			elemprop['width'] = self.widthval.GetValue()
+			elemprop['a'] = self.aval.GetValue()
+			elemprop['a_new_window'] = self.a_new_windowval.GetValue()
+			if elemprop['a_new_window']:
+				elemprop['a_new_window'] = "true"
+			else:
+				elemprop['a_new_window'] = "false"
+			elemprop['position'] = self.positionval.GetCurrentSelection()
+			elemprop['position'] = self.positionval.GetString(elemprop['position'])
+			elemprop['background-color'] = self.backgroundcolorval.GetLabel()
+			elemprop['background'] = self.backgroundval.GetValue()
+			elemprop['float'] = self.floatval.GetCurrentSelection()
+			elemprop['float'] = self.floatval.GetString(elemprop['float'])
+			elemprop['text-align'] = self.textalignval.GetCurrentSelection()
+			elemprop['text-align']  = self.textalignval.GetString(elemprop['text-align'] )
+			elemprop['margin'] = self.marginval.GetValue()
+			elemprop['padding'] = self.paddingval.GetValue()
+			elemprop['border'] = self.borderval.GetValue()
+
 		elif word == "text":
-			print(self.classnameval.GetValue())
+			elemprop['parent'] = self.parentval.GetCurrentSelection()
+			elemprop['parent'] = self.parentval.GetString(elemprop['parent'])
+			elemprop['class'] = self.classnameval.GetValue()
+			elemprop['id'] = self.idnameval.GetValue()
+			elemprop['height'] = self.heightval.GetValue()
+			elemprop['width'] = self.widthval.GetValue()
+			elemprop['a'] = self.aval.GetValue()
+			elemprop['a_new_window'] = self.a_new_windowval.GetValue()
+			if elemprop['a_new_window']:
+				elemprop['a_new_window'] = "true"
+			else:
+				elemprop['a_new_window'] = "false"
+			elemprop['position'] = self.positionval.GetCurrentSelection()
+			elemprop['position'] = self.positionval.GetString(elemprop['position'])
+			elemprop['background-color'] = self.backgroundcolorval.GetLabel()
+			elemprop['background'] = self.backgroundval.GetValue()
+			elemprop['float'] = self.floatval.GetCurrentSelection()
+			elemprop['float'] = self.floatval.GetString(elemprop['float'])
+			elemprop['text-align'] = self.textalignval.GetCurrentSelection()
+			elemprop['text-align']  = self.textalignval.GetString(elemprop['text-align'] )
+			elemprop['margin'] = self.marginval.GetValue()
+			elemprop['padding'] = self.paddingval.GetValue()
+			elemprop['border'] = self.borderval.GetValue()
+			elemprop['font-family'] = self.fontfamilyval.GetValue()
+			elemprop['font-weight'] = self.fontweightval.GetValue()
+			elemprop['text-decoration'] = self.textdecorationval.GetValue()
+			elemprop['type'] = self.typeval.GetCurrentSelection()
+			elemprop['type'] = self.typeval.GetString(elemprop['type'])
+			elemprop['content'] = self.contentval.GetValue()
+
 		elif word == "image":
-			print(self.classnameval.GetValue())
+			elemprop['parent'] = self.parentval.GetCurrentSelection()
+			elemprop['parent'] = self.parentval.GetString(elemprop['parent'])
+			elemprop['class'] = self.classnameval.GetValue()
+			elemprop['id'] = self.idnameval.GetValue()
+			elemprop['height'] = self.heightval.GetValue()
+			elemprop['width'] = self.widthval.GetValue()
+			elemprop['a'] = self.aval.GetValue()
+			elemprop['a_new_window'] = self.a_new_windowval.GetValue()
+			if elemprop['a_new_window']:
+				elemprop['a_new_window'] = "true"
+			else:
+				elemprop['a_new_window'] = "false"
+			elemprop['position'] = self.positionval.GetCurrentSelection()
+			elemprop['position'] = self.positionval.GetString(elemprop['position'])
+			elemprop['src'] = self.srcval.GetLabel()
+			elemprop['alt'] = self.altval.GetValue()
+			elemprop['float'] = self.floatval.GetCurrentSelection()
+			elemprop['float'] = self.floatval.GetString(elemprop['float'])
+			elemprop['margin'] = self.marginval.GetValue()
+			elemprop['padding'] = self.paddingval.GetValue()
+			elemprop['border'] = self.borderval.GetValue()
+
 		elif word == "button":
-			print(self.classnameval.GetValue())
+			elemprop['parent'] = self.parentval.GetCurrentSelection()
+			elemprop['parent'] = self.parentval.GetString(elemprop['parent'])
+			elemprop['class'] = self.classnameval.GetValue()
+			elemprop['id'] = self.idnameval.GetValue()
+			elemprop['height'] = self.heightval.GetValue()
+			elemprop['width'] = self.widthval.GetValue()
+			elemprop['a'] = self.aval.GetValue()
+			elemprop['a_new_window'] = self.a_new_windowval.GetValue()
+			if elemprop['a_new_window']:
+				elemprop['a_new_window'] = "true"
+			else:
+				elemprop['a_new_window'] = "false"
+			elemprop['position'] = self.positionval.GetCurrentSelection()
+			elemprop['position'] = self.positionval.GetString(elemprop['position'])
+			elemprop['background-color'] = self.backgroundcolorval.GetLabel()
+			elemprop['disabled'] = self.disabledval.GetValue()
+			if elemprop['disabled']:
+				elemprop['disabled'] = "true"
+			else:
+				elemprop['disabled'] = "false"
+			elemprop['type'] = self.typeval.GetCurrentSelection()
+			elemprop['type'] = self.typeval.GetString(elemprop['type'])
+			elemprop['value'] = self.valueval.GetValue()
+			elemprop['float'] = self.floatval.GetCurrentSelection()
+			elemprop['float'] = self.floatval.GetString(elemprop['float'])
+			elemprop['text-align'] = self.textalignval.GetCurrentSelection()
+			elemprop['text-align']  = self.textalignval.GetString(elemprop['text-align'] )
+			elemprop['margin'] = self.marginval.GetValue()
+			elemprop['padding'] = self.paddingval.GetValue()
+			elemprop['border'] = self.borderval.GetValue()
+
+
 		elif word == "input":
-			print(self.classnameval.GetValue())
+			elemprop['parent'] = self.parentval.GetCurrentSelection()
+			elemprop['parent'] = self.parentval.GetString(elemprop['parent'])
+			elemprop['class'] = self.classnameval.GetValue()
+			elemprop['id'] = self.idnameval.GetValue()
+			elemprop['height'] = self.heightval.GetValue()
+			elemprop['width'] = self.widthval.GetValue()
+			elemprop['a'] = self.aval.GetValue()
+			elemprop['a_new_window'] = self.a_new_windowval.GetValue()
+			if elemprop['a_new_window']:
+				elemprop['a_new_window'] = "true"
+			else:
+				elemprop['a_new_window'] = "false"
+			elemprop['position'] = self.positionval.GetCurrentSelection()
+			elemprop['position'] = self.positionval.GetString(elemprop['position'])
+			elemprop['background-color'] = self.backgroundcolorval.GetLabel()
+			elemprop['autocomplete'] = self.autocompleteval.GetValue()
+			if elemprop['autocomplete']:
+				elemprop['autocomplete'] = "true"
+			else:
+				elemprop['autocomplete'] = "false"
+			elemprop['type'] = self.typeval.GetCurrentSelection()
+			elemprop['type'] = self.typeval.GetString(elemprop['type'])
+			elemprop['readonly'] = self.readonlyval.GetValue()
+			if elemprop['readonly']:
+				elemprop['readonly'] = "true"
+			else:
+				elemprop['readonly'] = "false"
+			elemprop['float'] = self.floatval.GetCurrentSelection()
+			elemprop['float'] = self.floatval.GetString(elemprop['float'])
+			elemprop['text-align'] = self.textalignval.GetCurrentSelection()
+			elemprop['text-align']  = self.textalignval.GetString(elemprop['text-align'] )
+			elemprop['margin'] = self.marginval.GetValue()
+			elemprop['padding'] = self.paddingval.GetValue()
+			elemprop['border'] = self.borderval.GetValue()
+			elemprop['maxlenght'] = self.maxlenghtval.GetValue()
+			elemprop['name'] = self.nameval.GetValue()
+			elemprop['placeholder'] = self.placeholderval.GetValue()
+			elemprop['value'] = self.valueval.GetValue()
+
+
+		file = open(wd+'elements.properties', 'r')
+		lines = file.readlines()
+		file.close()
+
+		file = open(wd+'elements.properties', 'w+')
+
+		for line in lines: 
+			if elementname in line:
+				line = ',"'+elementname +'":'+ str(elemprop) + "\n"
+				line = line.replace("'", '"')
+
+			file.write(line)
+			print(line)
+		file.close()
+
+
+		file = open(wd+'elements.properties', 'r')
+		lines = file.readlines()
+		file.close()
+
+		file = open(wd+'elements.properties', 'w+')
+
+		for line in lines:
+			if elementname == str(elements[0]):
+				if line.startswith(',"'+elementname+'":'):
+					line = line[1:]
+			file.write(line)
+
+		file.close()
+
+
 
 			
 

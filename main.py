@@ -796,8 +796,8 @@ class settingsFrame(wx.Frame):
 
 ID_SAVE = wx.NewIdRef()
 ID_EXPORT = wx.NewIdRef()
-ID_DELETE = wx.NewIdRef()
-accelerators = [wx.AcceleratorEntry() for x in range(4)]
+#ID_DELETE = wx.NewIdRef()
+accelerators = [wx.AcceleratorEntry() for x in range(2)]
 accelerators[0].Set(wx.ACCEL_CTRL, ord('S'), ID_SAVE)
 accelerators[1].Set(wx.ACCEL_CTRL, ord('E'), ID_EXPORT)
 #accelerators[2].Set(wx.ACCEL_NORMAL, wx.WXK_DELETE, ID_DELETE)
@@ -848,7 +848,7 @@ class editorFrame(wx.Frame):
 
 		self.Bind(wx.EVT_MENU, self.save, id=ID_SAVE)
 		self.Bind(wx.EVT_MENU, self.export, id=ID_EXPORT)
-		self.Bind(wx.EVT_MENU, self.delete, id=ID_DELETE)
+		#self.Bind(wx.EVT_MENU, self.delete, id=ID_DELETE)
 
 
 		wd = str(workingdir)
@@ -1029,10 +1029,6 @@ class editorFrame(wx.Frame):
 
 				inputcount[num] = num
 
-
-	def export(self, event):
-		print("Export")
-		event.Skip()
 
 	def onDragSelection(self, event):
 		global myGrid
@@ -1662,11 +1658,11 @@ class editorFrame(wx.Frame):
 			self.idnameval.SetBackgroundColour(btncolor)
 
 
-			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
+			self.height = wx.StaticText(self.right, label="Height of parent in %: ", pos=(10,190))
 			self.height.SetFont(text_font)
 			self.height.SetForegroundColour('#CDCDCD')
 
-			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
+			self.width = wx.StaticText(self.right, label="Width of parent in %: ", pos=(260,190))
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
@@ -1843,11 +1839,11 @@ class editorFrame(wx.Frame):
 			self.idnameval.SetBackgroundColour(btncolor)
 
 
-			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
+			self.height = wx.StaticText(self.right, label="Height of parent in %: ", pos=(10,190))
 			self.height.SetFont(text_font)
 			self.height.SetForegroundColour('#CDCDCD')
 
-			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
+			self.width = wx.StaticText(self.right, label="Width of parent in %: ", pos=(260,190))
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
@@ -2086,11 +2082,11 @@ class editorFrame(wx.Frame):
 			self.idnameval.SetBackgroundColour(btncolor)
 
 
-			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
+			self.height = wx.StaticText(self.right, label="Height of parent in %: ", pos=(10,190))
 			self.height.SetFont(text_font)
 			self.height.SetForegroundColour('#CDCDCD')
 
-			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
+			self.width = wx.StaticText(self.right, label="Width of parent in %: ", pos=(260,190))
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
@@ -2256,11 +2252,11 @@ class editorFrame(wx.Frame):
 			self.idnameval.SetBackgroundColour(btncolor)
 
 
-			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
+			self.height = wx.StaticText(self.right, label="Height of parent in %: ", pos=(10,190))
 			self.height.SetFont(text_font)
 			self.height.SetForegroundColour('#CDCDCD')
 
-			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
+			self.width = wx.StaticText(self.right, label="Width of parent in %: ", pos=(260,190))
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
@@ -2456,11 +2452,11 @@ class editorFrame(wx.Frame):
 			self.idnameval.SetBackgroundColour(btncolor)
 
 
-			self.height = wx.StaticText(self.right, label="Element height in %: ", pos=(10,190))
+			self.height = wx.StaticText(self.right, label="Height of parent in %: ", pos=(10,190))
 			self.height.SetFont(text_font)
 			self.height.SetForegroundColour('#CDCDCD')
 
-			self.width = wx.StaticText(self.right, label="Element width in %: ", pos=(270,190))
+			self.width = wx.StaticText(self.right, label="Width of parent in %: ", pos=(260,190))
 			self.width.SetFont(text_font)
 			self.width.SetForegroundColour('#CDCDCD')
 
@@ -2710,6 +2706,7 @@ class editorFrame(wx.Frame):
 			elemprop['position'] = self.positionval.GetCurrentSelection()
 			elemprop['position'] = self.positionval.GetString(elemprop['position'])
 			elemprop['background-color'] = self.backgroundcolorval.GetLabel()
+			elemprop['color'] = self.colorval.GetLabel()
 			elemprop['background'] = self.backgroundval.GetValue()
 			elemprop['float'] = self.floatval.GetCurrentSelection()
 			elemprop['float'] = self.floatval.GetString(elemprop['float'])
@@ -2740,7 +2737,7 @@ class editorFrame(wx.Frame):
 				elemprop['a_new_window'] = "false"
 			elemprop['position'] = self.positionval.GetCurrentSelection()
 			elemprop['position'] = self.positionval.GetString(elemprop['position'])
-			elemprop['src'] = self.srcval.GetLabel()
+			elemprop['src'] = self.srcval.GetValue()
 			elemprop['alt'] = self.altval.GetValue()
 			elemprop['float'] = self.floatval.GetCurrentSelection()
 			elemprop['float'] = self.floatval.GetString(elemprop['float'])
@@ -2882,67 +2879,469 @@ class editorFrame(wx.Frame):
 	def export(self, event):
 		global wd, elements, webpage
 
-		file = os.path.join(wd, 'elements.properties')
-		file = open(file, "r")
-		lines = file.readlines()
-		file.close()
-
-		file = os.path.join(wd, 'elements.properties')
-		file = open(file, 'r')
-		js = json.load(file)
-		file.close()
 
 		destination = os.path.join(wd, 'OUTPUT')
 
-		css = open(destination+"\\generated_styles.css", 'w+')
+
+		css = open(destination + "\\styles.css", 'w+')
+		html = open(destination + "\\index.html", 'w+')
+		file = open(wd+"\\elements.properties")
+		js = json.load(file)
+
+		file = open(wd + "\\elements.properties", 'r')
+		file.close()
+		file = open(wd + "\\elements.properties", 'r')
+
+		css.write("body {\n\tmargin: 0 auto;\n}\n\n")
 
 
-		pregenerated = "<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset='UTF-8'>\n\t\t<meta name='viewport' content='width=device-width, initial-scale=1.0'>\n\t\t<link rel='stylesheet' type='text/css' href='generated_styles.css'>\n\t</head>\n\t<body>"
+		#print(str(js))
+		pregenerated = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='ANSI'>\n<meta name='viewport' content='width=device-width, initial-scale=1.0'>\n<link rel='stylesheet' type='text/css' href='styles.css'>\n</head>\n<body>\n"
+		html.write(pregenerated)
 
 		for element in elements:
-			string = str(js[element])
-			num, word = re.split('-', element)
+			num, word = re.split("-",element)
+
 
 			if word == "div":
-				if js[element]['class']:
-					style = js[element]['class']+" {\n\t"
+				string = "<div"
+				if js[element]["class"] != "":
+					string = string + " class='" + js[element]["class"] + "'"
+				if js[element]['id'] != "":
+					string = string + " id='" + js[element]["id"] + "'"
+				if js[element]['a'] != "":
+					st = "<a href='"+js[element]['a'] + "'"
+					if js[element]['a_new_window'] == "true":
+						st = st + " target='_blank'"
+					st = st + ">"
+					string = st+string
+				if js[element]['height'] !="":
+					string = string + " height='" + js[element]['height'] + "%'"
+				if js[element]['width'] !="":
+					string = string + " width='" + js[element]['width'] + "%'"
+
+				if js[element]['class'] == "":
+					style = " style='"
+					if js[element]['background-color'] != "":
+						style = style + "background-color: " + js[element]['background-color'] + ";"
+					if js[element]['text-align'] != "":
+						style = style + "text-align: " + js[element]['text-align'] + ";"
+					if js[element]['background'] != "":
+						style = style + "background: " + js[element]['background'] + ";"
+					if js[element]['float'] != "":
+						style = style + "float: " + js[element]['float'] + ";"
+					if js[element]['margin'] != "":
+						style = style + "margin: " + js[element]['margin'] + ";"
+					if js[element]['padding'] != "":
+						style = style + "padding: " + js[element]['padding'] + ";"
+					if js[element]['position'] != "":
+						style = style + "position: " + js[element]['position'] + ";"
+					if js[element]['border'] != "":
+						style = style + "border: " + js[element]['border'] + ";"
+					style = style + "'"
+					string = string + style
+				string = string + ">"
+
+				#recursion
+
+				string = string + "</div>"
+				if js[element]['a'] != "":
+					string = string + "</a>"
+
+				string = string + "\n"
+
+				if js[element]['class'] != "":
+					style = "."+js[element]['class']+" {\n\t"
 					if js[element]['background-color'] != "":
 						style = style + "background-color: " + js[element]['background-color']
 					if js[element]['text-align'] != "":
-						style = style + ",\n\t"
+						style = style + ";\n\t"
 						style = style + "text-align: " + js[element]['text-align']
 					if js[element]['background'] != "":
-						style = style + ",\n\t"
+						style = style + ";\n\t"
 						style = style + "background: " + js[element]['background']
 					if js[element]['float'] != "":
-						style = style + ",\n\t"
+						style = style + ";\n\t"
 						style = style + "float: " + js[element]['float']
 					if js[element]['margin'] != "":
-						style = style + ",\n\t"
+						style = style + ";\n\t"
 						style = style + "margin: " + js[element]['margin']
 					if js[element]['padding'] != "":
-						style = style + ",\n\t"
+						style = style + ";\n\t"
 						style = style + "padding: " + js[element]['padding']
+					if js[element]['position'] != "":
+						style = style + ";\n\t"
+						style = style + "position: " + js[element]['position']
 					if js[element]['border'] != "":
-						style = style + ",\n\t"
+						style = style + ";\n\t"
 						style = style + "border: " + js[element]['border']
 					style = style + "\n}\n\n"
 
-					css.write(style)
+				html.write(string)
+				css.write(style)
 
 
 
 
 			elif word == "text":
-				pass
-			elif word == "image":
-				pass
-			elif word == "button":
-				pass
-			elif word == "input":
-				pass
+				string = "<" + js[element]['type']
+				if js[element]["class"] != "":
+					string = string + " class='" + js[element]["class"] + "'"
+				if js[element]['id'] != "":
+					string = string + " id='" + js[element]["id"] + "'"
+				if js[element]['a'] != "":
+					st = "<a href='"+js[element]['a'] + "'"
+					if js[element]['a_new_window'] == "true":
+						st = st + " target='_blank'"
+					st = st + ">"
+					string = st+string
+				if js[element]['height'] !="":
+					string = string + " height='" + js[element]['height'] + "%'"
+				if js[element]['width'] !="":
+					string = string + " width='" + js[element]['width'] + "%'"
+				
+				if js[element]['class'] == "":
+					style = " style='"
+					if js[element]['background-color'] != "":
+						style = style + "background-color: " + js[element]['background-color'] + ";"
+					if js[element]['color'] != "":
+						style = style + "color: " + js[element]['color'] + ";"
+					if js[element]['text-align'] != "":
+						style = style + "text-align: " + js[element]['text-align'] + ";"
+					if js[element]['background'] != "":
+						style = style + "background: " + js[element]['background'] + ";"
+					if js[element]['float'] != "":
+						style = style + "float: " + js[element]['float'] + ";"
+					if js[element]['margin'] != "":
+						style = style + "margin: " + js[element]['margin'] + ";"
+					if js[element]['padding'] != "":
+						style = style + "padding: " + js[element]['padding'] + ";"
+					if js[element]['position'] != "":
+						style = style + "position: " + js[element]['position'] + ";"
+					if js[element]['border'] != "":
+						style = style + "border: " + js[element]['border'] + ";"
+					style = style + "'"
+					string = string + style
+				string = string + ">"
+
+
+				string = string + js[element]['content']
+
+				string = string + "</"+js[element]['type']+">"
+				if js[element]['a'] != "":
+					string = string + "</a>"
+
+				string = string + "\n"
+
+				if js[element]['class']:
+					style = "."+js[element]['class']+" {\n\t"
+					if js[element]['position']:
+						style = style + "position: "+js[element]['position']
+					if js[element]['background-color'] != "":
+						style = style + ";\n\t"
+						style = style + "background-color: " + js[element]['background-color']
+					if js[element]['color'] != "":
+						style = style + ";\n\t"
+						style = style + "color: " + js[element]['color']
+					if js[element]['float'] != "":
+						style = style + ";\n\t"
+						style = style + "float: "+ js[element]['float']
+					if js[element]['text-align'] != "":
+						style = style + ";\n\t"
+						style = style + "text-align: " + js[element]['text-align']
+					if js[element]['font-family'] != "":
+						style = style + ";\n\t"
+						style = style + "font-family: " + js[element]['font-family']
+					if js[element]['font-weight'] != "":
+						style = style + ";\n\t"
+						style = style + "font-weight: " + js[element]['font-weight']
+					if js[element]['text-decoration'] != "":
+						style = style + ";\n\t"
+						style = style + "text-decoration: " + js[element]['text-decoration']
+					if js[element]['background'] != "":
+						style = style + ";\n\t"
+						style = style + "background: " + js[element]['background']
+					if js[element]['color'] != "":
+						style = style + ";\n\t"
+						style = style + "color: " + js[element]['color']
+					if js[element]['margin'] != "":
+						style = style + ";\n\t"
+						style = style + "margin: " + js[element]['margin']
+					if js[element]['padding'] != "":
+						style = style + ";\n\t"
+						style = style + "padding: " + js[element]['padding']
+					if js[element]['border'] != "":
+						style = style + ";\n\t"
+						style = style + "border: " + js[element]['border']
+					style = style + "\n}\n\n"
+
+				html.write(string)
+				css.write(style)
+
+
+
+
+			if word == "image":
+				string = "<image"
+				if js[element]["class"] != "":
+					string = string + " class='" + js[element]["class"] + "'"
+				if js[element]['id'] != "":
+					string = string + " id='" + js[element]["id"] + "'"
+				if js[element]['src'] != "":
+					string = string + " src='" + js[element]["src"] + "'"
+				if js[element]['alt'] != "":
+					string = string + " alt='" + js[element]["alt"] + "'"
+				if js[element]['a'] != "":
+					st = "<a href='"+js[element]['a'] + "'"
+					if js[element]['a_new_window'] == "true":
+						st = st + " target='_blank'"
+					st = st + ">"
+					string = st+string
+				if js[element]['height'] !="":
+					string = string + " height='" + js[element]['height'] + "%'"
+				if js[element]['width'] !="":
+					string = string + " width='" + js[element]['width'] + "%'"
+
+				if js[element]['class'] == "":
+					style = " style='"
+					if js[element]['background-color'] != "":
+						style = style + "background-color: " + js[element]['background-color'] + ";"
+					if js[element]['text-align'] != "":
+						style = style + "text-align: " + js[element]['text-align'] + ";"
+					if js[element]['background'] != "":
+						style = style + "background: " + js[element]['background'] + ";"
+					if js[element]['float'] != "":
+						style = style + "float: " + js[element]['float'] + ";"
+					if js[element]['margin'] != "":
+						style = style + "margin: " + js[element]['margin'] + ";"
+					if js[element]['padding'] != "":
+						style = style + "padding: " + js[element]['padding'] + ";"
+					if js[element]['position'] != "":
+						style = style + "position: " + js[element]['position'] + ";"
+					if js[element]['border'] != "":
+						style = style + "border: " + js[element]['border'] + ";"
+					style = style + "'"
+					string = string + style
+				string = string + ">"
+
+
+				string = string + "</image>"
+				if js[element]['a'] != "":
+					string = string + "</a>"
+
+				string = string + "\n"
+
+				if js[element]['class'] != "":
+					style = "."+js[element]['class']+" {\n\t"
+					if js[element]['float'] != "":
+						style = style + "float: " + js[element]['float']
+					if js[element]['margin'] != "":
+						style = style + ";\n\t"
+						style = style + "margin: " + js[element]['margin']
+					if js[element]['padding'] != "":
+						style = style + ";\n\t"
+						style = style + "padding: " + js[element]['padding']
+					if js[element]['position'] != "":
+						style = style + ";\n\t"
+						style = style + "position: " + js[element]['position']
+					if js[element]['border'] != "":
+						style = style + ";\n\t"
+						style = style + "border: " + js[element]['border']
+					style = style + "\n}\n\n"
+
+				html.write(string)
+				css.write(style)
+
+
+
+			if word == "button":
+				string = "<button"
+				if js[element]["class"] != "":
+					string = string + " class='" + js[element]["class"] + "'"
+				if js[element]['id'] != "":
+					string = string + " id='" + js[element]["id"] + "'"
+				if js[element]['name'] != "":
+					string = string + " name='" + js[element]["name"] + "'"
+				if js[element]['type'] != "":
+					string = string + " type='" + js[element]["type"] + "'"
+				if js[element]['value'] != "":
+					string = string + " value='" + js[element]["value"] + "'"
+				
+				if js[element]['a'] != "":
+					st = "<a href='"+js[element]['a'] + "'"
+					if js[element]['a_new_window'] == "true":
+						st = st + " target='_blank'"
+					st = st + ">"
+					string = st+string
+				if js[element]['height'] !="":
+					string = string + " height='" + js[element]['height'] + "%'"
+				if js[element]['width'] !="":
+					string = string + " width='" + js[element]['width'] + "%'"
+
+				if js[element]['class'] == "":
+					style = " style='"
+					if js[element]['background-color'] != "":
+						style = style + "background-color: " + js[element]['background-color'] + ";"
+					if js[element]['text-align'] != "":
+						style = style + "text-align: " + js[element]['text-align'] + ";"
+					if js[element]['background'] != "":
+						style = style + "background: " + js[element]['background'] + ";"
+					if js[element]['float'] != "":
+						style = style + "float: " + js[element]['float'] + ";"
+					if js[element]['margin'] != "":
+						style = style + "margin: " + js[element]['margin'] + ";"
+					if js[element]['padding'] != "":
+						style = style + "padding: " + js[element]['padding'] + ";"
+					if js[element]['position'] != "":
+						style = style + "position: " + js[element]['position'] + ";"
+					if js[element]['border'] != "":
+						style = style + "border: " + js[element]['border'] + ";"
+					style = style + "'"
+					string = string + style
+				string = string + ">"
+
+				if js[element]['value'] != "":
+					string = string +  js[element]["value"]
+
+
+				string = string + "</button>"
+				if js[element]['a'] != "":
+					string = string + "</a>"
+
+				string = string + "\n"
+
+				if js[element]['class']:
+					style = "."+js[element]['class']+" {\n\t"
+					if js[element]['background-color'] != "":
+						style = style + "background-color: " + js[element]['background-color']
+					if js[element]['text-align'] != "":
+						style = style + ";\n\t"
+						style = style + "text-align: " + js[element]['text-align']
+					if js[element]['float'] != "":
+						style = style + ";\n\t"
+						style = style + "float: " + js[element]['float']
+					if js[element]['margin'] != "":
+						style = style + ";\n\t"
+						style = style + "margin: " + js[element]['margin']
+					if js[element]['padding'] != "":
+						style = style + ";\n\t"
+						style = style + "padding: " + js[element]['padding']
+					if js[element]['position'] != "":
+						style = style + ";\n\t"
+						style = style + "position: " + js[element]['position']
+					if js[element]['border'] != "":
+						style = style + ";\n\t"
+						style = style + "border: " + js[element]['border']
+					style = style + "\n}\n\n"
+
+				html.write(string)
+				css.write(style)
+
+
+
+			if word == "input":
+				string = "<input"
+				if js[element]["class"] != "":
+					string = string + " class='" + js[element]["class"] + "'"
+				if js[element]['id'] != "":
+					string = string + " id='" + js[element]["id"] + "'"
+				if js[element]['name'] != "":
+					string = string + " name='" + js[element]["name"] + "'"
+				if js[element]['type'] != "":
+					string = string + " type='" + js[element]["type"] + "'"
+				if js[element]['autocomplete'] != "":
+					string = string + " autocomplete='" + js[element]["autocomplete"] + "'"
+				if js[element]['readonly'] == "true":
+					string = string + " readonly"
+				if js[element]['maxlenght'] != "":
+					string = string + " maxlength='" + js[element]["maxlenght"] + "'"
+				if js[element]['placeholder'] != "":
+					string = string + " placeholder='" + js[element]["placeholder"] + "'"
+
+				
+				if js[element]['a'] != "":
+					st = "<a href='"+js[element]['a'] + "'"
+					if js[element]['a_new_window'] == "true":
+						st = st + " target='_blank'"
+					st = st + ">"
+					string = st+string
+				if js[element]['height'] !="":
+					string = string + " height='" + js[element]['height'] + "%'"
+				if js[element]['width'] !="":
+					string = string + " width='" + js[element]['width'] + "%'"
+
+				if js[element]['class'] == "":
+					style = " style='"
+					if js[element]['background-color'] != "":
+						style = style + "background-color: " + js[element]['background-color'] + ";"
+					if js[element]['text-align'] != "":
+						style = style + "text-align: " + js[element]['text-align'] + ";"
+					if js[element]['background'] != "":
+						style = style + "background: " + js[element]['background'] + ";"
+					if js[element]['float'] != "":
+						style = style + "float: " + js[element]['float'] + ";"
+					if js[element]['margin'] != "":
+						style = style + "margin: " + js[element]['margin'] + ";"
+					if js[element]['padding'] != "":
+						style = style + "padding: " + js[element]['padding'] + ";"
+					if js[element]['position'] != "":
+						style = style + "position: " + js[element]['position'] + ";"
+					if js[element]['border'] != "":
+						style = style + "border: " + js[element]['border'] + ";"
+					style = style + "'"
+					string = string + style
+				string = string + ">"
+
+				if js[element]['value'] != "":
+					string = string +  js[element]["value"]
+
+
+				string = string + "</input>"
+				if js[element]['a'] != "":
+					string = string + "</a>"
+
+				string = string + "\n"
+
+				if js[element]['class']:
+					style = "."+js[element]['class']+" {\n\t"
+					if js[element]['background-color'] != "":
+						style = style + "background-color: " + js[element]['background-color']
+					if js[element]['text-align'] != "":
+						style = style + ";\n\t"
+						style = style + "text-align: " + js[element]['text-align']
+					if js[element]['float'] != "":
+						style = style + ";\n\t"
+						style = style + "float: " + js[element]['float']
+					if js[element]['margin'] != "":
+						style = style + ";\n\t"
+						style = style + "margin: " + js[element]['margin']
+					if js[element]['padding'] != "":
+						style = style + ";\n\t"
+						style = style + "padding: " + js[element]['padding']
+					if js[element]['position'] != "":
+						style = style + ";\n\t"
+						style = style + "position: " + js[element]['position']
+					if js[element]['border'] != "":
+						style = style + ";\n\t"
+						style = style + "border: " + js[element]['border']
+					style = style + "\n}\n\n"
+
+				html.write(string)
+				css.write(style)
+
+
+
+
+
+
+		html.write("</body>\n</html>")
+
+
 
 		css.close()
+		html.close()
+		file.close()
+
 
 
 
